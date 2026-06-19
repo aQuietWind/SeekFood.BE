@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.15</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>${groupId}</groupId>
+    <artifactId>SeekFood</artifactId>
+    <version>${self.version}</version>
+    <name>SeekFood</name>
+    <description>SeekFood</description>
+    <packaging>pom</packaging>
+
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
+    <properties>
+        <java.version>21</java.version>
+        <groupId>com.seek.food</groupId>
+        <!--        依赖版本-->
+        <mybatis.version>3.0.5</mybatis.version>
+        <springCloud.version>2025.0.2</springCloud.version>
+        <springCloudAlibaba.version>2023.0.1.0</springCloudAlibaba.version>
+        <es.version>9.3.2</es.version>
+        <jvmCaffeine.version>3.1.8</jvmCaffeine.version>
+        <swagger.version>2.8.15</swagger.version>
+        <self.version>1.0-SNAPSHOT</self.version>
+        <skywalking.version>9.3.0</skywalking.version>
+        <jwt.version>0.13.0</jwt.version>
+    </properties>
+    <!--    依赖版本管理-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- mybatis依赖            -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+            <!-- 适配 Spring Boot 3.5.x/4.x、JDK 21 的最新稳定版 -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${springCloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- springcloudAlibaba           -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${springCloudAlibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- es客户端依赖 -->
+            <dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>${es.version}</version>
+            </dependency>
+            <!-- es传输层依赖（底层 HTTP 通信） -->
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${es.version}</version>
+            </dependency>
+            <!-- jvm缓存 -->
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>${jvmCaffeine.version}</version>
+            </dependency>
+            <!-- swagger接口文档自动生成 -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <!-- skywalking日志依赖           -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-logback-1.x</artifactId>
+                <version>${skywalking.version}</version>
+            </dependency>
+            <!--jwt依赖1-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <!--jwt依赖2-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <!--jwt依赖3-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <!--该项目的DTO模块        -->
+            <dependency>
+                <groupId>${groupId}</groupId>
+                <artifactId>DTO</artifactId>
+                <version>${self.version}</version>
+            </dependency>
+            <!--该项目的Util模块        -->
+            <dependency>
+                <groupId>${groupId}</groupId>
+                <artifactId>Util</artifactId>
+                <version>${self.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--子模块管理-->
+    <modules>
+        <module>Gateway</module>
+        <module>Util</module>
+        <module>DTO</module>
+        <module>Admin</module>
+        <module>Comment</module>
+        <module>Employee</module>
+        <module>Fund</module>
+        <module>Meal</module>
+        <module>Merchant</module>
+        <module>Order</module>
+        <module>Promotion</module>
+        <module>Rider</module>
+        <module>User</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
