@@ -10,6 +10,7 @@
         <module name="Comment" />
         <module name="User" />
         <module name="Fund" />
+        <module name="Interaction" />
         <module name="Meal" />
         <module name="Util" />
         <module name="Admin" />
@@ -36,6 +37,7 @@
       <module name="Employee" options="-parameters" />
       <module name="Fund" options="-parameters" />
       <module name="Gateway" options="-parameters" />
+      <module name="Interaction" options="-parameters" />
       <module name="Meal" options="-parameters" />
       <module name="Merchant" options="-parameters" />
       <module name="Order" options="-parameters" />

@@ -13,12 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 public class testRedis {
     @Autowired
-    private testNacos testNacosService;
-    @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @GetMapping
     public String testRedis(String key){
-        return testNacosService.printConfig();
+        return stringRedisTemplate.opsForValue().get(key);
     }
     @PostMapping
     public void testRedisPost(String key,String value){

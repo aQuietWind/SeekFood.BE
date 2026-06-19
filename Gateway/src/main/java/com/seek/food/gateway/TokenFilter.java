@@ -9,11 +9,11 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import util.CommonUtil.JWT;
+import com.seek.food.util.CommonUtil.JWT;
 
 
 @Order(2)       //过滤器的顺序，越小就越先执行
-@Component      //使其被扫描到
+//@Component      //使其被扫描到
 public class TokenFilter implements GlobalFilter {      //实现接口
     //token模拟处理拦截
     @Override

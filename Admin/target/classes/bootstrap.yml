@@ -1,35 +1,43 @@
 spring:
+  #服务名设置
   application:
-    name: Admin
+    name: admin
   profiles:
     active: dev # 环境：dev/test/prod
   cloud:
     nacos:
+      # 服务注册发现（控制截图里的分组）
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 123123123123
+        group: ADMIN_GROUP # 这里就是你要改的服务分组
       config:
-        server-addr: 127.0.0.1:8848   #nacos地址
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}   #nacos地址
         password: nacos   #密码
         username: nacos   #用户名
         # 配置文件后缀，yaml/properties
         file-extension: yaml
-        # 命名空间，隔离环境，默认public
-        namespace: dev-seek-food-id
+        # 命名空间Id，隔离环境，默认public
+        namespace: ${spring.cloud.nacos.discovery.namespace}
         # 分组，默认DEFAULT_GROUP，区分业务模块
-        group: SEEK_FOOD_GROUP
+        group: ${spring.cloud.nacos.discovery.group}
         # 开启自动刷新配置（动态更新无需重启服务）
         refresh-enabled: true
-        prefix: seek-food
-        # 关闭import强制校验
-        import-check:
-          enabled: false
-        # 扩展配置（多配置文件场景，数据库、redis分开配置）
-        extension-configs:
-#          - data-id: demo-db-dev.yml
-#            group: SEEK_FOOD_GROUP
-#            refresh: true # 该文件支持动态刷新
-          - data-id: common-redis-dev
-            group: SEEK_FOOD_GROUP
-            refresh: true
+  #声明配置引入，按顺序引入，后面的会覆盖前面的
+  config:
+    import:
+      - nacos:common-rabbitmq-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-rabbitmq-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-mybatis-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-seata-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-feign-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-sentinel-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-redis-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:${spring.application.name}-self-dev.yaml?group=${spring.cloud.nacos.discovery.group}&refreshEnabled=true
 
+#  端口设置
+server:
+  port: 10011
 
 
 

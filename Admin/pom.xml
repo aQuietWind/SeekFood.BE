@@ -6,6 +6,7 @@
         <groupId>com.seek.food</groupId>
         <artifactId>SeekFood</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>Admin</artifactId>
@@ -59,7 +60,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-        <!-- 开启bootstrap上下文，恢复旧版读取bootstrap.yml逻辑 -->
+        <!--        开启bootstrap上下文功能 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
