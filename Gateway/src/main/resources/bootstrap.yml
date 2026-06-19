@@ -10,7 +10,9 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
         namespace: 123123123123
-        group: GATEWAY_GROUP # 这里就是你要改的服务分组
+        group: SEEK_FOOD_GROUP
+        # 订阅同命名空间全部分组服务
+        subscribe-all-groups: true
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}   #nacos地址
         password: nacos   #密码

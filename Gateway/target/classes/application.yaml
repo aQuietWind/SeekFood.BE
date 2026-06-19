@@ -11,59 +11,63 @@ spring:
             - StripPrefix=1   #去除掉第一段路径
           routes:
             - id: user   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[0].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
+              # 显式指定目标服务分组，路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[0].id}
               predicates:       #断言，判断是否转发给该路由
                 - Path=/${spring.cloud.gateway.server.webflux.routes[0].id}/**    #路径断言，代表将路径为user的都转发
+              # 新增元数据，指定该路由要拉取的服务分组
+              metadata:
+                nacos-group: ADMIN_GROUP
 
-            - id: merchant   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[1].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[1].id}/**    #路径断言，代表将路径为user的都转发
+            - id: merchant
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[1].id}?group=MERCHANT_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[1].id}/**
 
-            - id: employee   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[2].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[2].id}/**    #路径断言，代表将路径为user的都转发
+            - id: employee
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[2].id}?group=EMPLOYEE_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[2].id}/**
 
-            - id: meal   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[3].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[3].id}/**    #路径断言，代表将路径为user的都转发
+            - id: meal
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[3].id}?group=MEAL_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[3].id}/**
 
-            - id: fund   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[4].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[4].id}/**    #路径断言，代表将路径为user的都转发
+            - id: fund
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[4].id}?group=FUND_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[4].id}/**
 
-            - id: promotion   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[5].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[5].id}/**    #路径断言，代表将路径为user的都转发
+            - id: promotion
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[5].id}?group=PROMOTION_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[5].id}/**
 
-            - id: order   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[6].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[6].id}/**    #路径断言，代表将路径为user的都转发
+            - id: order
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[6].id}?group=ORDER_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[6].id}/**
 
-            - id: rider   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[7].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[7].id}/**    #路径断言，代表将路径为user的都转发
+            - id: rider
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[7].id}?group=RIDER_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[7].id}/**
 
-            - id: comment   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[8].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[8].id}/**    #路径断言，代表将路径为user的都转发
+            - id: comment
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[8].id}?group=COMMENT_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[8].id}/**
 
-            - id: interaction   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[9].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[9].id}/**    #路径断言，代表将路径为user的都转发
+            - id: interaction
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[9].id}?group=INTERACTION_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[9].id}/**
 
-            - id: admin   #路由标识,必须唯一
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[10].id}   #路由地址，lb代表负载均衡，user代表模块服务名。该项可以直接用ip地址代替
-              predicates:       #断言，判断是否转发给该路由
-                - Path=/${spring.cloud.gateway.server.webflux.routes[10].id}/**    #路径断言，代表将路径为user的都转发
+            - id: admin
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[10].id}?group=ADMIN_GROUP
+              predicates:
+                - Path=/${spring.cloud.gateway.server.webflux.routes[10].id}/**
 
 #            - id: Social   #路由标识,必须唯一
 #              uri: lb://Social   #路由地址，lb代表负载均衡，Social代表模块服务名。该项可以直接用ip地址代替
