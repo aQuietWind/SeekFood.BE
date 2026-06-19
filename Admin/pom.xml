@@ -54,6 +54,16 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
+        <!--        nacos配置中心依赖-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+        <!-- 开启bootstrap上下文，恢复旧版读取bootstrap.yml逻辑 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
         <!--        负载均衡依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -104,6 +114,7 @@
             <groupId>com.seek.food</groupId>
             <artifactId>Util</artifactId>
         </dependency>
+
 
     </dependencies>
 

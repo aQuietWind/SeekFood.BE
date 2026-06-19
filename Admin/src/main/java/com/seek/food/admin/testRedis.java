@@ -1,6 +1,7 @@
 package com.seek.food.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,12 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("1")
+@RefreshScope
 public class testRedis {
+    @Autowired
+    private testNacos testNacosService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @GetMapping
     public String testRedis(String key){
-        return stringRedisTemplate.opsForValue().get(key);
+        return testNacosService.printConfig();
     }
     @PostMapping
     public void testRedisPost(String key,String value){
