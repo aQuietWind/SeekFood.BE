@@ -30,10 +30,12 @@ spring:
     import:
       - nacos:common-sentinel-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-redis-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-jwt-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-request-path-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
 
 #  端口设置
 server:
-  port: 10000
+  port: 9999
 
 
 

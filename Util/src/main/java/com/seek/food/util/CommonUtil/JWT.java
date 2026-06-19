@@ -17,7 +17,7 @@ public class JWT {
     private static final String sercetKey="my-32byte-secret-key-12345678901234567890";
 
     //生成令牌的方法
-    public static String obtainJwt(String userId){
+    public static String obtainJwt(String userId,String sercetKey){
         Map<String,String> dataMap = new HashMap<>();
         dataMap.put("userId",userId);
         //根据字符串密钥来生成HS256形式的密钥
@@ -39,24 +39,21 @@ public class JWT {
     }
 
     //解析并获取令牌内容的方法
-    public static String jwtCheck(String token){
+    public static String jwtCheck(String token,String sercetKey){
         SecretKey key= Keys.hmacShaKeyFor( sercetKey.getBytes(StandardCharsets.UTF_8) );    //根据字符串密钥生成HS256形式的密钥
-        try {
             Jws<Claims> data = Jwts.parser()           //开启解析器建立
                     .verifyWith(key)                    //设置解析的密钥
                     .build()                            //根据上述建立一个解析器
                     .parseSignedClaims(token);          //通过解析器获取指定令牌的破解版
             return (String) data.getPayload().get("userId");       //返回载荷存储的userId
-        }catch (Exception e){
-            throw new RuntimeException("令牌解析错误！！！");
-        }
     }
 
-    public static long jwtCheckToLong(String token){
-        return Long.parseLong(jwtCheck(token));
+    public static long jwtCheckToLong(String token,String sercetKey){
+        long l = Long.parseLong(jwtCheck(token,sercetKey));
+        return l;
     }
 
-    public static String obtainJwtByLong(long userId){
-        return obtainJwt(""+userId);
+    public static String obtainJwtByLong(long userId,String sercetKey){
+        return obtainJwt(""+userId,sercetKey);
     }
 }

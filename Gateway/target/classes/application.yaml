@@ -15,61 +15,53 @@ spring:
               uri: lb://${spring.cloud.gateway.server.webflux.routes[0].id}
               predicates:       #断言，判断是否转发给该路由
                 - Path=/${spring.cloud.gateway.server.webflux.routes[0].id}/**    #路径断言，代表将路径为user的都转发
-              # 新增元数据，指定该路由要拉取的服务分组
-              metadata:
-                nacos-group: ADMIN_GROUP
 
             - id: merchant
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[1].id}?group=MERCHANT_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[1].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[1].id}/**
 
             - id: employee
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[2].id}?group=EMPLOYEE_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[2].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[2].id}/**
 
             - id: meal
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[3].id}?group=MEAL_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[3].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[3].id}/**
 
             - id: fund
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[4].id}?group=FUND_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[4].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[4].id}/**
 
             - id: promotion
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[5].id}?group=PROMOTION_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[5].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[5].id}/**
 
             - id: order
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[6].id}?group=ORDER_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[6].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[6].id}/**
 
             - id: rider
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[7].id}?group=RIDER_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[7].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[7].id}/**
 
             - id: comment
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[8].id}?group=COMMENT_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[8].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[8].id}/**
 
             - id: interaction
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[9].id}?group=INTERACTION_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[9].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[9].id}/**
 
             - id: admin
-              uri: lb://${spring.cloud.gateway.server.webflux.routes[10].id}?group=ADMIN_GROUP
+              uri: lb://${spring.cloud.gateway.server.webflux.routes[10].id}
               predicates:
                 - Path=/${spring.cloud.gateway.server.webflux.routes[10].id}/**
-
-#            - id: Social   #路由标识,必须唯一
-#              uri: lb://Social   #路由地址，lb代表负载均衡，Social代表模块服务名。该项可以直接用ip地址代替
-#              predicates:       #断言，判断是否转发给该路由
-#                - Path=/Social/**    #路径断言，代表将路径为Social的都转发

@@ -34,6 +34,7 @@ spring:
       - nacos:common-sentinel-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-redis-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:${spring.application.name}-self-dev.yaml?group=${spring.cloud.nacos.discovery.group}&refreshEnabled=true
+      - nacos:common-jwt-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
 
 #  端口设置
 server:
