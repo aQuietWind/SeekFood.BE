@@ -1,0 +1,17 @@
+package com.seek.food.util.Context;
+
+
+public class TokenIdContext {
+    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    public static String get() {
+        return threadLocal.get();       //获取数据
+    }
+    public static void set(String tokenId) {       //Token是手写的辅助类
+        threadLocal.set(tokenId);         //设置该线程的存储数据
+    }
+    public static void remove() {
+        threadLocal.remove();           //删除该实例的数据，方便下次set
+    }
+}
+
+

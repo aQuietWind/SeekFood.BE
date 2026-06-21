@@ -2,7 +2,7 @@ package com.seek.food.gateway.Util;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.seek.food.gateway.Enum.GatewayConfig;
+import com.seek.food.gateway.Config.GatewayConfig;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 package com.seek.food.gateway.Filter;
 
 
-import com.seek.food.gateway.Enum.JWTConfig;
-import com.seek.food.gateway.Enum.RedisKeyConfig;
-import com.seek.food.gateway.Enum.RequestPathConfig;
+import com.seek.food.gateway.Config.JWTConfig;
+import com.seek.food.gateway.Config.RedisKeyConfig;
+import com.seek.food.gateway.Config.RequestPathConfig;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -28,19 +28,19 @@ import java.util.List;
 @Order(1)       //过滤器的顺序，越小就越先执行
 @Component      //使其被扫描到
 @RefreshScope
-public class TokenFilter implements GlobalFilter, ApplicationContextAware {
+public class TokenFilter implements GlobalFilter {
 
     private JWTConfig jwtConfig;
     private RequestPathConfig requestPathConfig;
     private StringRedisTemplate stringRedisTemplate;
     private RedisKeyConfig redisKeyConfig;
-    // 容器初始化好后，手动获取Bean
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.stringRedisTemplate = applicationContext.getBean(StringRedisTemplate.class);
-        this.jwtConfig = applicationContext.getBean(JWTConfig.class);
-        this.requestPathConfig = applicationContext.getBean(RequestPathConfig.class);
-        this.redisKeyConfig = applicationContext.getBean(RedisKeyConfig.class);
+    // 构造器注入
+    @Autowired
+    public TokenFilter(JWTConfig jwtConfig,RequestPathConfig requestPathConfig,StringRedisTemplate stringRedisTemplate,RedisKeyConfig redisKeyConfig) {
+        this.jwtConfig = jwtConfig;
+        this.requestPathConfig = requestPathConfig;
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.redisKeyConfig = redisKeyConfig;
     }
 
     //token处理拦截
@@ -90,7 +90,7 @@ public class TokenFilter implements GlobalFilter, ApplicationContextAware {
             } catch (Exception e) {
                 try {
                     //再判断是否为merchant
-                    result = JWT.jwtCheckToLong(token, jwtConfig.getUserSerectKey());
+                    result = JWT.jwtCheckToLong(token, jwtConfig.getMerchantSerectKey());
                 } catch (Exception ex) {
                     return result;
                 }
