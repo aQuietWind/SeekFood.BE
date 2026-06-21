@@ -1,0 +1,16 @@
+#  seata设置
+seata:
+  data-source-proxy-mode: AT      #设置模式为AT模式
+  register:
+    type: nacos       #类型
+    nacos:
+      server-addr: 127.0.0.1:8848     #nacos服务地点
+      namespace: ""       #命名空间，可为空
+      group: SEATA_GROUP      #服务组名称
+      application: seata-server       #服务名称
+  tx-server-group: default_tx_group     #事务组
+  service:
+    vgroup-mapping:     #与事务组的映射关系
+      default_tx_group: default   #你的seata集群名
+    default:
+      grouplist: 127.0.0.1:8091     #你的seata地址

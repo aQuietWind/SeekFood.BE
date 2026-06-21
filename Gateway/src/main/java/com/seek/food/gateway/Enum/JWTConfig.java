@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
 
 @RefreshScope
 @Component
-public class JWTEnum {
+public class JWTConfig {
     @Value("${jwt.key.user}")
     private String userSerectKey;
     @Value("${jwt.key.merchant}")
     private String merchantSerectKey;
 
 
-    public JWTEnum() {
+    public JWTConfig() {
     }
 
-    public JWTEnum(String userSerectKey, String merchantSerectKey) {
+    public JWTConfig(String userSerectKey, String merchantSerectKey) {
         this.userSerectKey = userSerectKey;
         this.merchantSerectKey = merchantSerectKey;
     }

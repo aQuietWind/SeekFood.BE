@@ -1,0 +1,8 @@
+request:
+  path:
+    allow-path:
+    - /user/login
+    reject-path:
+    - /testsetstes43435324634645746785
+    - /654654
+    - /t543erfgt

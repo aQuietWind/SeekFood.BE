@@ -1,0 +1,16 @@
+spring:
+  rabbitmq:
+    listener:
+      simple:
+        prefetch: 10   #设置每次消息预取的max上限，在未处理的消息达到上线时，不再获取消息
+        acknowledge-mode: auto      #设置消息确认模式
+        retry:      #重试配置
+          enabled: true     #开启重试
+          initial-interval: 1000    #初始的重试等待时间
+          multiplier: 1       #每次重试之间翻的倍数
+          max-attempts: 3       #最大重试次数
+          stateless: true       #是否处于无状态模式，有事务则设置为false
+    publisher-confirm-type: correlated  #异步等待消息，到时机再执行回调函数。也可以是simple同步等待
+    publisher-returns: true     #开启回调功能
+    template:
+      mandatory: true     #开启发生异常时对消息进行回调函数处理，为false代表直接抛弃消息

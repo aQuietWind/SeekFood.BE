@@ -1,0 +1,10 @@
+#  Feign的配置
+feign:
+  sentinel:
+    enabled: true # 开启Feign整合Sentinel
+  client:
+    config:
+      default:
+        connectTimeout: 1000
+        readTimeout: 3000
+        retryer: feign.Retryer.Default # 开启基础重试（注意：默认只重试1次，且只针对GET请求）

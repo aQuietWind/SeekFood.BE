@@ -10,13 +10,11 @@ import java.util.List;
 @RefreshScope
 @ConfigurationProperties(prefix = "request.path")
 @Component
-public class RequestPathEnum {
+public class RequestPathConfig {
     private List<String> allowPath;
     private List<String> rejectPath;
 
     public boolean checkAllowPath(String path){
-        System.out.println(allowPath);
-        System.out.println(rejectPath);
         for (int i = 0; i < allowPath.size(); i++) {
             if (allowPath.get(i).equals(path)) {
                 return true;
@@ -34,10 +32,10 @@ public class RequestPathEnum {
     }
 
 
-    public RequestPathEnum() {
+    public RequestPathConfig() {
     }
 
-    public RequestPathEnum(List<String> allowPath, List<String> rejectPath) {
+    public RequestPathConfig(List<String> allowPath, List<String> rejectPath) {
         this.allowPath = allowPath;
         this.rejectPath = rejectPath;
     }

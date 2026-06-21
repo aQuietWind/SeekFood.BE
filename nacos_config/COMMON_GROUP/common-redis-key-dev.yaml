@@ -1,0 +1,8 @@
+redis:
+  key:
+    name:
+      token-login: "common:token:login:Id:"
+      ip-check: "common:check:ip:"
+      id-check: "common:check:id:"
+      ip-black: "common:black:ip:"
+      id-black: "common:black:id:"

@@ -1,0 +1,36 @@
+gateway:
+  self:
+    caffeine:
+      local:
+        black-ip:
+          max-size: 10000
+          time-unit: minute
+          expire-time: 10
+        black-id:
+          max-size: 10000
+          time-unit: minute
+          expire-time: 10
+    black::
+      ip:
+        counts: 120
+        time-unit: hour
+        duration: 24
+      id:
+        counts: 9
+        time-unit: hour
+        duration: 12
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
