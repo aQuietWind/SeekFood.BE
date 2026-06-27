@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seek.food.user.Mapper.RegisterMapper">
+
+    <!-- 全局统一字段映射 -->
+    <resultMap id="UserResultMap" type="com.seek.food.dto.User.UserDTO">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="password" column="password"/>
+        <result property="sex" column="sex"/>
+        <result property="headerImageAddr" column="header_image_addr"/>
+        <result property="birthday" column="birthday"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isDelete" column="is_delete" />
+        <result property="shopAmount" column="shop_amount"/>
+    </resultMap>
+
+    <insert id="insertUser" >
+        insert into user (user_id,username,phone_number,password) values(#{userId},concat('用户',#{userId}),#{phoneNumber},#{password});
+    </insert>
+
+<!--    <select id="getUserById" resultMap="UserResultMap">-->
+<!--        select * from user where user_id=#{userId}-->
+<!--    </select>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

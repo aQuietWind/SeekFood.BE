@@ -2,7 +2,7 @@ package com.seek.food.gateway.Util;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.seek.food.gateway.Config.GatewayConfig;
+import com.seek.food.gateway.Config.GatewayBlackConfig;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +15,18 @@ public class BlackIpCaffeine {
     private Cache<String, Long> CACHE;
 
     // 构造注入配置
-    private final GatewayConfig gatewayConfig;
+    private final GatewayBlackConfig gatewayBlackConfig;
     @Autowired
-    public BlackIpCaffeine(GatewayConfig gatewayConfig) {
-        this.gatewayConfig = gatewayConfig;
+    public BlackIpCaffeine(GatewayBlackConfig gatewayBlackConfig) {
+        this.gatewayBlackConfig = gatewayBlackConfig;
     }
 
     // 容器启动构建缓存
     @PostConstruct
     public void init() {
         this.CACHE = Caffeine.newBuilder()
-                .maximumSize(gatewayConfig.getCaffeineBlackIpSize())
-                .expireAfterWrite(gatewayConfig.getCaffeineBlackIpExpire(), TimeUnit.MINUTES)
+                .maximumSize(gatewayBlackConfig.getCaffeineBlackIpSize())
+                .expireAfterWrite(gatewayBlackConfig.getCaffeineBlackIpExpire(), TimeUnit.MINUTES)
                 .recordStats()
                 .build();
     }

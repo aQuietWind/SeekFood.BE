@@ -3,32 +3,23 @@ package com.seek.food.gateway.Filter;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.seek.food.dto.Common.ErrorCodeEnum;
-import com.seek.food.gateway.Config.GatewayConfig;
+import com.seek.food.gateway.Config.GatewayBlackConfig;
 import com.seek.food.gateway.Config.JWTConfig;
-import com.seek.food.gateway.Config.RedisKeyConfig;
-import com.seek.food.gateway.Config.RequestPathConfig;
+import com.seek.food.gateway.Config.GatewayRedisKeyConfig;
 import com.seek.food.gateway.Util.BlackIdCaffeine;
 import com.seek.food.gateway.Util.BlackIpCaffeine;
 import com.seek.food.util.CommonUtil.LocalDateTimeUtil;
-import com.seek.food.util.JWT.JWTHeaderSign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Order(2)
@@ -38,7 +29,7 @@ public class RequestFilter implements GlobalFilter{
 
     //构造器注入
     private final StringRedisTemplate stringRedisTemplate;
-    private final RedisKeyConfig redisKeyConfig;
+    private final GatewayRedisKeyConfig gatewayRedisKeyConfig;
     private final BlackIpCaffeine blackIpCaffeine;
     private final BlackIdCaffeine blackIdCaffeine;
     private final JWTConfig jwtConfig;
@@ -49,17 +40,17 @@ public class RequestFilter implements GlobalFilter{
     private static final Logger logger = LoggerFactory.getLogger(RequestFilter.class);
     // 构造器注入
 //    @Autowired
-    public RequestFilter(StringRedisTemplate stringRedisTemplate, RedisKeyConfig redisKeyConfig,BlackIpCaffeine blackIpCaffeine
-    ,BlackIdCaffeine blackIdCaffeine, GatewayConfig gatewayConfig, JWTConfig jwtConfig) {
+    public RequestFilter(StringRedisTemplate stringRedisTemplate, GatewayRedisKeyConfig gatewayRedisKeyConfig, BlackIpCaffeine blackIpCaffeine
+    , BlackIdCaffeine blackIdCaffeine, GatewayBlackConfig gatewayBlackConfig, JWTConfig jwtConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
-        this.redisKeyConfig = redisKeyConfig;
+        this.gatewayRedisKeyConfig = gatewayRedisKeyConfig;
         this.blackIpCaffeine = blackIpCaffeine;
         this.blackIdCaffeine = blackIdCaffeine;
         this.jwtConfig = jwtConfig;
-        this.blackIpTimes=gatewayConfig.getBlackIpCounts();
-        this.blackIdTimes=gatewayConfig.getBlackIdCounts();
-        this.blackIpDuration=gatewayConfig.getBlackIpDuration();
-        this.blackIdDuration=gatewayConfig.getBlackIdDuration();
+        this.blackIpTimes= gatewayBlackConfig.getBlackIpCounts();
+        this.blackIdTimes= gatewayBlackConfig.getBlackIdCounts();
+        this.blackIpDuration= gatewayBlackConfig.getBlackIpDuration();
+        this.blackIdDuration= gatewayBlackConfig.getBlackIdDuration();
     }
 
     @Override
@@ -70,7 +61,7 @@ public class RequestFilter implements GlobalFilter{
         if (("".equals(tokenId)||tokenId==null)&&ipCheck(request))return chain.filter(exchange);
         else if (tokenId!=null&&idRecord(tokenId))return chain.filter(exchange);
         logger.warn("requestFilter拒绝请求");
-        exchange.getResponse().setStatusCode(ErrorCodeEnum.ACCOUNT_FORBIDDEN.getHttpStatus());      //设置状态码
+        exchange.getResponse().setRawStatusCode(ErrorCodeEnum.ACCOUNT_FORBIDDEN.getCode());      //设置状态码
         return exchange.getResponse().setComplete();        //拒绝请求
     }
 
@@ -84,9 +75,9 @@ public class RequestFilter implements GlobalFilter{
         //进行ip检查
         return recordCount(
                 blackIpCaffeine.getCACHE(),
-                redisKeyConfig.getIpBlackKey(),
+                gatewayRedisKeyConfig.getIpBlack(),
                 ip,
-                redisKeyConfig.getIpCheckKey(),
+                gatewayRedisKeyConfig.getIpCheck(),
                 blackIpTimes,
                 blackIpDuration
                 );      //检查名单
@@ -96,9 +87,9 @@ public class RequestFilter implements GlobalFilter{
     private boolean idRecord(String id){
         return recordCount(
                 blackIdCaffeine.getCACHE(),
-                redisKeyConfig.getIdBlackKey(),
+                gatewayRedisKeyConfig.getIdBlack(),
                 id,
-                redisKeyConfig.getIdCheckKey(),
+                gatewayRedisKeyConfig.getIdCheck(),
                 blackIdTimes,
                 blackIdDuration
         );

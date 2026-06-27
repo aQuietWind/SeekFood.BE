@@ -16,11 +16,14 @@ public class Result<T> {
     public Result() {
     }
 
-    public static <T> Result<T> success(String msg, T data) {
-        return new Result<>(200, msg, data);
+    public static <T> Result<T> success(T data) {
+        return new Result<>(200, null, data);
     }
     public static <T> Result<T> error(int code,String msg) {
         return new Result<T>(code, msg, null);
+    }
+    public static <T> Result<T> error(ErrorCodeEnum errorCodeEnum) {
+        return new Result(errorCodeEnum.getCode(),errorCodeEnum.getDefaultMsg(),null);
     }
 
 

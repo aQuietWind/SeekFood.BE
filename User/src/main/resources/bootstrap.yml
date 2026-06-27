@@ -26,15 +26,9 @@ spring:
   #声明配置引入，按顺序引入，后面的会覆盖前面的
   config:
     import:
-      - nacos:common-rabbitmq-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-rabbitmq-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-mybatis-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-seata-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-feign-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-sentinel-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-redis-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:${spring.application.name}-self-dev.yaml?group=${spring.cloud.nacos.discovery.group}&refreshEnabled=true
       - nacos:common-jwt-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-default-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
 
 #  端口设置
 server:

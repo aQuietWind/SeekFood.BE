@@ -28,8 +28,7 @@ spring:
   #声明配置引入，按顺序引入，后面的会覆盖前面的
   config:
     import:
-      - nacos:common-sentinel-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
-      - nacos:common-redis-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-default-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-jwt-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-request-path-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-redis-key-dev.yaml?group=COMMON_GROUP&refreshEnabled=true

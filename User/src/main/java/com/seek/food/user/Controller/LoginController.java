@@ -2,7 +2,7 @@ package com.seek.food.user.Controller;
 
 
 import com.seek.food.dto.Common.Result;
-import com.seek.food.user.Config.JWTConfig;
+import com.seek.food.user.Config.NacosConfig.JWTConfig;
 import com.seek.food.util.JWT.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +30,7 @@ public class LoginController {
         cookie.setPath("/");
         cookie.setMaxAge(60 * 1000000);
         response.addCookie(cookie);
-        return Result.success("good",null);
+        return Result.success("good");
     }
 
 
