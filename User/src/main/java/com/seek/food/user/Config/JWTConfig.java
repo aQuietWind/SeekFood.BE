@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 @Component
 public class JWTConfig {
-    @Value("${jwt.key.user}")
+    @Value("${common.jwt.secret-key.user}")
     private String userSerectKey;
-    @Value("${jwt.key.merchant}")
+    @Value("${common.jwt.secret-key.merchant}")
     private String merchantSerectKey;
 
 

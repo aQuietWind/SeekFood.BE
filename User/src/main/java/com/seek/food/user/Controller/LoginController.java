@@ -3,7 +3,7 @@ package com.seek.food.user.Controller;
 
 import com.seek.food.dto.Common.Result;
 import com.seek.food.user.Config.JWTConfig;
-import com.seek.food.util.CommonUtil.JWT;
+import com.seek.food.util.JWT.JWTUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ public class LoginController {
     @PostMapping
     public Result login(long userId, HttpServletResponse response) {
         // 1. 登录校验成功，生成JWT accessToken
-        String accessToken = JWT.obtainJwtByLong(userId,jwtConfig.getUserSerectKey());
+        String accessToken = JWTUtil.obtainJwtByLong(userId,jwtConfig.getUserSerectKey());
 
         // 2. 构建安全Cookie
         // 构建Servlet Cookie
-        Cookie cookie = new Cookie("access_token", accessToken);
+        Cookie cookie = new Cookie("access_token", "1-"+accessToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
         cookie.setPath("/");

@@ -19,6 +19,7 @@
         <module name="Employee" />
         <module name="Merchant" />
         <module name="Gateway" />
+        <module name="Chat" />
         <module name="DTO" />
       </profile>
     </annotationProcessing>
@@ -31,6 +32,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Activity" options="-parameters" />
       <module name="Admin" options="-parameters" />
+      <module name="Chat" options="-parameters" />
       <module name="Comment" options="-parameters" />
       <module name="Coupon" options="-parameters" />
       <module name="DTO" options="-parameters" />

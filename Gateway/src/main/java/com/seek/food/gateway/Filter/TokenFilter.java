@@ -4,13 +4,13 @@ package com.seek.food.gateway.Filter;
 import com.seek.food.gateway.Config.JWTConfig;
 import com.seek.food.gateway.Config.RedisKeyConfig;
 import com.seek.food.gateway.Config.RequestPathConfig;
-import org.springframework.beans.BeansException;
+import com.seek.food.util.JWT.JWTHeaderSign;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpCookie;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import com.seek.food.util.CommonUtil.JWT;
+import com.seek.food.util.JWT.JWTUtil;
 
 import java.util.List;
 
@@ -34,6 +34,8 @@ public class TokenFilter implements GlobalFilter {
     private RequestPathConfig requestPathConfig;
     private StringRedisTemplate stringRedisTemplate;
     private RedisKeyConfig redisKeyConfig;
+    private final JWTHeaderSign[] jwtHeaderSigns;
+    private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
     // 构造器注入
     @Autowired
     public TokenFilter(JWTConfig jwtConfig,RequestPathConfig requestPathConfig,StringRedisTemplate stringRedisTemplate,RedisKeyConfig redisKeyConfig) {
@@ -41,6 +43,10 @@ public class TokenFilter implements GlobalFilter {
         this.requestPathConfig = requestPathConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.redisKeyConfig = redisKeyConfig;
+        this.jwtHeaderSigns=JWTHeaderSign.getHeaderSignArr(jwtConfig.getSecretKey(),jwtConfig.getHeaderSign(), jwtConfig.getHeaderSeparator(), jwtConfig.getTokenName());
+        for (int i = 0; i < this.jwtHeaderSigns.length; i++) {
+            System.out.println(jwtHeaderSigns[i]);
+        }
     }
 
     //token处理拦截
@@ -49,8 +55,7 @@ public class TokenFilter implements GlobalFilter {
         //实现方法，其中exchange用于获取和设置请求头、响应头。chain用于放行
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
-        System.out.println(path);
-
+        logger.info("请求路径:{} ,进入TokenFilter",path);
         //检查该请求路径是否需要直接放行
         if(requestPathConfig.checkAllowPath(path))return chain.filter(exchange);
         //检查该请求路径是否为封禁路径
@@ -58,11 +63,11 @@ public class TokenFilter implements GlobalFilter {
         //尝试获取Id
         long ownId=checkToken(getToken(request));
         //token是否有效，有效则放行
-        if (ownId!=0) return chain.filter(getNewExchange(request,exchange,ownId));
+        if (ownId!=-1) return chain.filter(getNewExchange(request,exchange,ownId));
         //拒绝放行
+        logger.warn("非法请求被FilterFilter拦截");
         return reject(exchange);
         }
-
 
         // 通过安全的HttpOnly Cookie来获取token
         private String getToken(ServerHttpRequest request){
@@ -71,31 +76,19 @@ public class TokenFilter implements GlobalFilter {
             MultiValueMap<String, HttpCookie> cookies = request.getCookies();
             // 2. 根据Cookie名称拿token（登录接口Set-Cookie里的key，比如access_token）
             List<HttpCookie> tokenCookies = cookies.get("access_token");
-
             String token = null;
-            if (tokenCookies != null && !tokenCookies.isEmpty())token = tokenCookies.get(0).getValue();
+            if (tokenCookies != null && !tokenCookies.isEmpty())token = tokenCookies.getFirst().getValue();
             return token;
         }
 
-
         //检验token是否有效
         private long checkToken(String token){
-            long result = 0;
+            long result = -1;
             //检测token是否为空
             if(token == null||token.isEmpty())return result;
             //检查token是否有效
-            try {
-                //判断是否为user
-                result=JWT.jwtCheckToLong(token, jwtConfig.getUserSerectKey());
-            } catch (Exception e) {
-                try {
-                    //再判断是否为merchant
-                    result = JWT.jwtCheckToLong(token, jwtConfig.getMerchantSerectKey());
-                } catch (Exception ex) {
-                    return result;
-                }
-            }
-            if(stringRedisTemplate.opsForHash().get(redisKeyConfig.getLoginTokenKey()+result, token)==null)return 0;
+            result= JWTUtil.jwtCheckByList(token,jwtConfig.getHeaderSeparator(), jwtHeaderSigns);
+            if(stringRedisTemplate.opsForHash().get(redisKeyConfig.getLoginTokenKey()+result, token)==null)return -1;
             return result;
         }
 

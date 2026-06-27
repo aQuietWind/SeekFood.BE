@@ -7,6 +7,8 @@ import com.seek.food.gateway.Config.RedisKeyConfig;
 import com.seek.food.gateway.Util.BlackIdCaffeine;
 import com.seek.food.gateway.Util.BlackIpCaffeine;
 import com.seek.food.util.CommonUtil.LocalDateTimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -39,6 +41,7 @@ public class RequestFilter implements GlobalFilter, ApplicationContextAware {
     private int blackIpDuration;
     private int blackIdTimes;
     private int blackIdDuration;
+    private static final Logger logger = LoggerFactory.getLogger(RequestFilter.class);
     // 容器初始化好后，手动获取Bean
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -55,7 +58,9 @@ public class RequestFilter implements GlobalFilter, ApplicationContextAware {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){
+        logger.info("请求进入RequestFilter");
         ServerHttpRequest request = exchange.getRequest();
+        //获取tokenId
         List<String> tokens = request.getHeaders().get("X-Token-Id");
         String tokenId=tokens==null?null:tokens.getFirst();
         //检验是不是去公开路径的,并检查ip是否处于黑名单
@@ -115,6 +120,7 @@ public class RequestFilter implements GlobalFilter, ApplicationContextAware {
         }
         //第一次来访设置1分钟有效期
         if (count==1)stringRedisTemplate.expire(redisRecordKey+value,1,TimeUnit.MINUTES);
+        logger.info("请求黑名单验证成功");
         //同意放行
         return true;
     }
