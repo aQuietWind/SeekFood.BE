@@ -5,37 +5,28 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RefreshScope
 @ConfigurationProperties(prefix = "request.path")
 @Component
 public class RequestPathConfig {
-    private List<String> allowPath;
-    private List<String> rejectPath;
+    private HashSet<String> allowPath;
+    private HashSet<String> rejectPath;
 
     public boolean checkAllowPath(String path){
-        for (int i = 0; i < allowPath.size(); i++) {
-            if (allowPath.get(i).equals(path)) {
-                return true;
-            }
-        }
-        return false;
+        return allowPath.contains(path);
     }
     public boolean checkRejectPath(String path){
-        for (int i = 0; i < rejectPath.size(); i++) {
-            if (rejectPath.get(i).equals(path)) {
-                return true;
-            }
-        }
-        return false;
+        return rejectPath.contains(path);
     }
 
 
     public RequestPathConfig() {
     }
 
-    public RequestPathConfig(List<String> allowPath, List<String> rejectPath) {
+    public RequestPathConfig(HashSet<String> allowPath, HashSet<String> rejectPath) {
         this.allowPath = allowPath;
         this.rejectPath = rejectPath;
     }
@@ -44,7 +35,7 @@ public class RequestPathConfig {
      * 获取
      * @return allowPath
      */
-    public List<String> getAllowPath() {
+    public HashSet<String> getAllowPath() {
         return allowPath;
     }
 
@@ -52,7 +43,7 @@ public class RequestPathConfig {
      * 设置
      * @param allowPath
      */
-    public void setAllowPath(List<String> allowPath) {
+    public void setAllowPath(HashSet<String> allowPath) {
         this.allowPath = allowPath;
     }
 
@@ -60,7 +51,7 @@ public class RequestPathConfig {
      * 获取
      * @return rejectPath
      */
-    public List<String> getRejectPath() {
+    public HashSet<String> getRejectPath() {
         return rejectPath;
     }
 
@@ -68,12 +59,12 @@ public class RequestPathConfig {
      * 设置
      * @param rejectPath
      */
-    public void setRejectPath(List<String> rejectPath) {
+    public void setRejectPath(HashSet<String> rejectPath) {
         this.rejectPath = rejectPath;
     }
 
     public String toString() {
-        return "RequestPathEnum{allowPath = " + allowPath + ", rejectPath = " + rejectPath + "}";
+        return "RequestPathConfig{allowPath = " + allowPath + ", rejectPath = " + rejectPath + "}";
     }
 }
 

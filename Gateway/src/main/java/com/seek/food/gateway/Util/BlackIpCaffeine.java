@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class BlackIpCaffeine {
     // 全局单例缓存（唯一实例）
-    private static Cache<String, Long> CACHE;
+    private Cache<String, Long> CACHE;
 
     // 构造注入配置
     private final GatewayConfig gatewayConfig;

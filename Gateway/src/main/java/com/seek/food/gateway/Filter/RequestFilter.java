@@ -2,14 +2,19 @@ package com.seek.food.gateway.Filter;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.seek.food.dto.Common.ErrorCodeEnum;
 import com.seek.food.gateway.Config.GatewayConfig;
+import com.seek.food.gateway.Config.JWTConfig;
 import com.seek.food.gateway.Config.RedisKeyConfig;
+import com.seek.food.gateway.Config.RequestPathConfig;
 import com.seek.food.gateway.Util.BlackIdCaffeine;
 import com.seek.food.gateway.Util.BlackIpCaffeine;
 import com.seek.food.util.CommonUtil.LocalDateTimeUtil;
+import com.seek.food.util.JWT.JWTHeaderSign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -29,27 +34,28 @@ import java.util.concurrent.TimeUnit;
 @Order(2)
 //@Component
 @RefreshScope
-public class RequestFilter implements GlobalFilter, ApplicationContextAware {
+public class RequestFilter implements GlobalFilter{
 
     //构造器注入
-    private StringRedisTemplate stringRedisTemplate;
-    private RedisKeyConfig redisKeyConfig;
-    private BlackIpCaffeine blackIpCaffeine;
-    private BlackIdCaffeine blackIdCaffeine;
-    private GatewayConfig gatewayConfig;
-    private int blackIpTimes;
-    private int blackIpDuration;
-    private int blackIdTimes;
-    private int blackIdDuration;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisKeyConfig redisKeyConfig;
+    private final BlackIpCaffeine blackIpCaffeine;
+    private final BlackIdCaffeine blackIdCaffeine;
+    private final JWTConfig jwtConfig;
+    private final int blackIpTimes;
+    private final int blackIpDuration;
+    private final int blackIdTimes;
+    private final int blackIdDuration;
     private static final Logger logger = LoggerFactory.getLogger(RequestFilter.class);
-    // 容器初始化好后，手动获取Bean
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.stringRedisTemplate = applicationContext.getBean(StringRedisTemplate.class);
-        this.redisKeyConfig = applicationContext.getBean(RedisKeyConfig.class);
-        this.blackIpCaffeine = applicationContext.getBean(BlackIpCaffeine.class);
-        this.blackIdCaffeine = applicationContext.getBean(BlackIdCaffeine.class);
-        this.gatewayConfig = applicationContext.getBean(GatewayConfig.class);
+    // 构造器注入
+//    @Autowired
+    public RequestFilter(StringRedisTemplate stringRedisTemplate, RedisKeyConfig redisKeyConfig,BlackIpCaffeine blackIpCaffeine
+    ,BlackIdCaffeine blackIdCaffeine, GatewayConfig gatewayConfig, JWTConfig jwtConfig) {
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.redisKeyConfig = redisKeyConfig;
+        this.blackIpCaffeine = blackIpCaffeine;
+        this.blackIdCaffeine = blackIdCaffeine;
+        this.jwtConfig = jwtConfig;
         this.blackIpTimes=gatewayConfig.getBlackIpCounts();
         this.blackIdTimes=gatewayConfig.getBlackIdCounts();
         this.blackIpDuration=gatewayConfig.getBlackIpDuration();
@@ -58,15 +64,13 @@ public class RequestFilter implements GlobalFilter, ApplicationContextAware {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){
-        logger.info("请求进入RequestFilter");
         ServerHttpRequest request = exchange.getRequest();
-        //获取tokenId
-        List<String> tokens = request.getHeaders().get("X-Token-Id");
-        String tokenId=tokens==null?null:tokens.getFirst();
+        String tokenId = request.getHeaders().getFirst(jwtConfig.getHeaderTokenName());
         //检验是不是去公开路径的,并检查ip是否处于黑名单
         if (("".equals(tokenId)||tokenId==null)&&ipCheck(request))return chain.filter(exchange);
         else if (tokenId!=null&&idRecord(tokenId))return chain.filter(exchange);
-        exchange.getResponse().setStatusCode(HttpStatus.BAD_GATEWAY);      //设置状态码
+        logger.warn("requestFilter拒绝请求");
+        exchange.getResponse().setStatusCode(ErrorCodeEnum.ACCOUNT_FORBIDDEN.getHttpStatus());      //设置状态码
         return exchange.getResponse().setComplete();        //拒绝请求
     }
 
@@ -120,7 +124,6 @@ public class RequestFilter implements GlobalFilter, ApplicationContextAware {
         }
         //第一次来访设置1分钟有效期
         if (count==1)stringRedisTemplate.expire(redisRecordKey+value,1,TimeUnit.MINUTES);
-        logger.info("请求黑名单验证成功");
         //同意放行
         return true;
     }

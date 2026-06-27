@@ -16,15 +16,19 @@ public class JWTConfig {
     private Map<String,String> secretKey;
     private Map<String,String> headerSign;
     private String headerSeparator;
+    private String headerTokenName;
+    private String requestTokenName;
 
     public JWTConfig() {
     }
 
-    public JWTConfig(ArrayList<String> tokenName, Map<String, String> secretKey, Map<String, String> headerSign, String headerSeparator) {
+    public JWTConfig(ArrayList<String> tokenName, Map<String, String> secretKey, Map<String, String> headerSign, String headerSeparator, String headerTokenName, String requestTokenName) {
         this.tokenName = tokenName;
         this.secretKey = secretKey;
         this.headerSign = headerSign;
         this.headerSeparator = headerSeparator;
+        this.headerTokenName = headerTokenName;
+        this.requestTokenName = requestTokenName;
     }
 
     /**
@@ -91,7 +95,39 @@ public class JWTConfig {
         this.headerSeparator = headerSeparator;
     }
 
+    /**
+     * 获取
+     * @return headerTokenName
+     */
+    public String getHeaderTokenName() {
+        return headerTokenName;
+    }
+
+    /**
+     * 设置
+     * @param headerTokenName
+     */
+    public void setHeaderTokenName(String headerTokenName) {
+        this.headerTokenName = headerTokenName;
+    }
+
+    /**
+     * 获取
+     * @return requestTokenName
+     */
+    public String getRequestTokenName() {
+        return requestTokenName;
+    }
+
+    /**
+     * 设置
+     * @param requestTokenName
+     */
+    public void setRequestTokenName(String requestTokenName) {
+        this.requestTokenName = requestTokenName;
+    }
+
     public String toString() {
-        return "JWTConfig{tokenName = " + tokenName + ", secretKey = " + secretKey + ", headerSign = " + headerSign + ", headerSeparator = " + headerSeparator + "}";
+        return "JWTConfig{tokenName = " + tokenName + ", secretKey = " + secretKey + ", headerSign = " + headerSign + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + ", requestTokenName = " + requestTokenName + "}";
     }
 }

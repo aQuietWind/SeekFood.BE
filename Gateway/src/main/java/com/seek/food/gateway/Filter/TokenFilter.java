@@ -1,6 +1,7 @@
 package com.seek.food.gateway.Filter;
 
 
+import com.seek.food.dto.Common.ErrorCodeEnum;
 import com.seek.food.gateway.Config.JWTConfig;
 import com.seek.food.gateway.Config.RedisKeyConfig;
 import com.seek.food.gateway.Config.RequestPathConfig;
@@ -30,10 +31,10 @@ import java.util.List;
 @RefreshScope
 public class TokenFilter implements GlobalFilter {
 
-    private JWTConfig jwtConfig;
-    private RequestPathConfig requestPathConfig;
-    private StringRedisTemplate stringRedisTemplate;
-    private RedisKeyConfig redisKeyConfig;
+    private final JWTConfig jwtConfig;
+    private final RequestPathConfig requestPathConfig;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisKeyConfig redisKeyConfig;
     private final JWTHeaderSign[] jwtHeaderSigns;
     private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
     // 构造器注入
@@ -44,9 +45,6 @@ public class TokenFilter implements GlobalFilter {
         this.stringRedisTemplate = stringRedisTemplate;
         this.redisKeyConfig = redisKeyConfig;
         this.jwtHeaderSigns=JWTHeaderSign.getHeaderSignArr(jwtConfig.getSecretKey(),jwtConfig.getHeaderSign(), jwtConfig.getHeaderSeparator(), jwtConfig.getTokenName());
-        for (int i = 0; i < this.jwtHeaderSigns.length; i++) {
-            System.out.println(jwtHeaderSigns[i]);
-        }
     }
 
     //token处理拦截
@@ -63,55 +61,57 @@ public class TokenFilter implements GlobalFilter {
         //尝试获取Id
         long ownId=checkToken(getToken(request));
         //token是否有效，有效则放行
-        if (ownId!=-1) return chain.filter(getNewExchange(request,exchange,ownId));
+        if (ownId!=JWTUtil.FailResult)return chain.filter(getNewExchange(request,exchange,ownId));
         //拒绝放行
-        logger.warn("非法请求被FilterFilter拦截");
+        logger.warn("token验证失败");
         return reject(exchange);
         }
 
         // 通过安全的HttpOnly Cookie来获取token
-        private String getToken(ServerHttpRequest request){
-            //获取token
-            // 1. 获取全部Cookie集合
-            MultiValueMap<String, HttpCookie> cookies = request.getCookies();
-            // 2. 根据Cookie名称拿token（登录接口Set-Cookie里的key，比如access_token）
-            List<HttpCookie> tokenCookies = cookies.get("access_token");
-            String token = null;
-            if (tokenCookies != null && !tokenCookies.isEmpty())token = tokenCookies.getFirst().getValue();
-            return token;
-        }
+    private String getToken(ServerHttpRequest request){
+        //获取token
+        // 1. 获取全部Cookie集合
+        MultiValueMap<String, HttpCookie> cookies = request.getCookies();
+        // 2. 根据Cookie名称拿token（登录接口Set-Cookie里的key，比如access_token）
+        List<HttpCookie> tokenCookies = cookies.get(jwtConfig.getRequestTokenName());
+        String token = null;
+        if (tokenCookies != null && !tokenCookies.isEmpty())token = tokenCookies.getFirst().getValue();
+        return token;
+    }
 
         //检验token是否有效
-        private long checkToken(String token){
-            long result = -1;
-            //检测token是否为空
-            if(token == null||token.isEmpty())return result;
-            //检查token是否有效
-            result= JWTUtil.jwtCheckByList(token,jwtConfig.getHeaderSeparator(), jwtHeaderSigns);
-            if(stringRedisTemplate.opsForHash().get(redisKeyConfig.getLoginTokenKey()+result, token)==null)return -1;
-            return result;
-        }
+    private long checkToken(String token){
+        long result = JWTUtil.FailResult;
+        //检测token是否为空
+        if(token == null||token.isEmpty())return result;
+        //检查token是否有效
+        result= JWTUtil.jwtCheckByList(token,jwtConfig.getHeaderSeparator(), jwtHeaderSigns);
+        //检验redis是否存在该token
+        if(stringRedisTemplate.opsForHash().get(redisKeyConfig.getLoginTokenKey()+result, token)==null) return JWTUtil.FailResult;
+        return result;
+    }
 
         //构建新的上下文
-        private ServerWebExchange getNewExchange(ServerHttpRequest request, ServerWebExchange exchange,long ownId){
-            // 构造新请求，追加解析后的用户信息到请求头
-            ServerHttpRequest newReq = request.mutate()
-                    .headers(headers -> {
-                        // 清空客户端伪造的同名header
-                        headers.remove("X-Token-Id");
-                        // 新增，此时列表只有一条
-                        headers.add("X-Token-Id", String.valueOf(ownId));
-                    })
-                    .build();
-            //放入id
-            return exchange.mutate().request(newReq).build();
-        }
+    private ServerWebExchange getNewExchange(ServerHttpRequest request, ServerWebExchange exchange,long ownId){
+        // 构造新请求，追加解析后的用户信息到请求头
+        ServerHttpRequest newReq = request.mutate()
+                .headers(headers -> {
+                    // 清空客户端伪造的同名header
+                    headers.remove(jwtConfig.getHeaderTokenName());
+                    // 新增，此时列表只有一条
+                    headers.add(jwtConfig.getHeaderTokenName(), String.valueOf(ownId));
+                })
+                .build();
+        //放入id
+        return exchange.mutate().request(newReq).build();
+    }
 
         //拒绝放行
-        private Mono<Void> reject(ServerWebExchange exchange){
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);      //设置状态码
-            return exchange.getResponse().setComplete();        //拒绝请求
-        }
+    private Mono<Void> reject(ServerWebExchange exchange){
+        logger.warn("非法请求被FilterFilter拦截");
+        exchange.getResponse().setStatusCode(ErrorCodeEnum.UNAUTHORIZED.getHttpStatus());      //设置状态码
+        return exchange.getResponse().setComplete();        //拒绝请求
+    }
 
 
 }

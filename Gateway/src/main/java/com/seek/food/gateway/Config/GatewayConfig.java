@@ -28,16 +28,6 @@ public class GatewayConfig {
     public GatewayConfig() {
     }
 
-    public GatewayConfig(int caffeineBlackIpSize, int caffeineBlackIdSize, int caffeineBlackIpExpire, int caffeineBlackIdExpire, int blackIpCounts, int blackIdCounts, int blackIpDuration, int blackIdDuration) {
-        this.caffeineBlackIpSize = caffeineBlackIpSize;
-        this.caffeineBlackIdSize = caffeineBlackIdSize;
-        this.caffeineBlackIpExpire = caffeineBlackIpExpire;
-        this.caffeineBlackIdExpire = caffeineBlackIdExpire;
-        this.blackIpCounts = blackIpCounts;
-        this.blackIdCounts = blackIdCounts;
-        this.blackIpDuration = blackIpDuration;
-        this.blackIdDuration = blackIdDuration;
-    }
 
     /**
      * 获取

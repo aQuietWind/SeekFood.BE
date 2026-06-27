@@ -15,16 +15,18 @@ import java.util.Map;
 
 public class JWTUtil {
     private static final Logger logger = LoggerFactory.getLogger(JWTUtil.class);
+    public static final int FailResult=-1;
+    public static final String IdName="tokenId";
     //生成令牌的方法
     public static String obtainJwt(String tokenId,String sercetKey){
         Map<String,String> dataMap = new HashMap<>();
-        dataMap.put("tokenId",tokenId);
+        dataMap.put(IdName,tokenId);
         //根据字符串密钥来生成HS256形式的密钥
         SecretKey key= Keys.hmacShaKeyFor( sercetKey.getBytes(StandardCharsets.UTF_8) );
         Date usefulTime=new Date(System.currentTimeMillis()+3600*1000*24*20);             //设置最终过期时间点
         String token= Jwts.builder()                  //通过链式编程生成字符串令牌
                 .claims(dataMap)                    //设置Payload载荷数据
-                .subject("test")                  //设置主题，id，或者权限等等重要标识
+                .subject("seek_food")                  //设置主题，id，或者权限等等重要标识
                 .issuedAt(new Date())               //设置签发时间
                 .expiration(usefulTime)             //设置最终有效期为一个小时，后续可自己自定义
                 .signWith(key)                      //设置该令牌密钥，自动识别HS256算法
@@ -39,19 +41,19 @@ public class JWTUtil {
                     .verifyWith(key)                    //设置解析的密钥
                     .build()                            //根据上述建立一个解析器
                     .parseSignedClaims(token);          //通过解析器获取指定令牌的破解版
-            return (String) data.getPayload().get("tokenId");       //返回载荷存储的userId
+            return (String) data.getPayload().get(IdName);       //返回载荷存储的userId
     }
 
     public static long jwtCheckToLong(String token,String sercetKey){
         return Long.parseLong(jwtCheck(token,sercetKey));
     }
 
-    public static String obtainJwtByLong(long userId,String sercetKey){
-        return obtainJwt(""+userId,sercetKey);
+    public static String obtainJwtByLong(long tokenId,String sercetKey){
+        return obtainJwt(""+tokenId,sercetKey);
     }
 
     public static long jwtCheckByList(String token,String headerSeparator,JWTHeaderSign[] jwtHeaderSigns){
-        //分割token
+        //分割token,并且赋值
         String[] body=token.split(headerSeparator,2);
         String headerSign=body[0];
         token=body[1];
@@ -62,11 +64,11 @@ public class JWTUtil {
                 try {return jwtCheckToLong(token,jwtHeaderSigns[i].getSecretKey());}
                 catch (Exception e){
                     logger.warn("token:{} ,在解析时错误，发生异常:{}",token,e.getMessage());
-                    return -1;
+                    return FailResult;
                 }
             }
         }
-        return -1;
+        return FailResult;
     }
 
 

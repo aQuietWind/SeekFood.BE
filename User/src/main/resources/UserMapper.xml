@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seek.food.mapper.UserMapper">
+
+    <!-- 全局统一字段映射，所有CRUD共用 -->
+    <resultMap id="UserResultMap" type="com.seek.food.dto.UserDTO">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="password" column="password"/>
+        <result property="sex" column="sex"/>
+        <result property="headerImageAddr" column="header_image_addr"/>
+        <result property="birthday" column="birthday"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isDelete" column="is_delete" />
+        <result property="shopAmount" column="shop_amount"/>
+    </resultMap>
+
+    <!-- 示例查询，直接引用resultMap，不用重复写column映射 -->
+    <select id="selectById" resultMap="UserResultMap">
+        select user_id,
+               username,
+               phone_number,
+               password,
+               sex,
+               header_image_addr,
+               birthday,
+               create_time,
+               is_delete,
+               shop_amount
+        from user
+        where user_id = #{userId}
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

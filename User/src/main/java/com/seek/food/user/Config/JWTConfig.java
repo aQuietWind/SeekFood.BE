@@ -10,16 +10,21 @@ import org.springframework.stereotype.Component;
 public class JWTConfig {
     @Value("${common.jwt.secret-key.user}")
     private String userSerectKey;
-    @Value("${common.jwt.secret-key.merchant}")
-    private String merchantSerectKey;
-
+    @Value("${common.jwt.header-sign.user}")
+    private String userHeaderSign;
+    @Value("${common.jwt.header-separator}")
+    private String headerSeparator;
+    @Value("${common.jwt.header-token-name}")
+    private String headerTokenName;
 
     public JWTConfig() {
     }
 
-    public JWTConfig(String userSerectKey, String merchantSerectKey) {
+    public JWTConfig(String userSerectKey, String userHeaderSign, String headerSeparator, String headerTokenName) {
         this.userSerectKey = userSerectKey;
-        this.merchantSerectKey = merchantSerectKey;
+        this.userHeaderSign = userHeaderSign;
+        this.headerSeparator = headerSeparator;
+        this.headerTokenName = headerTokenName;
     }
 
     /**
@@ -40,21 +45,53 @@ public class JWTConfig {
 
     /**
      * 获取
-     * @return merchantSerectKey
+     * @return userHeaderSign
      */
-    public String getMerchantSerectKey() {
-        return merchantSerectKey;
+    public String getUserHeaderSign() {
+        return userHeaderSign;
     }
 
     /**
      * 设置
-     * @param merchantSerectKey
+     * @param userHeaderSign
      */
-    public void setMerchantSerectKey(String merchantSerectKey) {
-        this.merchantSerectKey = merchantSerectKey;
+    public void setUserHeaderSign(String userHeaderSign) {
+        this.userHeaderSign = userHeaderSign;
+    }
+
+    /**
+     * 获取
+     * @return headerSeparator
+     */
+    public String getHeaderSeparator() {
+        return headerSeparator;
+    }
+
+    /**
+     * 设置
+     * @param headerSeparator
+     */
+    public void setHeaderSeparator(String headerSeparator) {
+        this.headerSeparator = headerSeparator;
+    }
+
+    /**
+     * 获取
+     * @return headerTokenName
+     */
+    public String getHeaderTokenName() {
+        return headerTokenName;
+    }
+
+    /**
+     * 设置
+     * @param headerTokenName
+     */
+    public void setHeaderTokenName(String headerTokenName) {
+        this.headerTokenName = headerTokenName;
     }
 
     public String toString() {
-        return "JWTEnum{userSerectKey = " + userSerectKey + ", merchantSerectKey = " + merchantSerectKey + "}";
+        return "JWTConfig{userSerectKey = " + userSerectKey + ", userHeaderSign = " + userHeaderSign + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + "}";
     }
 }

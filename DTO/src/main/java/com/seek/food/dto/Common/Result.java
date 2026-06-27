@@ -3,13 +3,6 @@ package com.seek.food.dto.Common;
 
 
 
-
-
-
-
-
-
-
 public class Result<T> {
     private  int code;
     private String msg;

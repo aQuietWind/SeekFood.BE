@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class BlackIdCaffeine {
     // 全局单例缓存（唯一实例）
-    private static Cache<String, Long> CACHE;
+    private Cache<String, Long> CACHE;
 
     // 构造注入配置
     private final GatewayConfig gatewayConfig;
@@ -43,11 +43,11 @@ public class BlackIdCaffeine {
         CACHE.put(key, value);
     }
     //取缓存，没有返回 null
-    public Object get(String key) {
+    public Long get(String key) {
         return CACHE.getIfPresent(key);
     }
     // 取缓存，如果没有，自动执行 load 逻辑并写入缓存（最常用）
-    public Object get(String key, java.util.function.Function<String, Long> loader) {
+    public Long get(String key, java.util.function.Function<String, Long> loader) {
         return CACHE.get(key, loader);
     }
     //删除缓存
