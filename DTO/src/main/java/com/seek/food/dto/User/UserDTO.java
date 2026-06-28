@@ -12,13 +12,13 @@ public class UserDTO {
     private String headerImageAddr;
     private LocalDate birthday;
     private LocalDateTime createTime;
-    private Byte isDelete;
-    private Integer shopAmount;
+    private boolean delete;
+    private Integer orderAmount;
 
-    // 无参构造
-    public UserDTO(){}
+    public UserDTO() {
+    }
 
-    public UserDTO(Long userId, String username, String phoneNumber, String password, Byte sex, String headerImageAddr, LocalDate birthday, LocalDateTime createTime, Byte isDelete, Integer shopAmount) {
+    public UserDTO(Long userId, String username, String phoneNumber, String password, Byte sex, String headerImageAddr, LocalDate birthday, LocalDateTime createTime, boolean delete, Integer orderAmount) {
         this.userId = userId;
         this.username = username;
         this.phoneNumber = phoneNumber;
@@ -27,55 +27,171 @@ public class UserDTO {
         this.headerImageAddr = headerImageAddr;
         this.birthday = birthday;
         this.createTime = createTime;
-        this.isDelete = isDelete;
-        this.shopAmount = shopAmount;
+        this.delete = delete;
+        this.orderAmount = orderAmount;
     }
 
+    /**
+     * 获取
+     * @return userId
+     */
+    public Long getUserId() {
+        return userId;
+    }
 
-    // 全套get/set、toString 不变
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    /**
+     * 设置
+     * @param userId
+     */
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    /**
+     * 获取
+     * @return username
+     */
+    public String getUsername() {
+        return username;
+    }
 
-    public String getPhoneNumber() { return phoneNumber; }
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    /**
+     * 设置
+     * @param username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    /**
+     * 获取
+     * @return phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-    public Byte getSex() { return sex; }
-    public void setSex(Byte sex) { this.sex = sex; }
+    /**
+     * 设置
+     * @param phoneNumber
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-    public String getHeaderImageAddr() { return headerImageAddr; }
-    public void setHeaderImageAddr(String headerImageAddr) { this.headerImageAddr = headerImageAddr; }
+    /**
+     * 获取
+     * @return password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-    public LocalDate getBirthday() { return birthday; }
-    public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
+    /**
+     * 设置
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-    public LocalDateTime getCreateTime() { return createTime; }
-    public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
+    /**
+     * 获取
+     * @return sex
+     */
+    public Byte getSex() {
+        return sex;
+    }
 
-    public Byte getIsDelete() { return isDelete; }
-    public void setIsDelete(Byte isDelete) { this.isDelete = isDelete; }
+    /**
+     * 设置
+     * @param sex
+     */
+    public void setSex(Byte sex) {
+        this.sex = sex;
+    }
 
-    public Integer getShopAmount() { return shopAmount; }
-    public void setShopAmount(Integer shopAmount) { this.shopAmount = shopAmount; }
+    /**
+     * 获取
+     * @return headerImageAddr
+     */
+    public String getHeaderImageAddr() {
+        return headerImageAddr;
+    }
 
-    @Override
+    /**
+     * 设置
+     * @param headerImageAddr
+     */
+    public void setHeaderImageAddr(String headerImageAddr) {
+        this.headerImageAddr = headerImageAddr;
+    }
+
+    /**
+     * 获取
+     * @return birthday
+     */
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * 设置
+     * @param birthday
+     */
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
+     * 获取
+     * @return createTime
+     */
+    public LocalDateTime getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * 设置
+     * @param createTime
+     */
+    public void setCreateTime(LocalDateTime createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * 获取
+     * @return delete
+     */
+    public boolean isDelete() {
+        return delete;
+    }
+
+    /**
+     * 设置
+     * @param delete
+     */
+    public void setDelete(boolean delete) {
+        this.delete = delete;
+    }
+
+    /**
+     * 获取
+     * @return orderAmount
+     */
+    public Integer getOrderAmount() {
+        return orderAmount;
+    }
+
+    /**
+     * 设置
+     * @param orderAmount
+     */
+    public void setOrderAmount(Integer orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
     public String toString() {
-        return "UserDTO{" +
-                "userId=" + userId +
-                ", username='" + username + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", sex=" + sex +
-                ", headerImageAddr='" + headerImageAddr + '\'' +
-                ", birthday=" + birthday +
-                ", createTime=" + createTime +
-                ", isDelete=" + isDelete +
-                ", shopAmount=" + shopAmount +
-                '}';
+        return "UserDTO{userId = " + userId + ", username = " + username + ", phoneNumber = " + phoneNumber + ", password = " + password + ", sex = " + sex + ", headerImageAddr = " + headerImageAddr + ", birthday = " + birthday + ", createTime = " + createTime + ", delete = " + delete + ", orderAmount = " + orderAmount + "}";
     }
 }

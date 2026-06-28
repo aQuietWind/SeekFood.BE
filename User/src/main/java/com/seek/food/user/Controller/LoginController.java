@@ -2,35 +2,44 @@ package com.seek.food.user.Controller;
 
 
 import com.seek.food.dto.Common.Result;
+import com.seek.food.dto.User.UserDTO;
 import com.seek.food.user.Config.NacosConfig.JWTConfig;
+import com.seek.food.user.Enum.RequestPathEnum;
+import com.seek.food.user.Service.LoginService;
 import com.seek.food.util.JWT.JWTUtil;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("login")
+@RequestMapping(RequestPathEnum.Login)
 public class LoginController {
+    private final LoginService loginService;
     @Autowired
-    private JWTConfig jwtConfig;
-    @PostMapping
-    public Result login(long userId, HttpServletResponse response) {
-        // 1. 登录校验成功，生成JWT accessToken
-        String accessToken = JWTUtil.obtainJwtByLong(userId,jwtConfig.getUserSerectKey());
+    public LoginController(LoginService loginService) {
+        this.loginService = loginService;
+    }
 
-        // 2. 构建安全Cookie
-        // 构建Servlet Cookie
-        Cookie cookie = new Cookie("access_token", "1-"+accessToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);
-        cookie.setPath("/");
-        cookie.setMaxAge(60 * 1000000);
-        response.addCookie(cookie);
-        return Result.success("good");
+    @GetMapping(RequestPathEnum.Register_Opt)
+    public Result<String> loginGetOpt(String phoneNumber) {
+        return Result.success(loginService.loginGetOpt(phoneNumber));
+    }
+
+
+    @GetMapping
+    public Result<UserDTO> login(String phoneNumber, String opt, HttpServletResponse response) {
+        return Result.success(loginService.login(phoneNumber,opt,response));
+    }
+
+    @GetMapping(RequestPathEnum.Login_Password)
+    public Result<UserDTO> loginPassword(String phoneNumber, String password, HttpServletResponse response) {
+        return Result.success(loginService.loginByPassword(phoneNumber,password,response));
     }
 
 

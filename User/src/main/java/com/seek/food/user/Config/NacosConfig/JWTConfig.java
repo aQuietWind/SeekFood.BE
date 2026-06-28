@@ -9,38 +9,44 @@ import org.springframework.stereotype.Component;
 @Component
 public class JWTConfig {
     @Value("${common.jwt.secret-key.user}")
-    private String userSerectKey;
+    private String userSecretKey;
     @Value("${common.jwt.header-sign.user}")
     private String userHeaderSign;
     @Value("${common.jwt.header-separator}")
     private String headerSeparator;
     @Value("${common.jwt.header-token-name}")
     private String headerTokenName;
+    @Value("${common.jwt.request-token-name}")
+    private String requestTokenName;
+    @Value("${common.jwt.token-duration}")
+    private long tokenDuration;
 
     public JWTConfig() {
     }
 
-    public JWTConfig(String userSerectKey, String userHeaderSign, String headerSeparator, String headerTokenName) {
-        this.userSerectKey = userSerectKey;
+    public JWTConfig(String userSecretKey, String userHeaderSign, String headerSeparator, String headerTokenName, String requestTokenName, long tokenDuration) {
+        this.userSecretKey = userSecretKey;
         this.userHeaderSign = userHeaderSign;
         this.headerSeparator = headerSeparator;
         this.headerTokenName = headerTokenName;
+        this.requestTokenName = requestTokenName;
+        this.tokenDuration = tokenDuration;
     }
 
     /**
      * 获取
-     * @return userSerectKey
+     * @return userSecretKey
      */
-    public String getUserSerectKey() {
-        return userSerectKey;
+    public String getUserSecretKey() {
+        return userSecretKey;
     }
 
     /**
      * 设置
-     * @param userSerectKey
+     * @param userSecretKey
      */
-    public void setUserSerectKey(String userSerectKey) {
-        this.userSerectKey = userSerectKey;
+    public void setUserSecretKey(String userSecretKey) {
+        this.userSecretKey = userSecretKey;
     }
 
     /**
@@ -91,7 +97,39 @@ public class JWTConfig {
         this.headerTokenName = headerTokenName;
     }
 
+    /**
+     * 获取
+     * @return requestTokenName
+     */
+    public String getRequestTokenName() {
+        return requestTokenName;
+    }
+
+    /**
+     * 设置
+     * @param requestTokenName
+     */
+    public void setRequestTokenName(String requestTokenName) {
+        this.requestTokenName = requestTokenName;
+    }
+
+    /**
+     * 获取
+     * @return tokenDuration
+     */
+    public long getTokenDuration() {
+        return tokenDuration;
+    }
+
+    /**
+     * 设置
+     * @param tokenDuration
+     */
+    public void setTokenDuration(long tokenDuration) {
+        this.tokenDuration = tokenDuration;
+    }
+
     public String toString() {
-        return "JWTConfig{userSerectKey = " + userSerectKey + ", userHeaderSign = " + userHeaderSign + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + "}";
+        return "JWTConfig{userSecretKey = " + userSecretKey + ", userHeaderSign = " + userHeaderSign + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + ", requestTokenName = " + requestTokenName + ", tokenDuration = " + tokenDuration + "}";
     }
 }

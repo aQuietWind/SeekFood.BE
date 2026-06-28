@@ -18,38 +18,33 @@ public class JWTUtil {
     public static final int FailResult=-1;
     public static final String IdName="tokenId";
     //生成令牌的方法
-    public static String obtainJwt(String tokenId,String sercetKey){
-        Map<String,String> dataMap = new HashMap<>();
+    public static String obtainJwt(Long tokenId,String sercetKey,long expireTime){
+        Map<String,Long> dataMap = new HashMap<>();
         dataMap.put(IdName,tokenId);
         //根据字符串密钥来生成HS256形式的密钥
         SecretKey key= Keys.hmacShaKeyFor( sercetKey.getBytes(StandardCharsets.UTF_8) );
-        Date usefulTime=new Date(System.currentTimeMillis()+3600*1000*24*20);             //设置最终过期时间点
-        String token= Jwts.builder()                  //通过链式编程生成字符串令牌
+        Date usefulTime=new Date(System.currentTimeMillis()+expireTime);             //设置最终过期时间点
+        return Jwts.builder()                  //通过链式编程生成字符串令牌
                 .claims(dataMap)                    //设置Payload载荷数据
                 .subject("seek_food")                  //设置主题，id，或者权限等等重要标识
                 .issuedAt(new Date())               //设置签发时间
                 .expiration(usefulTime)             //设置最终有效期为一个小时，后续可自己自定义
                 .signWith(key)                      //设置该令牌密钥，自动识别HS256算法
                 .compact();                         //根据上述设置生成一个令牌字符串
-        return token;
     }
 
     //解析并获取令牌内容的方法
-    public static String jwtCheck(String token,String sercetKey){
+    public static Long jwtCheck(String token,String sercetKey){
         SecretKey key= Keys.hmacShaKeyFor( sercetKey.getBytes(StandardCharsets.UTF_8) );    //根据字符串密钥生成HS256形式的密钥
             Jws<Claims> data = Jwts.parser()           //开启解析器建立
                     .verifyWith(key)                    //设置解析的密钥
                     .build()                            //根据上述建立一个解析器
                     .parseSignedClaims(token);          //通过解析器获取指定令牌的破解版
-            return (String) data.getPayload().get(IdName);       //返回载荷存储的userId
+            return (Long) data.getPayload().get(IdName);       //返回载荷存储的userId
     }
 
-    public static long jwtCheckToLong(String token,String sercetKey){
-        return Long.parseLong(jwtCheck(token,sercetKey));
-    }
-
-    public static String obtainJwtByLong(long tokenId,String sercetKey){
-        return obtainJwt(""+tokenId,sercetKey);
+    public static String obtainJwtByLong(long tokenId,String sercetKey,long expireTime){
+        return obtainJwt(tokenId,sercetKey,expireTime);
     }
 
     public static long jwtCheckByList(String token,String headerSeparator,JWTHeaderSign[] jwtHeaderSigns){
@@ -61,7 +56,7 @@ public class JWTUtil {
         for (int i = 0; i < jwtHeaderSigns.length; i++) {
             if (jwtHeaderSigns[i].getHeaderSign().equals(headerSign)){
                 //解析token
-                try {return jwtCheckToLong(token,jwtHeaderSigns[i].getSecretKey());}
+                try {return jwtCheck(token,jwtHeaderSigns[i].getSecretKey());}
                 catch (Exception e){
                     logger.warn("token:{} ,在解析时错误，发生异常:{}",token,e.getMessage());
                     return FailResult;

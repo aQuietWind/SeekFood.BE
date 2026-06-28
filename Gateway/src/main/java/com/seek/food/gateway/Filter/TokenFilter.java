@@ -1,7 +1,7 @@
 package com.seek.food.gateway.Filter;
 
 
-import com.seek.food.dto.Common.ErrorCodeEnum;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.gateway.Config.CommonRedisKeyConfig;
 import com.seek.food.gateway.Config.JWTConfig;
 import com.seek.food.gateway.Config.RequestPathConfig;
@@ -67,6 +67,7 @@ public class TokenFilter implements GlobalFilter {
         return reject(exchange);
         }
 
+
         // 通过安全的HttpOnly Cookie来获取token
     private String getToken(ServerHttpRequest request){
         //获取token
@@ -79,6 +80,7 @@ public class TokenFilter implements GlobalFilter {
         return token;
     }
 
+
         //检验token是否有效
     private long checkToken(String token){
         long result = JWTUtil.FailResult;
@@ -90,6 +92,7 @@ public class TokenFilter implements GlobalFilter {
         if(stringRedisTemplate.opsForHash().get(commonRedisKeyConfig.getLoginToken()+result, token)==null) return JWTUtil.FailResult;
         return result;
     }
+
 
         //构建新的上下文
     private ServerWebExchange getNewExchange(ServerHttpRequest request, ServerWebExchange exchange,long ownId){
@@ -105,6 +108,7 @@ public class TokenFilter implements GlobalFilter {
         //放入id
         return exchange.mutate().request(newReq).build();
     }
+
 
         //拒绝放行
     private Mono<Void> reject(ServerWebExchange exchange){

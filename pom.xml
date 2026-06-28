@@ -42,6 +42,7 @@
         <self.version>1.0-SNAPSHOT</self.version>
         <skywalking.version>9.3.0</skywalking.version>
         <jwt.version>0.13.0</jwt.version>
+        <jakarta.version>6.1.0</jakarta.version>
     </properties>
     <!--    依赖版本管理-->
     <dependencyManagement>
@@ -127,6 +128,13 @@
                 <groupId>${groupId}</groupId>
                 <artifactId>Util</artifactId>
                 <version>${self.version}</version>
+            </dependency>
+            <!--        cookie解析包-->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

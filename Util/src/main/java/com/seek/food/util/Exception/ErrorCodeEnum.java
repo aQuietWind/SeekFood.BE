@@ -1,6 +1,4 @@
-package com.seek.food.dto.Common;
-
-import org.springframework.http.HttpStatus;
+package com.seek.food.util.Exception;
 
 public enum ErrorCodeEnum {
     // 鉴权 40xx

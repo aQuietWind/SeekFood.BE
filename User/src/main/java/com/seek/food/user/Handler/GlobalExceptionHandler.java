@@ -1,7 +1,7 @@
 package com.seek.food.user.Handler;
 
-import com.seek.food.dto.Common.BizException;
-import com.seek.food.dto.Common.ErrorCodeEnum;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.dto.Common.Result;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

@@ -1,4 +1,4 @@
-package com.seek.food.dto.Common;
+package com.seek.food.util.Exception;
 
 public class BizException extends RuntimeException{
     // 绑定错误码枚举

@@ -1,0 +1,114 @@
+package com.seek.food.user.Service.Impl;
+
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.dto.User.UserDTO;
+import com.seek.food.user.Config.NacosConfig.JWTConfig;
+import com.seek.food.user.Config.NacosConfig.UserParamsRulesConfig;
+import com.seek.food.user.Config.NacosConfig.UserRedisKeyDurationConfig;
+import com.seek.food.user.Config.NacosConfig.UserRedisKeyNameConfig;
+import com.seek.food.user.Mapper.LoginMapper;
+import com.seek.food.user.Service.LoginService;
+import com.seek.food.util.OPT.OPTUtil;
+import com.seek.food.util.JWT.TokenUtil;
+import com.seek.food.util.TimeUtil.DurationUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+
+@Service
+@RefreshScope
+public class LoginServiceImpl implements LoginService {
+    private final JWTConfig jwtConfig;
+    private final LoginMapper loginMapper;
+    private final UserParamsRulesConfig userParamsRulesConfig;
+    private final StringRedisTemplate stringRedisTemplate;
+    private final UserRedisKeyNameConfig userRedisKeyNameConfig;
+    private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
+    private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+
+    @Autowired
+    public LoginServiceImpl(JWTConfig jwtConfig, LoginMapper loginMapper, UserParamsRulesConfig userParamsRulesConfig
+    ,StringRedisTemplate stringRedisTemplate, UserRedisKeyNameConfig userRedisKeyNameConfig, UserRedisKeyDurationConfig userRedisKeyDurationConfig
+    ) {
+        this.jwtConfig = jwtConfig;
+        this.loginMapper = loginMapper;
+        this.userParamsRulesConfig = userParamsRulesConfig;
+        this.stringRedisTemplate = stringRedisTemplate;
+        this.userRedisKeyNameConfig = userRedisKeyNameConfig;
+        this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
+    }
+
+    @Override
+    //获取登录所需验证码
+    public String loginGetOpt(String phoneNumber){
+        logger.info("phone number:{} ,尝试获取登录验证码",phoneNumber);
+        //验证手机号
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //生产验证码
+        String opt= OPTUtil.generateOPT(6);
+        //存储验证码到redis，并检查是否已经存在验证码
+        if(Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
+                userRedisKeyNameConfig.getLoginOpt() + phoneNumber,
+                opt,
+                DurationUtil.getSecondDuration(userRedisKeyDurationConfig.getOpt())))) return opt;
+        else throw new BizException(ErrorCodeEnum.OPT_SURVIVE);
+    }
+
+    @Override
+    //手机号与验证码登录
+    public UserDTO login(String phoneNumber, String opt, HttpServletResponse response){
+        //检验格式
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //检查验证码
+        OPTUtil.checkOPT(stringRedisTemplate, userRedisKeyNameConfig.getLoginOpt() + phoneNumber, opt);
+        //根据手机号获取目标
+        return loginAndGetToken(loginMapper.getUserByPhoneNumber(phoneNumber),response);
+    }
+
+
+    @Override
+    public UserDTO loginByPassword(String phoneNumber, String password, HttpServletResponse response){
+        //检验格式
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) ||!userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //获取冷却时间
+        if (Boolean.FALSE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
+                userRedisKeyNameConfig.getLoginPasswordCooldown() + phoneNumber, "true",
+                Duration.ofSeconds(userRedisKeyDurationConfig.getLoginPasswordCooldown()))))throw new BizException(ErrorCodeEnum.TOO_MANY_REQUEST);
+        //验证登录
+        return loginAndGetToken(loginMapper.getUserByPassword(phoneNumber, password), response);
+    }
+
+
+    //发放登录信息
+    private UserDTO loginAndGetToken(UserDTO user, HttpServletResponse response){
+        if (user==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //获取token，并且放在请求头上
+        TokenUtil.getToken(user.getUserId(), response, jwtConfig.getUserSecretKey()
+                , jwtConfig.getTokenDuration(), jwtConfig.getRequestTokenName(), jwtConfig.getUserHeaderSign(), jwtConfig.getHeaderSeparator());
+        return user;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

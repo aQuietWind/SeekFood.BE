@@ -2,7 +2,7 @@ package com.seek.food.gateway.Filter;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.seek.food.dto.Common.ErrorCodeEnum;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.gateway.Config.GatewayBlackConfig;
 import com.seek.food.gateway.Config.JWTConfig;
 import com.seek.food.gateway.Config.GatewayRedisKeyConfig;

@@ -18,11 +18,12 @@ public class UserRedisKeyNameConfig {
     private String updatePasswordCooldown;
     private String caffeineMessage;
     private String userIdCount;
+    private String loginPasswordCooldown;
 
     public UserRedisKeyNameConfig() {
     }
 
-    public UserRedisKeyNameConfig(String registerOpt, String loginOpt, String deleteUserOpt, String registerCooldown, String updatePasswordOpt, String updateHeaderImageCooldown, String updateMessageCooldown, String updatePasswordCooldown, String caffeineMessage, String userIdCount) {
+    public UserRedisKeyNameConfig(String registerOpt, String loginOpt, String deleteUserOpt, String registerCooldown, String updatePasswordOpt, String updateHeaderImageCooldown, String updateMessageCooldown, String updatePasswordCooldown, String caffeineMessage, String userIdCount, String loginPasswordCooldown) {
         this.registerOpt = registerOpt;
         this.loginOpt = loginOpt;
         this.deleteUserOpt = deleteUserOpt;
@@ -33,6 +34,7 @@ public class UserRedisKeyNameConfig {
         this.updatePasswordCooldown = updatePasswordCooldown;
         this.caffeineMessage = caffeineMessage;
         this.userIdCount = userIdCount;
+        this.loginPasswordCooldown = loginPasswordCooldown;
     }
 
     /**
@@ -195,7 +197,23 @@ public class UserRedisKeyNameConfig {
         this.userIdCount = userIdCount;
     }
 
+    /**
+     * 获取
+     * @return loginPasswordCooldown
+     */
+    public String getLoginPasswordCooldown() {
+        return loginPasswordCooldown;
+    }
+
+    /**
+     * 设置
+     * @param loginPasswordCooldown
+     */
+    public void setLoginPasswordCooldown(String loginPasswordCooldown) {
+        this.loginPasswordCooldown = loginPasswordCooldown;
+    }
+
     public String toString() {
-        return "UserRedisKeyNameConfig{registerOpt = " + registerOpt + ", loginOpt = " + loginOpt + ", deleteUserOpt = " + deleteUserOpt + ", registerCooldown = " + registerCooldown + ", updatePasswordOpt = " + updatePasswordOpt + ", updateHeaderImageCooldown = " + updateHeaderImageCooldown + ", updateMessageCooldown = " + updateMessageCooldown + ", updatePasswordCooldown = " + updatePasswordCooldown + ", caffeineMessage = " + caffeineMessage + ", userIdCount = " + userIdCount + "}";
+        return "UserRedisKeyNameConfig{registerOpt = " + registerOpt + ", loginOpt = " + loginOpt + ", deleteUserOpt = " + deleteUserOpt + ", registerCooldown = " + registerCooldown + ", updatePasswordOpt = " + updatePasswordOpt + ", updateHeaderImageCooldown = " + updateHeaderImageCooldown + ", updateMessageCooldown = " + updateMessageCooldown + ", updatePasswordCooldown = " + updatePasswordCooldown + ", caffeineMessage = " + caffeineMessage + ", userIdCount = " + userIdCount + ", loginPasswordCooldown = " + loginPasswordCooldown + "}";
     }
 }

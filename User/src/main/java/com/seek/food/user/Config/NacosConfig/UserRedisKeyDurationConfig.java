@@ -14,17 +14,19 @@ public class UserRedisKeyDurationConfig {
     private long updateMessageCooldown;
     private long updatePasswordCooldown;
     private long caffeineMessage;
+    private long loginPasswordCooldown;
 
     public UserRedisKeyDurationConfig() {
     }
 
-    public UserRedisKeyDurationConfig(long registerCooldown, long opt, long updateHeaderImageCooldown, long updateMessageCooldown, long updatePasswordCooldown, long caffeineMessage) {
+    public UserRedisKeyDurationConfig(long registerCooldown, long opt, long updateHeaderImageCooldown, long updateMessageCooldown, long updatePasswordCooldown, long caffeineMessage, long loginPasswordCooldown) {
         this.registerCooldown = registerCooldown;
         this.opt = opt;
         this.updateHeaderImageCooldown = updateHeaderImageCooldown;
         this.updateMessageCooldown = updateMessageCooldown;
         this.updatePasswordCooldown = updatePasswordCooldown;
         this.caffeineMessage = caffeineMessage;
+        this.loginPasswordCooldown = loginPasswordCooldown;
     }
 
     /**
@@ -123,7 +125,23 @@ public class UserRedisKeyDurationConfig {
         this.caffeineMessage = caffeineMessage;
     }
 
+    /**
+     * 获取
+     * @return loginPasswordCooldown
+     */
+    public long getLoginPasswordCooldown() {
+        return loginPasswordCooldown;
+    }
+
+    /**
+     * 设置
+     * @param loginPasswordCooldown
+     */
+    public void setLoginPasswordCooldown(long loginPasswordCooldown) {
+        this.loginPasswordCooldown = loginPasswordCooldown;
+    }
+
     public String toString() {
-        return "RedisKeyDurationConfig{registerCooldown = " + registerCooldown + ", opt = " + opt + ", updateHeaderImageCooldown = " + updateHeaderImageCooldown + ", updateMessageCooldown = " + updateMessageCooldown + ", updatePasswordCooldown = " + updatePasswordCooldown + ", caffeineMessage = " + caffeineMessage + "}";
+        return "UserRedisKeyDurationConfig{registerCooldown = " + registerCooldown + ", opt = " + opt + ", updateHeaderImageCooldown = " + updateHeaderImageCooldown + ", updateMessageCooldown = " + updateMessageCooldown + ", updatePasswordCooldown = " + updatePasswordCooldown + ", caffeineMessage = " + caffeineMessage + ", loginPasswordCooldown = " + loginPasswordCooldown + "}";
     }
 }

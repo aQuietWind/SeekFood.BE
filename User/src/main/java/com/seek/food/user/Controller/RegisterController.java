@@ -3,6 +3,8 @@ package com.seek.food.user.Controller;
 import com.seek.food.dto.Common.Result;
 import com.seek.food.user.Enum.RequestPathEnum;
 import com.seek.food.user.Service.RegisterService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
