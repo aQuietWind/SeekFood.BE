@@ -59,6 +59,11 @@
             <groupId>com.seek.food</groupId>
             <artifactId>Util</artifactId>
         </dependency>
+        <!--        自己的工具类依赖-->
+        <dependency>
+            <groupId>com.seek.food</groupId>
+            <artifactId>Config</artifactId>
+        </dependency>
         <!--        redis依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

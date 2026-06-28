@@ -2,10 +2,10 @@ package com.seek.food.gateway.Filter;
 
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.Exception.ErrorCodeEnum;
-import com.seek.food.gateway.Config.GatewayBlackConfig;
-import com.seek.food.gateway.Config.JWTConfig;
-import com.seek.food.gateway.Config.GatewayRedisKeyConfig;
+import com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig;
+import com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig;
 import com.seek.food.gateway.Util.BlackIdCaffeine;
 import com.seek.food.gateway.Util.BlackIpCaffeine;
 import com.seek.food.util.CommonUtil.LocalDateTimeUtil;
@@ -17,6 +17,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -39,7 +40,6 @@ public class RequestFilter implements GlobalFilter{
     private final int blackIdDuration;
     private static final Logger logger = LoggerFactory.getLogger(RequestFilter.class);
     // 构造器注入
-//    @Autowired
     public RequestFilter(StringRedisTemplate stringRedisTemplate, GatewayRedisKeyConfig gatewayRedisKeyConfig, BlackIpCaffeine blackIpCaffeine
     , BlackIdCaffeine blackIdCaffeine, GatewayBlackConfig gatewayBlackConfig, JWTConfig jwtConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
@@ -47,10 +47,10 @@ public class RequestFilter implements GlobalFilter{
         this.blackIpCaffeine = blackIpCaffeine;
         this.blackIdCaffeine = blackIdCaffeine;
         this.jwtConfig = jwtConfig;
-        this.blackIpTimes= gatewayBlackConfig.getBlackIpCounts();
-        this.blackIdTimes= gatewayBlackConfig.getBlackIdCounts();
-        this.blackIpDuration= gatewayBlackConfig.getBlackIpDuration();
-        this.blackIdDuration= gatewayBlackConfig.getBlackIdDuration();
+        this.blackIpTimes= gatewayBlackConfig.getIp().getCounts();
+        this.blackIdTimes= gatewayBlackConfig.getId().getCounts();
+        this.blackIpDuration= gatewayBlackConfig.getIp().getDuration();
+        this.blackIdDuration= gatewayBlackConfig.getId().getDuration();
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.seek.food.user.Interceptor;
 
-import com.seek.food.user.Config.NacosConfig.JWTConfig;
+import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.Context.TokenIdContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -2,9 +2,9 @@ package com.seek.food.user.Service.Impl;
 
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
-import com.seek.food.user.Config.NacosConfig.UserRedisKeyDurationConfig;
-import com.seek.food.user.Config.NacosConfig.UserRedisKeyNameConfig;
-import com.seek.food.user.Config.NacosConfig.UserParamsRulesConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
+import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.user.Mapper.RegisterMapper;
 import com.seek.food.user.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;

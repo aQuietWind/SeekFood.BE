@@ -2,7 +2,7 @@ package com.seek.food.gateway.Util;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import com.seek.food.gateway.Config.GatewayBlackConfig;
+import com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class BlackIdCaffeine {
     @PostConstruct
     public void init() {
         this.CACHE = Caffeine.newBuilder()
-                .maximumSize(gatewayBlackConfig.getCaffeineBlackIdSize())
-                .expireAfterWrite(gatewayBlackConfig.getCaffeineBlackIdExpire(), TimeUnit.MINUTES)
+                .maximumSize(gatewayBlackConfig.getId().getCaffeineMaxSize())
+                .expireAfterWrite(gatewayBlackConfig.getId().getCaffeineExpireTime(), TimeUnit.MINUTES)
                 .recordStats()
                 .build();
     }

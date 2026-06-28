@@ -1,0 +1,245 @@
+{
+  "groups": [
+    {
+      "name": "common.jwt",
+      "type": "com.seek.food.config.NacosConfig.Common.JWTConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.redis.key.name",
+      "type": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.black",
+      "type": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"
+    },
+    {
+      "name": "gateway.self.redis.key.name",
+      "type": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.request.path",
+      "type": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "user.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration",
+      "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.name",
+      "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "common.jwt.admin",
+      "type": "com.seek.food.config.Data.JWTData",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.header-separator",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.header-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.merchant",
+      "type": "com.seek.food.config.Data.JWTData",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.request-token-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.rider",
+      "type": "com.seek.food.config.Data.JWTData",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.jwt.user",
+      "type": "com.seek.food.config.Data.JWTData",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "gateway.self.black.id",
+      "type": "com.seek.food.config.Data.GatewayIpIdBlackData",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"
+    },
+    {
+      "name": "gateway.self.black.ip",
+      "type": "com.seek.food.config.Data.GatewayIpIdBlackData",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"
+    },
+    {
+      "name": "gateway.self.redis.key.name.id-black",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.redis.key.name.id-check",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.redis.key.name.ip-black",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.redis.key.name.ip-check",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig"
+    },
+    {
+      "name": "gateway.self.request.path.allow-path",
+      "type": "java.util.HashSet<java.lang.String>",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "gateway.self.request.path.reject-path",
+      "type": "java.util.HashSet<java.lang.String>",
+      "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "user.self.params.rules.password-regex",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.phone-number-regex",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.sex-values",
+      "type": "java.util.HashSet<java.lang.Integer>",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.user-id-capacity",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.user-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.username-length-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.caffeine-message",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.login-password-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.opt",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.register-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.update-header-image-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.update-message-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.update-password-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.caffeine-message",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.delete-user-opt",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.login-opt",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.login-password-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.register-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.register-opt",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.update-header-image-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.update-message-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.update-password-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.update-password-opt",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.user-id-count",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

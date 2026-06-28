@@ -1,8 +1,0 @@
-spring:
-  #rabbitmq的依赖
-  rabbitmq:
-    host: 127.0.0.1   #ip地址
-    port: 5672        #端口
-    virtual-host: /   #虚拟主机
-    username: guest   #用户名
-    password: guest   #密码

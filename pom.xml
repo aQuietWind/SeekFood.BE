@@ -129,6 +129,12 @@
                 <artifactId>Util</artifactId>
                 <version>${self.version}</version>
             </dependency>
+            <!--该项目的Config模块        -->
+            <dependency>
+                <groupId>${groupId}</groupId>
+                <artifactId>Config</artifactId>
+                <version>${self.version}</version>
+            </dependency>
             <!--        cookie解析包-->
             <dependency>
                 <groupId>jakarta.servlet</groupId>
@@ -155,6 +161,7 @@
         <module>Rider</module>
         <module>User</module>
         <module>Chat</module>
+        <module>Config</module>
     </modules>
 
     <build>

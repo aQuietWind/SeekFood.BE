@@ -1,11 +1,11 @@
 package com.seek.food.gateway.Filter;
 
 
+import com.seek.food.config.Data.JWTData;
+import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.Exception.ErrorCodeEnum;
-import com.seek.food.gateway.Config.CommonRedisKeyConfig;
-import com.seek.food.gateway.Config.JWTConfig;
-import com.seek.food.gateway.Config.RequestPathConfig;
-import com.seek.food.util.JWT.JWTHeaderSign;
+import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
+import com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import com.seek.food.util.JWT.JWTUtil;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -31,21 +32,24 @@ import java.util.List;
 public class TokenFilter implements GlobalFilter {
 
     private final JWTConfig jwtConfig;
-    private final RequestPathConfig requestPathConfig;
+    private final GatewayRequestPathConfig gatewayRequestPathConfig;
     private final StringRedisTemplate stringRedisTemplate;
-    private final JWTHeaderSign[] jwtHeaderSigns;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
+    private final HashMap<String,String> jwtHeaders=new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
     // 构造器注入
     @Autowired
-    public TokenFilter(JWTConfig jwtConfig,RequestPathConfig requestPathConfig,StringRedisTemplate stringRedisTemplate,
+    public TokenFilter(JWTConfig jwtConfig, GatewayRequestPathConfig gatewayRequestPathConfig, StringRedisTemplate stringRedisTemplate,
                        CommonRedisKeyConfig commonRedisKeyConfig) {
         this.jwtConfig = jwtConfig;
-        this.requestPathConfig = requestPathConfig;
+        this.gatewayRequestPathConfig = gatewayRequestPathConfig;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.jwtHeaderSigns=JWTHeaderSign.getHeaderSignArr(jwtConfig.getSecretKey(),jwtConfig.getHeaderSign(), jwtConfig.getHeaderSeparator(), jwtConfig.getTokenName());
         this.commonRedisKeyConfig = commonRedisKeyConfig;
+        for (JWTData jwtData : jwtConfig.getAllJWTData()) jwtHeaders.put(jwtData.getHeaderSign(), jwtData.getSecretKey());
+        System.out.println(jwtHeaders);
     }
+
+
 
     //token处理拦截
     @Override
@@ -55,9 +59,9 @@ public class TokenFilter implements GlobalFilter {
         String path = request.getURI().getPath();
         logger.info("请求路径:{} ,进入TokenFilter",path);
         //检查该请求路径是否需要直接放行
-        if(requestPathConfig.checkAllowPath(path))return chain.filter(exchange);
+        if(gatewayRequestPathConfig.checkAllowPath(path))return chain.filter(exchange);
         //检查该请求路径是否为封禁路径
-        if (requestPathConfig.checkRejectPath(path))return reject(exchange);
+        if (gatewayRequestPathConfig.checkRejectPath(path))return reject(exchange);
         //尝试获取Id
         long ownId=checkToken(getToken(request));
         //token是否有效，有效则放行
@@ -87,7 +91,7 @@ public class TokenFilter implements GlobalFilter {
         //检测token是否为空
         if(token == null||token.isEmpty())return result;
         //检查token是否有效
-        result= JWTUtil.jwtCheckByList(token,jwtConfig.getHeaderSeparator(), jwtHeaderSigns);
+        result= JWTUtil.jwtCheckByList(token, jwtConfig.getHeaderSeparator(),jwtHeaders);
         //检验redis是否存在该token
         if(stringRedisTemplate.opsForHash().get(commonRedisKeyConfig.getLoginToken()+result, token)==null) return JWTUtil.FailResult;
         return result;

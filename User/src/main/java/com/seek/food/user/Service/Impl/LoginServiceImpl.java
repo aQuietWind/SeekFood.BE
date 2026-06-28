@@ -1,12 +1,13 @@
 package com.seek.food.user.Service.Impl;
 
+import com.seek.food.config.Data.JWTData;
+import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.dto.User.UserDTO;
-import com.seek.food.user.Config.NacosConfig.JWTConfig;
-import com.seek.food.user.Config.NacosConfig.UserParamsRulesConfig;
-import com.seek.food.user.Config.NacosConfig.UserRedisKeyDurationConfig;
-import com.seek.food.user.Config.NacosConfig.UserRedisKeyNameConfig;
+import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
 import com.seek.food.user.Mapper.LoginMapper;
 import com.seek.food.user.Service.LoginService;
 import com.seek.food.util.OPT.OPTUtil;
@@ -25,6 +26,7 @@ import java.time.Duration;
 @Service
 @RefreshScope
 public class LoginServiceImpl implements LoginService {
+    private final JWTData JWTUser;
     private final JWTConfig jwtConfig;
     private final LoginMapper loginMapper;
     private final UserParamsRulesConfig userParamsRulesConfig;
@@ -38,6 +40,7 @@ public class LoginServiceImpl implements LoginService {
     ,StringRedisTemplate stringRedisTemplate, UserRedisKeyNameConfig userRedisKeyNameConfig, UserRedisKeyDurationConfig userRedisKeyDurationConfig
     ) {
         this.jwtConfig = jwtConfig;
+        this.JWTUser = jwtConfig.getUser();
         this.loginMapper = loginMapper;
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -90,8 +93,14 @@ public class LoginServiceImpl implements LoginService {
     private UserDTO loginAndGetToken(UserDTO user, HttpServletResponse response){
         if (user==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //获取token，并且放在请求头上
-        TokenUtil.getToken(user.getUserId(), response, jwtConfig.getUserSecretKey()
-                , jwtConfig.getTokenDuration(), jwtConfig.getRequestTokenName(), jwtConfig.getUserHeaderSign(), jwtConfig.getHeaderSeparator());
+        TokenUtil.getToken(
+                user.getUserId()
+                , response
+                , JWTUser.getSecretKey()
+                , JWTUser.getTokenDuration()
+                , jwtConfig.getRequestTokenName()
+                , JWTUser.getHeaderSign()
+                , jwtConfig.getHeaderSeparator());
         return user;
     }
 

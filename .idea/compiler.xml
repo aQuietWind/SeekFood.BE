@@ -11,6 +11,7 @@
         <module name="User" />
         <module name="Fund" />
         <module name="Interaction" />
+        <module name="Config" />
         <module name="Meal" />
         <module name="Util" />
         <module name="Admin" />
@@ -34,6 +35,7 @@
       <module name="Admin" options="-parameters" />
       <module name="Chat" options="-parameters" />
       <module name="Comment" options="-parameters" />
+      <module name="Config" options="-parameters" />
       <module name="Coupon" options="-parameters" />
       <module name="DTO" options="-parameters" />
       <module name="Employee" options="-parameters" />

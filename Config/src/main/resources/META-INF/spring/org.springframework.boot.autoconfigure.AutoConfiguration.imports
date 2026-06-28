@@ -1,0 +1,3 @@
+# 基础通用配置（引入依赖自动加载）
+# 全类名即可
+# com.seek.food.config.NacosConfig.Common.JWTConfig

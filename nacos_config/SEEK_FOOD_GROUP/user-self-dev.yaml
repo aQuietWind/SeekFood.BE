@@ -2,6 +2,51 @@ spring:
   #mysql的配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/user
+    url: jdbc:mysql://localhost:3306/seek_food_user
     username: root
     password: 439176
+
+user:
+  self:
+    params:
+      rules:
+        user-id-start: 1
+        user-id-capacity: 100000000000
+        username-length-max: 15
+        phone-number-regex: "\\d{11}"
+        password-regex: "(?-U)\\w{8,20}"
+        sex-value:
+          - 1
+          - 2
+        header-image-type:
+          - "img"
+          - "png"
+          - "jpg"
+        header-image-size: 1024*1024*3
+    redis:
+      key:
+        name:
+          register-opt: "user:register:opt:"
+          login-opt: "user:login:opt:"
+          delete-user-opt: "user:delete:self:opt:"
+          register-cooldown: "user:register:cooldown"
+          update-password-opt: "user:update:password:opt:"
+          login-password-cooldown: "user:login:password:"
+          update-header-image-cooldown: "user:update:header:image:cooldown:"
+          update-message-cooldown: "user:update:message:cooldown:"
+          update-password-cooldown: "user:update:password:cooldown:"
+          caffeine-message: "user:caffeine:message:"
+          user-id-count: "user:id:count"
+        duration:
+          register-cooldown: 86400
+          opt: 60
+          login-password-cooldown: 20
+          update-header-image-cooldown: 2
+          update-message-cooldown: 1
+          update-password-cooldown: 60
+          caffeine-message: 600
+    jvm-caffeine:
+      user-message:
+        max-size: 100000
+        expire-time: 300
+

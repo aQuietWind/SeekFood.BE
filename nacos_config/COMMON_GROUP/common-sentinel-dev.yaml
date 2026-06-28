@@ -1,6 +1,0 @@
-spring:
-  cloud:
-    #sentinel的配置
-    sentinel:
-      transport:
-        dashboard: 127.0.0.1:8090   #sentinel的地址
