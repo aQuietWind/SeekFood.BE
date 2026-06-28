@@ -78,6 +78,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
     },
     {
+      "name": "common.redis.key.name.login-token",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
+    },
+    {
       "name": "gateway.self.black.id",
       "type": "com.seek.food.config.Data.GatewayIpIdBlackData",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"

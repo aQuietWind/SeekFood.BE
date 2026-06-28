@@ -12,20 +12,19 @@ public class GatewayRequestPathConfig {
     private HashSet<String> allowPath;
     private HashSet<String> rejectPath;
 
-    public boolean checkAllowPath(String path){
-        return allowPath.contains(path);
-    }
-    public boolean checkRejectPath(String path){
-        return rejectPath.contains(path);
-    }
-
-
     public GatewayRequestPathConfig() {
     }
 
     public GatewayRequestPathConfig(HashSet<String> allowPath, HashSet<String> rejectPath) {
         this.allowPath = allowPath;
         this.rejectPath = rejectPath;
+    }
+
+    public boolean checkAllowPath(String path){
+        return allowPath.contains(path);
+    }
+    public boolean checkRejectPath(String path){
+        return rejectPath.contains(path);
     }
 
     /**
@@ -61,7 +60,7 @@ public class GatewayRequestPathConfig {
     }
 
     public String toString() {
-        return "RequestPathConfig{allowPath = " + allowPath + ", rejectPath = " + rejectPath + "}";
+        return "GatewayRequestPathConfig{allowPath = " + allowPath + ", rejectPath = " + rejectPath + "}";
     }
 }
 

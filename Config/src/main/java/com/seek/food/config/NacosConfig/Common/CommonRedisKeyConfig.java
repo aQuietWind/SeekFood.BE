@@ -7,6 +7,14 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties("common.redis.key.name")
 public class CommonRedisKeyConfig {
     private String loginToken;
+
+    public CommonRedisKeyConfig() {
+    }
+
+    public CommonRedisKeyConfig(String loginToken) {
+        this.loginToken = loginToken;
+    }
+
     /**
      * 获取
      * @return loginToken
@@ -15,4 +23,15 @@ public class CommonRedisKeyConfig {
         return loginToken;
     }
 
+    /**
+     * 设置
+     * @param loginToken
+     */
+    public void setLoginToken(String loginToken) {
+        this.loginToken = loginToken;
+    }
+
+    public String toString() {
+        return "CommonRedisKeyConfig{loginToken = " + loginToken + "}";
+    }
 }

@@ -47,8 +47,4 @@
     </select>
 
 
-    <!--    <select id="getUserById" resultMap="UserResultMap">-->
-    <!--        select * from user where user_id=#{userId}-->
-    <!--    </select>-->
-
 </mapper>

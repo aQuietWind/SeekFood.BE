@@ -3,6 +3,8 @@ package com.seek.food.user.Handler;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.dto.Common.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 捕获自定义业务异常（最高优先级）
     @ExceptionHandler(BizException.class)
@@ -47,6 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<?> handleServerError(Exception e) {
         // 打印完整堆栈日志，用于线上排查
+        logger.error(e.getMessage());
         e.printStackTrace();
         return Result.error(ErrorCodeEnum.SERVER_ERROR);
     }
