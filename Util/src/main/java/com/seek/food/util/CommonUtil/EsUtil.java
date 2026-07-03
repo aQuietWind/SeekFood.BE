@@ -12,7 +12,7 @@ public class EsUtil {
     //返回一个对某一字段自行自增自减的请求
     public static UpdateRequest getUpdateStepRequest(String index,String id
     ,String field,int step){
-        // 1. 构建 ScriptSource
+        //构建 ScriptSource
         ScriptSource scriptSource = ScriptSource.of(s -> s
                 .scriptString("""
                     if (ctx._source.containsKey(params.field)) {
@@ -23,7 +23,7 @@ public class EsUtil {
                 """)
         );
 
-        // 2. 构建 Script,并且将参数填充
+        //构建 Script,并且将参数填充
         Script script = Script.of(s -> s
                 .source(scriptSource)
                 .params(Map.of(

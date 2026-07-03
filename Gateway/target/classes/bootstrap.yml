@@ -33,6 +33,7 @@ spring:
       - nacos:common-request-path-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-redis-key-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:gateway-self-dev.yaml?group=SEEK_FOOD_GROUP&refreshEnabled=true
+      - nacos:gateway-self-api-dev.yaml?group=SEEK_FOOD_GROUP&refreshEnabled=true
 
 #  端口设置
 server:

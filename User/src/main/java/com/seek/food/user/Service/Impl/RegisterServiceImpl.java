@@ -66,7 +66,7 @@ public class RegisterServiceImpl implements RegisterService {
         //检验验证码
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,opt);
         //写入mysql,失败会报错
-        registerMapper.insertUser(IdUtil.IdGenerate(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate),phoneNumber,password);
+        registerMapper.insertUser(IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate),phoneNumber,password);
         logger.info("phone number:{} ,成功注册用户",phoneNumber);
     }
 

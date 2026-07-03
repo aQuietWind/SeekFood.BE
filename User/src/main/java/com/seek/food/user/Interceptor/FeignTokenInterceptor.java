@@ -33,7 +33,7 @@ public class FeignTokenInterceptor {
             HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
             //从tokenId线程上下文中取出tokenId
             String tokenId = TokenIdContext.get();
-            logger.info("tokenId:{} ,在user模块调用了feign",tokenId);
+            logger.info("tokenId:{} ,调用了feign",tokenId);
             if (tokenId != null && !tokenId.isBlank()) {
                 //Feign发起远程调用时自动带上该Header
                 template.header(jwtConfig.getHeaderTokenName(), tokenId);

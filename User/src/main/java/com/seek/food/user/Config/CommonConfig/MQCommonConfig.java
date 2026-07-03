@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 //该类用于交换机无法将信息发送给队列的情况
 @Configuration
-//实现接口是为了使其在Springboot初始化后调用这一重写方法，达到注入Bean的作用
+//实现接口是为了使其在SpringBoot初始化后调用这一重写方法，达到注入Bean的作用
 public class MQCommonConfig implements ApplicationContextAware {
     private static final Logger log = LoggerFactory.getLogger(MQCommonConfig.class);
 

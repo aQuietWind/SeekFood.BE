@@ -10,8 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 public class IdUtil {
     private static final Random random=new Random();
-    public static long IdGenerate(String redisKey,StringRedisTemplate stringRedisTemplate) {
-        return stringRedisTemplate.opsForValue().increment(redisKey,random.nextInt(100));
+    public static long IdGenerateByIncreaseRandom(String redisKey,StringRedisTemplate stringRedisTemplate,int maxRandomNumber) {
+        return stringRedisTemplate.opsForValue().increment(redisKey,random.nextInt(maxRandomNumber));
+    }
+    public static long IdGenerateByIncrease(String redisKey,StringRedisTemplate stringRedisTemplate) {
+        return stringRedisTemplate.opsForValue().increment(redisKey);
     }
 }
 

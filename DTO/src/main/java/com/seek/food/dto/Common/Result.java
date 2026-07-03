@@ -2,6 +2,7 @@ package com.seek.food.dto.Common;
 
 
 import com.seek.food.util.Exception.ErrorCodeEnum;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class Result<T> {
     private  int code;
@@ -23,6 +24,10 @@ public class Result<T> {
         return new Result<T>(code, msg, null);
     }
     public static <T> Result<T> error(ErrorCodeEnum errorCodeEnum) {
+        return new Result(errorCodeEnum.getCode(),errorCodeEnum.getDefaultMsg(),null);
+    }
+    public static <T> Result<T> error(ErrorCodeEnum errorCodeEnum, HttpServletResponse response) {
+        response.setStatus(errorCodeEnum.getHttpStatus().value());
         return new Result(errorCodeEnum.getCode(),errorCodeEnum.getDefaultMsg(),null);
     }
 

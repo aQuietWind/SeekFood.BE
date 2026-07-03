@@ -83,7 +83,7 @@ public class LoginServiceImpl implements LoginService {
         //获取冷却时间
         if (Boolean.FALSE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
                 userRedisKeyNameConfig.getLoginPasswordCooldown() + phoneNumber, "true",
-                Duration.ofSeconds(userRedisKeyDurationConfig.getLoginPasswordCooldown()))))throw new BizException(ErrorCodeEnum.TOO_MANY_REQUEST);
+                DurationUtil.getSecondDuration(userRedisKeyDurationConfig.getLoginPasswordCooldown()))))throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
         //验证登录
         return loginAndGetToken(loginMapper.getUserByPassword(phoneNumber, password), response);
     }

@@ -14,7 +14,6 @@ public class WebConfig implements WebMvcConfigurer {            //实现
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**");        //添加拦截器，且声明该拦截器将拦截所有请求，"/*"只能匹配一级路径，不能匹配"/xx1/xx2/..."
-//                .excludePathPatterns("");         //不拦截指定路径，该参数可为集合
 
     }
 }

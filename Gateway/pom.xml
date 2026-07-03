@@ -7,10 +7,8 @@
         <groupId>com.seek.food</groupId>
         <artifactId>SeekFood</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.seek</groupId>
     <artifactId>Gateway</artifactId>
 
     <properties>
@@ -69,11 +67,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-
         <!-- JUnit5 核心 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -85,7 +78,6 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <scope>test</scope>
         </dependency>
-
         <!-- SpringBoot 测试整合（注入JWTConfig配置类） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

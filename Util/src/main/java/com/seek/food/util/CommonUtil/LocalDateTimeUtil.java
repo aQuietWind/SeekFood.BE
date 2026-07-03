@@ -3,10 +3,13 @@ package com.seek.food.util.CommonUtil;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class LocalDateTimeUtil {
     private LocalDateTimeUtil() {}
-    public static final String Default_Time_Format="yyyy-MM-dd HH:mm:ss";
+    public static final DateTimeFormatter Default_Time_Format=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter Zip_Time_Format=DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    public static final DateTimeFormatter Zip_Date_Format=DateTimeFormatter.ofPattern("yyyyMMdd");
     public static LocalDateTime getNowAfterHours(int number) {
         return LocalDateTime.now().plusHours(number);
     }
@@ -17,7 +20,10 @@ public class LocalDateTimeUtil {
         return LocalDateTime.now().plusHours(number).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
     public static long getStampByNow() {
-        return LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        return System.currentTimeMillis();
+    }
+    public static String getNowByFormat(DateTimeFormatter format) {
+        return LocalDateTime.now().format(format);
     }
 
 }
