@@ -12,6 +12,12 @@ public class TokenIdContext {
     public static void remove() {
         threadLocal.remove();           //删除该实例的数据，方便下次set
     }
+    public static long getAndToLong() {
+        return Long.parseLong(threadLocal.get());
+    }
+    public static boolean compareIsSame(long id) {
+        return id==getAndToLong();
+    }
 }
 
 

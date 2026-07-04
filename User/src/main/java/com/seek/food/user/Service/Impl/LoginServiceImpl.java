@@ -4,6 +4,7 @@ import com.seek.food.config.Data.JWTData;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.CommonUtil.TimeUtil;
+import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.dto.User.UserDTO;
@@ -90,27 +91,39 @@ public class LoginServiceImpl implements LoginService {
                 userRedisKeyNameConfig.getLoginPasswordCooldown() + phoneNumber, "true",
                 DurationUtil.getSecondDuration(userRedisKeyDurationConfig.getLoginPasswordCooldown()))))throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
         //验证登录
-        return loginAndGetToken(loginMapper.getUserByPassword(phoneNumber, password), response);
+        return loginAndGetToken(loginMapper.getUserByPassword(phoneNumber, password),response);
     }
 
+    @Override
+    public void loginRefresh(HttpServletResponse response){
+        loginAndGetToken(TokenIdContext.getAndToLong(), response);
+    }
 
     //发放登录信息
     private UserDTO loginAndGetToken(UserDTO user, HttpServletResponse response){
-        if (user==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //获取token，并且放在请求头上
-        String token=TokenUtil.getToken(
-                user.getUserId()
-                , response
-                , JWTUser.getSecretKey()
+        getTokenByUtil(user.getUserId(),  response);
+        return user;
+    }
+
+    //同样为发放登录消息，不过只需要id
+    private void loginAndGetToken(long userId, HttpServletResponse response){
+        getTokenByUtil(userId,response);
+    }
+
+    private void getTokenByUtil(long userId, HttpServletResponse response){
+        //获取token，并且放在请求头上
+        TokenUtil.getAndRecordToken(userId,response, JWTUser.getSecretKey()
                 , JWTUser.getTokenDuration()
                 , jwtConfig.getRequestTokenName()
                 , JWTUser.getHeaderSign()
-                , jwtConfig.getHeaderSeparator());
-        stringRedisTemplate.execute(tokenAddScript         //执行脚本
-                ,RedisUtil.toCollect(commonRedisKeyConfig.getLoginToken()+user.getUserId())       //KEYS参数
-                ,jwtConfig.getMaxStore(),token, ""+TimeUtil.getStampByNow());     //ARGV参数
-        return user;
+                , jwtConfig.getHeaderSeparator()
+                , commonRedisKeyConfig.getLoginToken()
+                , jwtConfig.getMaxStore()
+                , stringRedisTemplate);
     }
+
+
 
 
 
