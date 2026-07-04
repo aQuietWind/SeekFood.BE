@@ -1,5 +1,6 @@
 package com.seek.food.config.AutoConfig;
 
+import com.seek.food.config.NacosConfig.User.UserCaffeineConfig;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
@@ -30,6 +31,12 @@ public class UserSubConfig {
     @Lazy // 用到才实例化，启动不创建对象
     public UserRedisKeyNameConfig userRedisKeyNameConfig(UserRedisKeyNameConfig userRedisKeyNameConfig) {
         return userRedisKeyNameConfig;
+    }
+    @Bean
+    @ConditionalOnMissingBean // 业务可自定义覆盖
+    @Lazy // 用到才实例化，启动不创建对象
+    public UserCaffeineConfig userCaffeineConfig(UserCaffeineConfig userCaffeineConfig) {
+        return userCaffeineConfig;
     }
 
 

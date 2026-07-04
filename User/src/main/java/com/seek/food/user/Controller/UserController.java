@@ -21,7 +21,6 @@ public class UserController{
 
     @GetMapping(RequestPathEnum.User_Get_Detail)
     public Result<UserDTO> getUserDetailMessage(long userId){
-
         return Result.success(userService.getUserDetailMessage(userId));
     }
 
