@@ -1,14 +1,17 @@
 package com.seek.food.gateway.Filter;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.google.gson.Gson;
 import com.seek.food.config.NacosConfig.Common.JWTConfig;
+import com.seek.food.dto.Common.Result;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig;
 import com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig;
 import com.seek.food.gateway.Util.BlackIdCaffeine;
 import com.seek.food.gateway.Util.BlackIpCaffeine;
-import com.seek.food.util.CommonUtil.LocalDateTimeUtil;
+import com.seek.food.util.CommonUtil.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -17,7 +20,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -38,7 +41,10 @@ public class RequestFilter implements GlobalFilter{
     private final int blackIpDuration;
     private final int blackIdTimes;
     private final int blackIdDuration;
+    //字节码化的Result
+    private final static byte[] errorBytes = new Gson().toJson(Result.error(ErrorCodeEnum.UNAUTHORIZED)).getBytes();
     private static final Logger logger = LoggerFactory.getLogger(RequestFilter.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     // 构造器注入
     public RequestFilter(StringRedisTemplate stringRedisTemplate, GatewayRedisKeyConfig gatewayRedisKeyConfig, BlackIpCaffeine blackIpCaffeine
     , BlackIdCaffeine blackIdCaffeine, GatewayBlackConfig gatewayBlackConfig, JWTConfig jwtConfig) {
@@ -61,8 +67,7 @@ public class RequestFilter implements GlobalFilter{
         if (("".equals(tokenId)||tokenId==null)&&ipCheck(request))return chain.filter(exchange);
         else if (tokenId!=null&&idRecord(tokenId))return chain.filter(exchange);
         logger.warn("requestFilter拒绝请求");
-        exchange.getResponse().setRawStatusCode(ErrorCodeEnum.ACCOUNT_FORBIDDEN.getCode());      //设置状态码
-        return exchange.getResponse().setComplete();        //拒绝请求
+        return reject(exchange);
     }
 
     //ip名单校验
@@ -105,7 +110,7 @@ public class RequestFilter implements GlobalFilter{
         long count=stringRedisTemplate.opsForValue().increment(redisRecordKey+value);
         if (count>= maxCounts){
             //持续时间戳
-            long aimStamp=LocalDateTimeUtil.getPlusHoursStampByNow(blackDuration);
+            long aimStamp= TimeUtil.getPlusHoursStampByNow(blackDuration);
             //封禁并且设置有效期
             stringRedisTemplate.opsForValue().set(redisBlackKey+value, ""+aimStamp,blackDuration, TimeUnit.HOURS);
             //回写jvm缓存
@@ -117,6 +122,20 @@ public class RequestFilter implements GlobalFilter{
         if (count==1)stringRedisTemplate.expire(redisRecordKey+value,1,TimeUnit.MINUTES);
         //同意放行
         return true;
+    }
+
+    //拒绝放行
+    private Mono<Void> reject(ServerWebExchange exchange) {
+        logger.warn("非法请求被RequestFilter拦截");
+        ServerHttpResponse response=exchange.getResponse();
+        response.setStatusCode(ErrorCodeEnum.UNAUTHORIZED.getHttpStatus());      //设置状态码
+        try {
+            //使返回失败结果
+            return response.writeWith(Mono.just(response.bufferFactory().wrap(errorBytes)));
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            return response.setComplete();
+        }
     }
 
 

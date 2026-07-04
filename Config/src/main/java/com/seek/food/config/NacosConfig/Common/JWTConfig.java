@@ -18,11 +18,12 @@ public class JWTConfig {
     private String headerSeparator;
     private String headerTokenName;
     private String RequestTokenName;
+    private String maxStore;
 
     public JWTConfig() {
     }
 
-    public JWTConfig(JWTData user, JWTData merchant, JWTData rider, JWTData admin, String headerSeparator, String headerTokenName, String RequestTokenName) {
+    public JWTConfig(JWTData user, JWTData merchant, JWTData rider, JWTData admin, String headerSeparator, String headerTokenName, String RequestTokenName, String maxStore) {
         this.user = user;
         this.merchant = merchant;
         this.rider = rider;
@@ -30,6 +31,7 @@ public class JWTConfig {
         this.headerSeparator = headerSeparator;
         this.headerTokenName = headerTokenName;
         this.RequestTokenName = RequestTokenName;
+        this.maxStore = maxStore;
     }
 
     public JWTData[] getAllJWTData() {
@@ -148,7 +150,23 @@ public class JWTConfig {
         this.RequestTokenName = RequestTokenName;
     }
 
+    /**
+     * 获取
+     * @return maxStore
+     */
+    public String getMaxStore() {
+        return maxStore;
+    }
+
+    /**
+     * 设置
+     * @param maxStore
+     */
+    public void setMaxStore(String maxStore) {
+        this.maxStore = maxStore;
+    }
+
     public String toString() {
-        return "JWTConfig{user = " + user + ", merchant = " + merchant + ", rider = " + rider + ", admin = " + admin + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + ", RequestTokenName = " + RequestTokenName + "}";
+        return "JWTConfig{user = " + user + ", merchant = " + merchant + ", rider = " + rider + ", admin = " + admin + ", headerSeparator = " + headerSeparator + ", headerTokenName = " + headerTokenName + ", RequestTokenName = " + RequestTokenName + ", maxStore = " + maxStore + "}";
     }
 }

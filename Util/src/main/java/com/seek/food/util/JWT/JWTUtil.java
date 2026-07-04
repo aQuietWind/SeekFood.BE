@@ -47,22 +47,16 @@ public class JWTUtil {
         return obtainJwt(tokenId,sercetKey,expireTime);
     }
 
-    public static long jwtCheckByList(String token,String headerSeparator,HashMap<String,String> jwtHeaders){
+    public static TokenCheckResult jwtCheckByList(String token,String headerSeparator,HashMap<String,String> jwtHeaders){
         //分割token,并且赋值
         String[] body=token.split(headerSeparator,2);
         String headerSign=body[0];
         token=body[1];
         //查找对应的secretKey进行解析
-        if (jwtHeaders.containsKey(headerSign)){
-                //解析token
-                try {return jwtCheck(token,jwtHeaders.get(headerSign));}
-                catch (Exception e){
-                    logger.warn("token:{} ,在解析时错误，发生异常:{}",token,e.getMessage());
-                    return FailResult;
-                }
-        }
-        return FailResult;
+        if (jwtHeaders.containsKey(headerSign))return new TokenCheckResult(token,jwtCheck(token,jwtHeaders.get(headerSign)));
+        return new TokenCheckResult(token,FailResult);
     }
+
 
 
 

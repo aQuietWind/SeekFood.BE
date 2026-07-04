@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TokenUtil {
     //统一获取token
-    public static void getToken(Long id, HttpServletResponse response, String secretKey, long expireMillSecondsTime
+    public static String getToken(Long id, HttpServletResponse response, String secretKey, long expireMillSecondsTime
     , String requestTokenName, String headerSign, String headerSeparator){
         //登录校验成功，生成JWT Token
         String accessToken = JWTUtil.obtainJwtByLong(id,secretKey,expireMillSecondsTime);
@@ -20,5 +20,6 @@ public class TokenUtil {
         cookie.setPath("/");
         cookie.setMaxAge((int) (expireMillSecondsTime/1000));
         response.addCookie(cookie);
+        return accessToken;
     }
 }

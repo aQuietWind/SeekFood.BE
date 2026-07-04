@@ -7,7 +7,7 @@ com.seek.food.config.NativeConfig.Interceptor.TokenInterceptor
 com.seek.food.config.NativeConfig.SentinelConfig.HeaderOriginParser
 com.seek.food.config.NativeConfig.MQConfig.MQCommonConfig
 com.seek.food.config.NativeConfig.MQConfig.RabbitMQConfig
-com.seek.food.config.NativeConfig.MQConfig.MQErrorQueueConfig
+com.seek.food.config.NativeConfig.MQConfig.MQErrorConfig
 com.seek.food.config.NativeConfig.SentinelConfig.SentinelBlockHandler
 com.seek.food.config.NativeConfig.SentinelConfig.SentinelGlobalApiConfig
 com.seek.food.config.NativeConfig.CommonConfig.WebConfig

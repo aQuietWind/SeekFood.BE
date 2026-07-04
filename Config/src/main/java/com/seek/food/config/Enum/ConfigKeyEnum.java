@@ -12,7 +12,6 @@ public class ConfigKeyEnum {
     public static final String User_Redis_Key_Duration_Config="user.self.redis.key.duration";
     public static final String User_Redis_Key_Name_Config="user.self.redis.key.name";
 
-    public static final String Error_Exchange_Config="mq.name.bind.error-exchange";
     public static final String User_Register_Exchange_Config="mq.name.bind.user-register-exchange";
 
     public static final String Fund_Params_Rules_Config="fund.self.params.rules";

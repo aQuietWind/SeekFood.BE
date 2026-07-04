@@ -78,6 +78,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
     },
     {
+      "name": "common.jwt.max-store",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
       "name": "common.jwt.merchant",
       "type": "com.seek.food.config.Data.JWTData",
       "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"

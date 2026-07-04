@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public class LocalDateTimeUtil {
-    private LocalDateTimeUtil() {}
+public class TimeUtil {
+    private TimeUtil() {}
     public static final DateTimeFormatter Default_Time_Format=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final DateTimeFormatter Zip_Time_Format=DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     public static final DateTimeFormatter Zip_Date_Format=DateTimeFormatter.ofPattern("yyyyMMdd");

@@ -1,7 +1,9 @@
 package com.seek.food.user.Service.Impl;
 
 import com.seek.food.config.Data.JWTData;
+import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.JWTConfig;
+import com.seek.food.util.CommonUtil.TimeUtil;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.dto.User.UserDTO;
@@ -12,6 +14,7 @@ import com.seek.food.user.Mapper.LoginMapper;
 import com.seek.food.user.Service.LoginService;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.JWT.TokenUtil;
+import com.seek.food.util.Redis.RedisUtil;
 import com.seek.food.util.TimeUtil.DurationUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -19,28 +22,30 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
 
 @Service
 @RefreshScope
 public class LoginServiceImpl implements LoginService {
     private final JWTData JWTUser;
     private final JWTConfig jwtConfig;
+    private final CommonRedisKeyConfig commonRedisKeyConfig;
     private final LoginMapper loginMapper;
     private final UserParamsRulesConfig userParamsRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
     private final UserRedisKeyNameConfig userRedisKeyNameConfig;
     private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+    private static final DefaultRedisScript<Boolean> tokenAddScript= RedisUtil.luaQuickInit("lua/token_add.lua");
 
     @Autowired
     public LoginServiceImpl(JWTConfig jwtConfig, LoginMapper loginMapper, UserParamsRulesConfig userParamsRulesConfig
     ,StringRedisTemplate stringRedisTemplate, UserRedisKeyNameConfig userRedisKeyNameConfig, UserRedisKeyDurationConfig userRedisKeyDurationConfig
-    ) {
+    ,CommonRedisKeyConfig commonRedisKeyConfig) {
         this.jwtConfig = jwtConfig;
         this.JWTUser = jwtConfig.getUser();
+        this.commonRedisKeyConfig = commonRedisKeyConfig;
         this.loginMapper = loginMapper;
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -93,7 +98,7 @@ public class LoginServiceImpl implements LoginService {
     private UserDTO loginAndGetToken(UserDTO user, HttpServletResponse response){
         if (user==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //获取token，并且放在请求头上
-        TokenUtil.getToken(
+        String token=TokenUtil.getToken(
                 user.getUserId()
                 , response
                 , JWTUser.getSecretKey()
@@ -101,6 +106,9 @@ public class LoginServiceImpl implements LoginService {
                 , jwtConfig.getRequestTokenName()
                 , JWTUser.getHeaderSign()
                 , jwtConfig.getHeaderSeparator());
+        stringRedisTemplate.execute(tokenAddScript         //执行脚本
+                ,RedisUtil.toCollect(commonRedisKeyConfig.getLoginToken()+user.getUserId())       //KEYS参数
+                ,jwtConfig.getMaxStore(),token, ""+TimeUtil.getStampByNow());     //ARGV参数
         return user;
     }
 
