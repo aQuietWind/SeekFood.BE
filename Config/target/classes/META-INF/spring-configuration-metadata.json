@@ -11,6 +11,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
     },
     {
+      "name": "fund.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
+    },
+    {
+      "name": "fund.self.redis.key.duration",
+      "type": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyDurationConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyDurationConfig"
+    },
+    {
+      "name": "fund.self.redis.key.name",
+      "type": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig"
+    },
+    {
       "name": "gateway.self.black",
       "type": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"
@@ -24,6 +39,11 @@
       "name": "gateway.self.request.path",
       "type": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "mq.name.bind.user-register-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
     },
     {
       "name": "user.self.params.rules",
@@ -83,6 +103,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
     },
     {
+      "name": "fund.self.params.rules.fund-id-capacity",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
+    },
+    {
+      "name": "fund.self.params.rules.fund-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
+    },
+    {
+      "name": "fund.self.redis.key.name.fund-id-count",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig"
+    },
+    {
       "name": "gateway.self.black.id",
       "type": "com.seek.food.config.Data.GatewayIpIdBlackData",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig"
@@ -121,6 +156,21 @@
       "name": "gateway.self.request.path.reject-path",
       "type": "java.util.HashSet<java.lang.String>",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "mq.name.bind.user-register-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.user-register-exchange.fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.user-register-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
     },
     {
       "name": "user.self.params.rules.password-regex",

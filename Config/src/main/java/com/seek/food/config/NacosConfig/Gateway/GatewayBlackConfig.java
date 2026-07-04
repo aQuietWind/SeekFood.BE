@@ -1,11 +1,12 @@
 package com.seek.food.config.NacosConfig.Gateway;
 
 import com.seek.food.config.Data.GatewayIpIdBlackData;
+import com.seek.food.config.Enum.ConfigKeyEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties("gateway.self.black")
+@ConfigurationProperties(ConfigKeyEnum.Gateway_Black_Config)
 public class GatewayBlackConfig {
     private GatewayIpIdBlackData ip;
     private GatewayIpIdBlackData id;

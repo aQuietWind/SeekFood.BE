@@ -1,6 +1,6 @@
-CREATE DATABASE seek_food_user;
+CREATE DATABASE if not exists  seek_food_user;
 USE seek_food_user;
-drop table `user`;
+drop table if exists  `user`;
 CREATE TABLE `user` (
                         `user_id` bigint NOT NULL COMMENT '用户id',
                         `username` varchar(15) NOT NULL COMMENT '用户名',

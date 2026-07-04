@@ -148,20 +148,23 @@
     <!--子模块管理-->
     <modules>
         <module>Gateway</module>
-        <module>Util</module>
-        <module>DTO</module>
-        <module>Admin</module>
-        <module>Comment</module>
-        <module>Employee</module>
-        <module>Fund</module>
-        <module>Meal</module>
+        <module>User</module>
         <module>Merchant</module>
-        <module>Order</module>
+        <module>Employee</module>
+        <module>Meal</module>
+        <module>Fund</module>
         <module>Promotion</module>
         <module>Rider</module>
-        <module>User</module>
+        <module>Order</module>
         <module>Chat</module>
+        <module>Comment</module>
+        <module>Interaction</module>
+        <module>Admin</module>
+        <module>ErrorConsumer</module>
+        <module>DTO</module>
+        <module>Util</module>
         <module>Config</module>
+        <module>Feign</module>
     </modules>
 
     <build>

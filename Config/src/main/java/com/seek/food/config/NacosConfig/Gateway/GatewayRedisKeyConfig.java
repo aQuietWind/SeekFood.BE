@@ -1,10 +1,11 @@
 package com.seek.food.config.NacosConfig.Gateway;
 
+import com.seek.food.config.Enum.ConfigKeyEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties("gateway.self.redis.key.name")
+@ConfigurationProperties(ConfigKeyEnum.Gateway_Redis_Key_Config)
 public class GatewayRedisKeyConfig {
     private String idCheck;
     private String ipCheck;

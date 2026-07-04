@@ -6,7 +6,6 @@
         <groupId>com.seek.food</groupId>
         <artifactId>SeekFood</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>Interaction</artifactId>
@@ -16,7 +15,7 @@
     </properties>
 
     <dependencies>
-        <!--        springboot依赖-->
+        <!--        SpringBoot依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

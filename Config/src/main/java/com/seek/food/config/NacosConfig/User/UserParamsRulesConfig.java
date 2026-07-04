@@ -1,5 +1,6 @@
 package com.seek.food.config.NacosConfig.User;
 
+import com.seek.food.config.Enum.ConfigKeyEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 
 @RefreshScope
-@ConfigurationProperties("user.self.params.rules")
+@ConfigurationProperties(ConfigKeyEnum.User_Params_Rules_Config)
 public class UserParamsRulesConfig {
     private int userIdStart;
     private long userIdCapacity;

@@ -19,6 +19,8 @@
         <option value="$PROJECT_DIR$/Promotion/pom.xml" />
         <option value="$PROJECT_DIR$/Interaction/pom.xml" />
         <option value="$PROJECT_DIR$/Chat/pom.xml" />
+        <option value="$PROJECT_DIR$/Feign/pom.xml" />
+        <option value="$PROJECT_DIR$/ErrorConsumer/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

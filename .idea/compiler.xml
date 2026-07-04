@@ -12,6 +12,7 @@
         <module name="Fund" />
         <module name="Interaction" />
         <module name="Config" />
+        <module name="ErrorConsumer" />
         <module name="Meal" />
         <module name="Util" />
         <module name="Admin" />
@@ -21,6 +22,7 @@
         <module name="Merchant" />
         <module name="Gateway" />
         <module name="Chat" />
+        <module name="Feign" />
         <module name="DTO" />
       </profile>
     </annotationProcessing>
@@ -39,6 +41,8 @@
       <module name="Coupon" options="-parameters" />
       <module name="DTO" options="-parameters" />
       <module name="Employee" options="-parameters" />
+      <module name="ErrorConsumer" options="-parameters" />
+      <module name="Feign" options="-parameters" />
       <module name="Fund" options="-parameters" />
       <module name="Gateway" options="-parameters" />
       <module name="Interaction" options="-parameters" />

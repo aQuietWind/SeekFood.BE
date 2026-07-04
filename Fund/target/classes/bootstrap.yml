@@ -27,7 +27,10 @@ spring:
   config:
     import:
       - nacos:common-default-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:common-sentinel-rule-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:${spring.application.name}-self-dev.yaml?group=${spring.cloud.nacos.discovery.group}&refreshEnabled=true
+      - nacos:mq-name-bind-dev.yaml?group=MQ_GROUP&refreshEnabled=true
+
 
 #  端口设置
 server:

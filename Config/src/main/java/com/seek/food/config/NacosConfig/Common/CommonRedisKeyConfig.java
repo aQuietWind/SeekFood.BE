@@ -1,10 +1,11 @@
 package com.seek.food.config.NacosConfig.Common;
 
+import com.seek.food.config.Enum.ConfigKeyEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties("common.redis.key.name")
+@ConfigurationProperties(ConfigKeyEnum.Common_Redis_Key)
 public class CommonRedisKeyConfig {
     private String loginToken;
 

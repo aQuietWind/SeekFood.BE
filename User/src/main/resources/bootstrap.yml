@@ -30,6 +30,7 @@ spring:
       - nacos:common-jwt-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-default-connection-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
       - nacos:common-sentinel-rule-dev.yaml?group=COMMON_GROUP&refreshEnabled=true
+      - nacos:mq-name-bind-dev.yaml?group=MQ_GROUP&refreshEnabled=true
 
 #  端口设置
 server:

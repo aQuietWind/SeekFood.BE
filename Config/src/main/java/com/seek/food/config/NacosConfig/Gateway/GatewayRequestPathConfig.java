@@ -1,13 +1,14 @@
 package com.seek.food.config.NacosConfig.Gateway;
 
 
+import com.seek.food.config.Enum.ConfigKeyEnum;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import java.util.HashSet;
 
 @RefreshScope
-@ConfigurationProperties(prefix = "gateway.self.request.path")
+@ConfigurationProperties(prefix = ConfigKeyEnum.Gateway_Request_Path_Config)
 public class GatewayRequestPathConfig {
     private HashSet<String> allowPath;
     private HashSet<String> rejectPath;

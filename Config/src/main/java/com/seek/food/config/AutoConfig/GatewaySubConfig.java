@@ -14,19 +14,16 @@ import org.springframework.context.annotation.Lazy;
 @EnableConfigurationProperties({GatewayRedisKeyConfig.class, GatewayBlackConfig.class, GatewayRequestPathConfig.class})
 public class GatewaySubConfig {
     @Bean
-    @ConditionalOnMissingBean // 业务可自定义覆盖
     @Lazy // 用到才实例化，启动不创建对象
     public GatewayBlackConfig gatewayBlackConfig(GatewayBlackConfig gatewayBlackConfig) {
         return gatewayBlackConfig;
     }
     @Bean
-    @ConditionalOnMissingBean // 业务可自定义覆盖
     @Lazy // 用到才实例化，启动不创建对象
     public GatewayRedisKeyConfig gatewayRedisKeyConfig(GatewayRedisKeyConfig gatewayRedisKeyConfig) {
         return gatewayRedisKeyConfig;
     }
     @Bean
-    @ConditionalOnMissingBean // 业务可自定义覆盖
     @Lazy // 用到才实例化，启动不创建对象
     public GatewayRequestPathConfig gatewayRequestPathConfig(GatewayRequestPathConfig gatewayRequestPathConfig) {
         return gatewayRequestPathConfig;
