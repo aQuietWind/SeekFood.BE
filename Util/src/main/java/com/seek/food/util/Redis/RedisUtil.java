@@ -26,6 +26,6 @@ public class RedisUtil {
 
     //快速鉴别是否处于冷却期
     public static void checkCooldown(StringRedisTemplate stringRedisTemplate,String key,long duration){
-        if (!Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, cooldownValue, DurationUtil.getSecondDuration(duration)))) throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
+        if (Boolean.FALSE.equals(stringRedisTemplate.opsForValue().setIfAbsent(key, cooldownValue, DurationUtil.getSecondDuration(duration)))) throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
     }
 }

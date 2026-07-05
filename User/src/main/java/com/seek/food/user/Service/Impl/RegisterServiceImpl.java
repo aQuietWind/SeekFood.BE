@@ -55,14 +55,8 @@ public class RegisterServiceImpl implements RegisterService {
         logger.info("phone number:{} ,进行注册获取验证码",phoneNumber);
         //验证手机号
         if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-        //生产验证码
-        String opt= OPTUtil.generateOPT(6);
-        //存储验证码到redis，并检查是否已经存在验证码
-        if(Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
-                userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,
-                opt,
-                DurationUtil.getSecondDuration(userRedisKeyDurationConfig.getOpt())))) return opt;
-        else throw new BizException(ErrorCodeEnum.OPT_SURVIVE);
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber
+                ,userRedisKeyDurationConfig.getOpt(),6);
     }
 
     //注册用户

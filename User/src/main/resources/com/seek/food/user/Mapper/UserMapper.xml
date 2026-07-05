@@ -31,4 +31,7 @@
         from user where user_id=#{userId} and is_delete=false
     </select>
 
+    <update id="updateUserPassword">
+        update user set password=#{newPassword} where phone_number=#{phoneNumber} and is_delete=false
+    </update>
 </mapper>

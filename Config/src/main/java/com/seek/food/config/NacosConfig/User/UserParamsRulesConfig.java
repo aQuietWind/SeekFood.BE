@@ -38,10 +38,10 @@ public class UserParamsRulesConfig {
         return (username.length()<usernameLengthMax&& !username.isEmpty());
     };
     public boolean passwordCheck(String password) {
-        return password.matches(passwordRegex);
+        return password!=null&&password.matches(passwordRegex);
     };
     public boolean phoneNumberCheck(String phoneNumber) {
-        return phoneNumber.matches(phoneNumberRegex);
+        return phoneNumber!=null&&phoneNumber.matches(phoneNumberRegex);
     }
     public boolean sexCheck(Integer sex){
         return (sex==null||sexValues.contains(sex));

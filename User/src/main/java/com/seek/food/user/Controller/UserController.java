@@ -7,6 +7,7 @@ import com.seek.food.user.Enum.RequestPathEnum;
 import com.seek.food.user.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +29,17 @@ public class UserController{
     @GetMapping(RequestPathEnum.User_Get_Self)
     public Result<UserDTO> getUserSelfMessage(){
         return Result.success(userService.getUserSelfMessage());
+    }
+    //获取验证码以更改密码,且可用于用户忘记密码
+    @GetMapping(RequestPathEnum.User_Update_Password)
+    public Result<String> updateUserPasswordGetOpt(String phoneNumber){
+        return Result.success(userService.updateUserPasswordGetOpt(phoneNumber));
+    }
+    //更改密码
+    @PutMapping(RequestPathEnum.User_Update_Password)
+    public Result<Void> updateUserPassword(String phoneNumber,String newPassword,String opt){
+        userService.updateUserPassword(phoneNumber,newPassword,opt);
+        return Result.success();
     }
 
 

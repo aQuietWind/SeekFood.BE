@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
     public UserDTO getUserDetailMessage(long userId);
+    public boolean updateUserPassword(String phoneNumber,String newPassword);
 }

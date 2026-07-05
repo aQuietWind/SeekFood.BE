@@ -116,6 +116,7 @@ public class LoginServiceImpl implements LoginService {
         getTokenByUtil(userId,response);
     }
 
+    //从TokenUtil中快速获取token
     private void getTokenByUtil(long userId, HttpServletResponse response){
         //获取token，并且放在请求头上
         TokenUtil.getAndRecordToken(userId,response, JWTUser.getSecretKey()
