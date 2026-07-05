@@ -2,7 +2,6 @@ package com.seek.food.user.Consumer;
 
 import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
-import com.seek.food.dto.User.OldFileDTO;
 import com.seek.food.user.Mapper.OldFileMapper;
 import com.seek.food.util.FileUtil.FileRemove;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +24,7 @@ public class UpdateFileConsumer {
     public void updateFileQueue(long userId){
         String addr = oldFileMapper.getOldFileByUserId(userId).getFileAddr();
         try {
-            FileRemove.removeFile(userParamsRulesConfig.getHeaderImagePath(), addr);
+            FileRemove.removeFile(userParamsRulesConfig.getHeaderImageDest(), addr);
             oldFileMapper.deleteFile(addr);
         }catch (Exception e){
             //不再进行重试，而是留给spring后台线程进行定时处理

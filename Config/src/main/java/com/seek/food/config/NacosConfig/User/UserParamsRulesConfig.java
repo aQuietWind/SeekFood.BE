@@ -4,10 +4,7 @@ import com.seek.food.config.Enum.ConfigKeyEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 
 @RefreshScope
@@ -22,7 +19,7 @@ public class UserParamsRulesConfig {
     private HashSet<Integer> sexValues;
     private HashSet<String> headerImageType;
     private long headerImageSize;
-    private String headerImagePath;
+    private String headerImageDest;
 
     //------------------------
     //校验参数

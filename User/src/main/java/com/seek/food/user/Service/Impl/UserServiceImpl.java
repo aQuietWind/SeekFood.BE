@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     public void initPath() {
         //提前创建目录，后面头像保存无需再校验
-        FileSave.createDestDir(userParamsRulesConfig.getHeaderImagePath());
+        FileSave.createDestDir(userParamsRulesConfig.getHeaderImageDest());
     }
 
 
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
         RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdateHeaderImageCooldown()+userId
                 ,userRedisKeyDurationConfig.getUpdateHeaderImageCooldown());
         //快速保存
-        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImagePath(), userParamsRulesConfig.getHeaderImageSize()
+        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), userParamsRulesConfig.getHeaderImageSize()
                 , userParamsRulesConfig.getHeaderImageType());
         //检查是否成功
         if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);

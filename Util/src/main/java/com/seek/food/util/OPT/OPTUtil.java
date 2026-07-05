@@ -6,14 +6,14 @@ import com.seek.food.util.TimeUtil.DurationUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class OPTUtil {
-    private static final Random random=new Random();
     public static String generateOPT(int n){
         StringBuilder opt = new StringBuilder();
         for (int i = 0; i < n; i++) {
             //添加一位随机数字
-            opt.append(random.nextInt(10));
+            opt.append(ThreadLocalRandom.current().nextInt(10));
         }
         return opt.toString();
     }

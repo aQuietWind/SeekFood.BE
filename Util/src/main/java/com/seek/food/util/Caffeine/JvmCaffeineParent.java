@@ -42,7 +42,7 @@ public class JvmCaffeineParent<T,E> {
     //jvm-redis-mysql多级缓存逻辑方法
     public E getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate,String redisKeyName,long duration
             ,Class<E> resultClass,java.util.function.Function<T, E> loader) {
-        if (key == null) return null;
+        if (key == null||key.equals("")) return null;
         return CACHE.get(key,k->{
             //从redis中获取分布式缓存
             String json=stringRedisTemplate.opsForValue().get(redisKeyName);
@@ -57,12 +57,12 @@ public class JvmCaffeineParent<T,E> {
             E result=loader.apply(k);
             //防止缓存穿透,在分布式场景下预先写入redis中，除此，可用额外缓存空值代替方案进行jvm处直接判断是否为缓存
             if (result==null){
-                stringRedisTemplate.opsForValue().set(redisKeyName, caffeineFail, DurationUtil.getSecondDuration(30));
+                stringRedisTemplate.opsForValue().set(redisKeyName, caffeineFail, duration);
                 return null;
             }
             //不是缓存穿透则存储到redis做分布式缓存后返回
             try {
-                stringRedisTemplate.opsForValue().set(redisKeyName, mapper.writeValueAsString(redisKeyName), DurationUtil.getSecondDuration(duration));}
+                stringRedisTemplate.opsForValue().set(redisKeyName, mapper.writeValueAsString(result), DurationUtil.getSecondDuration(duration));}
             catch (JsonProcessingException e) {throw new RuntimeException(e);}
             return result;
         });
