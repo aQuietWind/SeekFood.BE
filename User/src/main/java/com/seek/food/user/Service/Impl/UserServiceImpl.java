@@ -1,5 +1,6 @@
 package com.seek.food.user.Service.Impl;
 
+import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
@@ -11,9 +12,12 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -22,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RefreshScope
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserCaffeine userCaffeine;
@@ -29,16 +34,20 @@ public class UserServiceImpl implements UserService {
     private final UserRedisKeyNameConfig userRedisKeyNameConfig;
     private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private final UserParamsRulesConfig userParamsRulesConfig;
+    private final RabbitTemplate rabbitTemplate;
+    private final UserExchangeConfig userExchangeConfig;
     @Autowired
     public UserServiceImpl(UserMapper userMapper,UserCaffeine userCaffeine,StringRedisTemplate stringRedisTemplate
     ,UserRedisKeyNameConfig userRedisKeyNameConfig,UserRedisKeyDurationConfig userRedisKeyDurationConfig
-    ,UserParamsRulesConfig userParamsRulesConfig) {
+    ,UserParamsRulesConfig userParamsRulesConfig,RabbitTemplate rabbitTemplate,UserExchangeConfig userExchangeConfig) {
         this.userMapper = userMapper;
         this.userCaffeine = userCaffeine;
         this.stringRedisTemplate = stringRedisTemplate;
         this.userRedisKeyNameConfig = userRedisKeyNameConfig;
         this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
         this.userParamsRulesConfig = userParamsRulesConfig;
+        this.rabbitTemplate = rabbitTemplate;
+        this.userExchangeConfig = userExchangeConfig;
     }
     // Bean 注入完成后再执行初始化
     @PostConstruct
@@ -99,7 +108,10 @@ public class UserServiceImpl implements UserService {
         //快速保存
         String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImagePath(), userParamsRulesConfig.getHeaderImageSize()
                 , userParamsRulesConfig.getHeaderImageType());
-        userMapper.updateUserHeader(userId,path);
+        //检查是否成功
+        if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //发送消息到mq中删除旧文件
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),userId,rabbitTemplate,log);
     }
 
 

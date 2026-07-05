@@ -1,6 +1,6 @@
 package com.seek.food.user.Service.Impl;
 
-import com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig;
+import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -11,7 +11,6 @@ import com.seek.food.user.Mapper.RegisterMapper;
 import com.seek.food.user.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.OPT.OPTUtil;
-import com.seek.food.util.TimeUtil.DurationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -29,19 +28,19 @@ public class RegisterServiceImpl implements RegisterService {
     private final UserRedisKeyNameConfig userRedisKeyNameConfig;
     private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private final RegisterMapper registerMapper;
-    private final UserRegisterExchangeConfig userRegisterExchangeConfig;
+    private final UserExchangeConfig userExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private static final Logger logger = LoggerFactory.getLogger(RegisterServiceImpl.class);
     @Autowired
     public RegisterServiceImpl(UserParamsRulesConfig userParamsRulesConfig, StringRedisTemplate stringRedisTemplate
     , UserRedisKeyNameConfig userRedisKeyNameConfig, UserRedisKeyDurationConfig userRedisKeyDurationConfig
-    , RegisterMapper registerMapper , UserRegisterExchangeConfig userRegisterExchangeConfig, RabbitTemplate rabbitTemplate) {
+    , RegisterMapper registerMapper , UserExchangeConfig userExchangeConfig, RabbitTemplate rabbitTemplate) {
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.userRedisKeyNameConfig = userRedisKeyNameConfig;
         this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
         this.registerMapper = registerMapper;
-        this.userRegisterExchangeConfig = userRegisterExchangeConfig;
+        this.userExchangeConfig = userExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
         //初始化userIdCount
         stringRedisTemplate.opsForValue().setIfAbsent(userRedisKeyNameConfig.getUserIdCount(),
@@ -69,7 +68,7 @@ public class RegisterServiceImpl implements RegisterService {
         long userId=IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate);
         //写入mysql,失败会报错
         registerMapper.insertUser(userId,phoneNumber,password);
-        MQUtil.send(userRegisterExchangeConfig.getExchangeName(),"",userId,rabbitTemplate,logger);
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getRegisterFundQueue().getRoutingKey(),userId,rabbitTemplate,logger);
         logger.info("phone number:{} ,成功注册用户",phoneNumber);
     }
 

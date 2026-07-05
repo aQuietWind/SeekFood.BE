@@ -36,6 +36,6 @@
     </update>
 
     <update id="updateUserHeader">
-        update user set header_image_addr=#{headerImageAddr} where user_id=#{userId}
+        update user set header_image_addr=#{path} where user_id=#{userId}
     </update>
 </mapper>

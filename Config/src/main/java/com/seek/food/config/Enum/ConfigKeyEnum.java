@@ -13,7 +13,7 @@ public class ConfigKeyEnum {
     public static final String User_Redis_Key_Name_Config="user.self.redis.key.name";
     public static final String User_Caffeine_Config="user.self.jvm-caffeine.user";
 
-    public static final String User_Register_Exchange_Config="mq.name.bind.user-register-exchange";
+    public static final String User_Register_Exchange_Config="mq.name.bind.user-exchange";
 
     public static final String Fund_Params_Rules_Config="fund.self.params.rules";
     public static final String Fund_Redis_Key_Duration_Config="fund.self.redis.key.duration";

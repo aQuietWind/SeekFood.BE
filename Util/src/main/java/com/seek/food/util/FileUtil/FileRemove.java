@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 
 public class FileRemove {
     //传输完整路径下来
-    public static void removeFile(String adder) {
-        Path path = Paths.get(adder);
+    public static void removeFile(String dest,String addr) {
+        Path path = Paths.get(dest).resolve(addr);
         //检查路径是否存在
         if (!Files.exists(path)){
             throw new BizException(ErrorCodeEnum.TOO_BIG_FILE);

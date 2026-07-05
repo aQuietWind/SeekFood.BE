@@ -1,4 +1,4 @@
-package com.seek.food.dto.Fund;
+package com.seek.food.dto.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,9 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FundDTO {
-    private Long fundId;
-    private Long accountId;
+public class OldFileDTO {
+    private String fileAddr;
+    private Long userId;
     private LocalDateTime createTime;
-    private Long fundAmount;
     private Boolean delete;
-
 }

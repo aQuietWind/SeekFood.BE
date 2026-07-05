@@ -14,7 +14,7 @@
         <result property="headerImageAddr" column="header_image_addr"/>
         <result property="birthday" column="birthday"/>
         <result property="createTime" column="create_time"/>
-        <result property="isDelete" column="delete" />
+        <result property="delete" column="is_delete" />
         <result property="orderAmount" column="order_amount"/>
     </resultMap>
 
@@ -22,7 +22,6 @@
         select
         user_id,
         username,
-        phone_number,
         sex,
         header_image_addr,
         birthday,
@@ -36,7 +35,6 @@
         select
         user_id,
         username,
-        phone_number,
         sex,
         header_image_addr,
         birthday,

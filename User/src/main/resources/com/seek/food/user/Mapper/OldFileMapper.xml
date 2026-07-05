@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seek.food.user.Mapper.OldFileMapper">
+
+    <!-- 全局统一字段映射 -->
+    <resultMap id="OldFileResultMap" type="com.seek.food.dto.User.OldFileDTO">
+        <id property="fileAddr" column="file_addr"/>
+        <result property="userId" column="user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="delete" column="is_delete" />
+    </resultMap>
+
+    <select id="getOldFileByUserId" resultMap="OldFileResultMap">
+        select file_addr from old_file where user_id=#{userId} and is_delete=false order by create_time desc limit 0,1
+    </select>
+    <delete id="deleteFile">
+        update old_file set is_delete=true where file_addr=#{addr}
+    </delete>
+
+
+
+</mapper>

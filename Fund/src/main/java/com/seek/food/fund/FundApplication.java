@@ -12,9 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @CommonImport
 @FundImport
 public class FundApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(FundApplication.class, args);
     }
-
 }
