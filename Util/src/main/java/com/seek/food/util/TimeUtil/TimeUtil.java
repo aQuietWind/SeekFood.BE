@@ -1,4 +1,4 @@
-package com.seek.food.util.CommonUtil;
+package com.seek.food.util.TimeUtil;
 
 
 import java.time.LocalDateTime;

@@ -1,33 +1,71 @@
 package com.seek.food.util.Caffeine;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.seek.food.util.TimeUtil.DurationUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-public class JvmCaffeineParent {
+@Slf4j
+public class JvmCaffeineParent<T,E> {
+    public static final String caffeineFail="n";
+    private static final ObjectMapper mapper = new ObjectMapper();
     // 全局单例缓存（唯一实例）
-    private Cache<String, Long> CACHE;
+    protected Cache<T, E> CACHE;
 
     // ====================== 对外方法 ======================
     // 存缓存
-    public void put(String key, Long value) {
+    public void put(T key, E value) {
         CACHE.put(key, value);
     }
     //取缓存，没有返回 null
-    public Long get(String key) {
+    public E get(T key) {
         return CACHE.getIfPresent(key);
     }
     // 取缓存，如果没有，自动执行 load 逻辑并写入缓存（最常用）
-    public Long get(String key, java.util.function.Function<String, Long> loader) {
+    public E get(T key, java.util.function.Function<T, E> loader) {
         return CACHE.get(key, loader);
     }
     //删除缓存
-    public void delete(String key) {
+    public void delete(T key) {
         CACHE.invalidate(key);
     }
     //清空所有缓存
     public void clear() {
         CACHE.invalidateAll();
     }
-    public Cache<String, Long> getCACHE() {
+    public Cache<T, E> getCACHE() {
         return CACHE;
     }
+
+    //jvm-redis-mysql多级缓存逻辑方法
+    public E getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate,String redisKeyName,long duration
+            ,Class<E> resultClass,java.util.function.Function<T, E> loader) {
+        if (key == null) return null;
+        return CACHE.get(key,k->{
+            //从redis中获取分布式缓存
+            String json=stringRedisTemplate.opsForValue().get(redisKeyName);
+            //判断是否为空
+            if (json!=null&& !json.isEmpty()){
+                //判断是否为缓存穿透
+                if (json.equals(caffeineFail))return null;
+                //返回正确值
+                return mapper.convertValue(json,resultClass);
+            }
+            //从目标方法中获取值
+            E result=loader.apply(k);
+            //防止缓存穿透,在分布式场景下预先写入redis中，除此，可用额外缓存空值代替方案进行jvm处直接判断是否为缓存
+            if (result==null){
+                stringRedisTemplate.opsForValue().set(redisKeyName, caffeineFail, DurationUtil.getSecondDuration(30));
+                return null;
+            }
+            //不是缓存穿透则存储到redis做分布式缓存后返回
+            try {
+                stringRedisTemplate.opsForValue().set(redisKeyName, mapper.writeValueAsString(redisKeyName), DurationUtil.getSecondDuration(duration));}
+            catch (JsonProcessingException e) {throw new RuntimeException(e);}
+            return result;
+        });
+    }
+
 }

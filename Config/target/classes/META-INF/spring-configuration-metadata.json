@@ -46,6 +46,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
     },
     {
+      "name": "user.self.jvm-caffeine.user",
+      "type": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
+    },
+    {
       "name": "user.self.params.rules",
       "type": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
@@ -178,6 +183,16 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserRegisterExchangeConfig"
     },
     {
+      "name": "user.self.jvm-caffeine.user.expire-time",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
+    },
+    {
+      "name": "user.self.jvm-caffeine.user.max-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
+    },
+    {
       "name": "user.self.params.rules.password-regex",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
@@ -214,6 +229,11 @@
     },
     {
       "name": "user.self.redis.key.duration.login-password-cooldown",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
+      "name": "user.self.redis.key.duration.login-refresh-cooldown",
       "type": "java.lang.Long",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
     },
@@ -259,6 +279,11 @@
     },
     {
       "name": "user.self.redis.key.name.login-password-cooldown",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.login-refresh-cooldown",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
     },

@@ -5,4 +5,5 @@ import com.seek.food.dto.User.UserDTO;
 
 public interface UserService {
     public UserDTO getUserDetailMessage(long userId);
+    public UserDTO getUserSelfMessage();
 }

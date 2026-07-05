@@ -11,7 +11,7 @@ import com.seek.food.config.NacosConfig.Gateway.GatewayBlackConfig;
 import com.seek.food.config.NacosConfig.Gateway.GatewayRedisKeyConfig;
 import com.seek.food.gateway.Caffeine.BlackIdCaffeine;
 import com.seek.food.gateway.Caffeine.BlackIpCaffeine;
-import com.seek.food.util.CommonUtil.TimeUtil;
+import com.seek.food.util.TimeUtil.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.context.config.annotation.RefreshScope;

@@ -13,7 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @CommonImport
 @MQImport
 public class UserApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(UserApplication.class, args);
     }

@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Lazy;
 
 @Configuration
 // 绑定当前组件对应的属性类
-@EnableConfigurationProperties({UserParamsRulesConfig.class, UserRedisKeyDurationConfig.class, UserRedisKeyNameConfig.class})
+@EnableConfigurationProperties({UserParamsRulesConfig.class, UserRedisKeyDurationConfig.class, UserRedisKeyNameConfig.class,UserCaffeineConfig.class})
 public class UserSubConfig {
     @Bean
     @ConditionalOnMissingBean // 业务可自定义覆盖

@@ -3,7 +3,6 @@ package com.seek.food.user.Service.Impl;
 import com.seek.food.config.Data.JWTData;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.JWTConfig;
-import com.seek.food.util.CommonUtil.TimeUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -38,7 +37,6 @@ public class LoginServiceImpl implements LoginService {
     private final UserRedisKeyNameConfig userRedisKeyNameConfig;
     private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
-    private static final DefaultRedisScript<Boolean> tokenAddScript= RedisUtil.luaQuickInit("lua/token_add.lua");
 
     @Autowired
     public LoginServiceImpl(JWTConfig jwtConfig, LoginMapper loginMapper, UserParamsRulesConfig userParamsRulesConfig
@@ -81,7 +79,7 @@ public class LoginServiceImpl implements LoginService {
         return loginAndGetToken(loginMapper.getUserByPhoneNumber(phoneNumber),response);
     }
 
-
+    //通过密码登录
     @Override
     public UserDTO loginByPassword(String phoneNumber, String password, HttpServletResponse response){
         //检验格式
@@ -94,13 +92,20 @@ public class LoginServiceImpl implements LoginService {
         return loginAndGetToken(loginMapper.getUserByPassword(phoneNumber, password),response);
     }
 
+    //刷新token用
     @Override
     public void loginRefresh(HttpServletResponse response){
+        long userId=TokenIdContext.getAndToLong();
+        //防止别的商家等id请求token,导致误用密钥
+        if (userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //检查冷却期，防止频繁刷新token
+        RedisUtil.checkCooldown(stringRedisTemplate, userRedisKeyNameConfig.getLoginRefreshCooldown()+userId,userRedisKeyDurationConfig.getLoginRefreshCooldown());
         loginAndGetToken(TokenIdContext.getAndToLong(), response);
     }
 
     //发放登录信息
     private UserDTO loginAndGetToken(UserDTO user, HttpServletResponse response){
+        if (user == null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //获取token，并且放在请求头上
         getTokenByUtil(user.getUserId(),  response);
         return user;

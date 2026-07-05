@@ -19,9 +19,15 @@ public class UserController{
         this.userService = userService;
     }
 
+    //获取他人的详细信息
     @GetMapping(RequestPathEnum.User_Get_Detail)
     public Result<UserDTO> getUserDetailMessage(long userId){
         return Result.success(userService.getUserDetailMessage(userId));
+    }
+    //获取用户自身的信息
+    @GetMapping(RequestPathEnum.User_Get_Self)
+    public Result<UserDTO> getUserSelfMessage(){
+        return Result.success(userService.getUserSelfMessage());
     }
 
 

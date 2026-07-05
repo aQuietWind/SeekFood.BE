@@ -1,7 +1,7 @@
 package com.seek.food.util.JWT;
 
 
-import com.seek.food.util.CommonUtil.TimeUtil;
+import com.seek.food.util.TimeUtil.TimeUtil;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.Redis.RedisUtil;
@@ -9,8 +9,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-
-import java.util.concurrent.TimeUnit;
 
 public class TokenUtil {
     private static final DefaultRedisScript<Boolean> tokenAddScript= RedisUtil.luaQuickInit("lua/token_add.lua");

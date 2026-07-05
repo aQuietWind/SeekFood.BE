@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 @Component
-public class BlackIdCaffeine extends JvmCaffeineParent {
+public class BlackIdCaffeine extends JvmCaffeineParent<String,Long> {
     // 全局单例缓存（唯一实例）
     private Cache<String, Long> CACHE;
 
