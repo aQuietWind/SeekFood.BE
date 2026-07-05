@@ -6,10 +6,8 @@ import com.seek.food.dto.User.UserDTO;
 import com.seek.food.user.Enum.RequestPathEnum;
 import com.seek.food.user.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(RequestPathEnum.User)
@@ -41,21 +39,12 @@ public class UserController{
         userService.updateUserPassword(phoneNumber,newPassword,opt);
         return Result.success();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //改头像
+    @PutMapping(RequestPathEnum.User_Update_Header_Image)
+    public Result<Void> updateUserHeader(@RequestBody MultipartFile file){
+        userService.updateUserHeader(file);
+        return Result.success();
+    }
 
 
 

@@ -10,13 +10,18 @@ import com.seek.food.user.Service.UserService;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.FileUtil.FileSave;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@RefreshScope
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserCaffeine userCaffeine;
@@ -34,6 +39,12 @@ public class UserServiceImpl implements UserService {
         this.userRedisKeyNameConfig = userRedisKeyNameConfig;
         this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
         this.userParamsRulesConfig = userParamsRulesConfig;
+    }
+    // Bean 注入完成后再执行初始化
+    @PostConstruct
+    public void initPath() {
+        //提前创建目录，后面头像保存无需再校验
+        FileSave.createDestDir(userParamsRulesConfig.getHeaderImagePath());
     }
 
 
@@ -73,6 +84,22 @@ public class UserServiceImpl implements UserService {
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordOpt()+phoneNumber,opt);
         //如果mysql无目标数据会返回false
         if (!userMapper.updateUserPassword(phoneNumber,newPassword))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+    }
+
+    //更改头像
+    @Override
+    public void updateUserHeader(MultipartFile file){
+        //获取id
+        long userId=TokenIdContext.getAndToLong();
+        //校验id
+        if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //冷却期校验
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdateHeaderImageCooldown()+userId
+                ,userRedisKeyDurationConfig.getUpdateHeaderImageCooldown());
+        //快速保存
+        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImagePath(), userParamsRulesConfig.getHeaderImageSize()
+                , userParamsRulesConfig.getHeaderImageType());
+        userMapper.updateUserHeader(userId,path);
     }
 
 

@@ -193,6 +193,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
     },
     {
+      "name": "user.self.params.rules.header-image-path",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.header-image-size",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.header-image-type",
+      "type": "java.util.HashSet<java.lang.String>",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
       "name": "user.self.params.rules.password-regex",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
