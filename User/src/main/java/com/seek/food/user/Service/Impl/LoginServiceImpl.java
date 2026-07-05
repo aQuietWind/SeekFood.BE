@@ -58,14 +58,9 @@ public class LoginServiceImpl implements LoginService {
         logger.info("phone number:{} ,尝试获取登录验证码",phoneNumber);
         //验证手机号
         if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-        //生产验证码
-        String opt= OPTUtil.generateOPT(6);
-        //存储验证码到redis，并检查是否已经存在验证码
-        if(Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
-                userRedisKeyNameConfig.getLoginOpt() + phoneNumber,
-                opt,
-                DurationUtil.getSecondDuration(userRedisKeyDurationConfig.getOpt())))) return opt;
-        else throw new BizException(ErrorCodeEnum.OPT_SURVIVE);
+        //生成token并且记录于redis
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyNameConfig.getLoginOpt() + phoneNumber
+                ,userRedisKeyDurationConfig.getOpt(),6);
     }
 
     @Override

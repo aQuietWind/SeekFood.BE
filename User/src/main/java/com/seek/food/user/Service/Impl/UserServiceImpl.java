@@ -3,7 +3,6 @@ package com.seek.food.user.Service.Impl;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
-import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.User.UserDTO;
 import com.seek.food.user.Caffeine.UserCaffeine;
 import com.seek.food.user.Mapper.UserMapper;
