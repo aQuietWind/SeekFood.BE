@@ -5,7 +5,9 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.function.Function;
 
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.User_Params_Rules_Config)
@@ -20,6 +22,7 @@ public class UserParamsRulesConfig {
     private HashSet<String> headerImageType;
     private long headerImageSize;
     private String headerImageDest;
+    private Function<Long,Boolean> userIdCheck= this::userIdCheck;
 
     //------------------------
     //校验参数
@@ -27,15 +30,18 @@ public class UserParamsRulesConfig {
         return (userId/userIdCapacity)==userIdStart;
     };
     public boolean usernameCheck(String username) {
-        return (username.length()<usernameLengthMax&& !username.isEmpty());
+        return (username!=null&&username.length()<usernameLengthMax);
     };
     public boolean passwordCheck(String password) {
-        return password!=null&&password.matches(passwordRegex);
+        return password != null && password.matches(passwordRegex);
     };
     public boolean phoneNumberCheck(String phoneNumber) {
         return phoneNumber!=null&&phoneNumber.matches(phoneNumberRegex);
     }
     public boolean sexCheck(Integer sex){
         return (sex==null||sexValues.contains(sex));
+    }
+    public boolean birthdayCheck(LocalDate birthday){
+        return birthday==null||LocalDate.now().isAfter(birthday);
     }
 }

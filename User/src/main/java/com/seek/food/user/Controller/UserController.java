@@ -45,6 +45,12 @@ public class UserController{
         userService.updateUserHeader(file);
         return Result.success();
     }
+    //改用户自身信息
+    @PutMapping(RequestPathEnum.User_Update_Message)
+    public Result<Void> updateUserMessage(@RequestBody UserDTO userDTO){
+        userService.updateUserMessage(userDTO);
+        return Result.success();
+    }
 
 
 

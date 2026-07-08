@@ -21,5 +21,4 @@ public class UserRedisKeyNameConfig {
     private String caffeineMessage;
     private String userIdCount;
     private String loginPasswordCooldown;
-
 }

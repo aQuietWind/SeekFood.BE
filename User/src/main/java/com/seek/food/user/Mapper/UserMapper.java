@@ -8,4 +8,5 @@ public interface UserMapper {
     public UserDTO getUserDetailMessage(long userId);
     public boolean updateUserPassword(String phoneNumber,String newPassword);
     public boolean updateUserHeader(long userId, String path);
+    public boolean updateUserMessage(UserDTO userDTO);
 }

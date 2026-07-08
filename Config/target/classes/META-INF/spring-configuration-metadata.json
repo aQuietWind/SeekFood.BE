@@ -64,6 +64,11 @@
       "name": "user.self.redis.key.name",
       "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.stream",
+      "type": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig"
     }
   ],
   "properties": [
@@ -198,7 +203,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
     },
     {
-      "name": "user.self.params.rules.header-image-path",
+      "name": "user.self.params.rules.header-image-dest",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
     },
@@ -230,6 +235,11 @@
     {
       "name": "user.self.params.rules.user-id-capacity",
       "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
+    },
+    {
+      "name": "user.self.params.rules.user-id-check",
+      "type": "java.util.function.Function<java.lang.Long,java.lang.Boolean>",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
     },
     {
@@ -341,6 +351,11 @@
       "name": "user.self.redis.key.name.user-id-count",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.stream.old-file-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig"
     }
   ],
   "hints": [],

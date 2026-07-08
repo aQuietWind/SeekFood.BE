@@ -62,7 +62,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public void registerUser(String phoneNumber, String password, String opt) {
         //检验格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) ||!userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) || !userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         //检验验证码
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,opt);
         long userId=IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate);

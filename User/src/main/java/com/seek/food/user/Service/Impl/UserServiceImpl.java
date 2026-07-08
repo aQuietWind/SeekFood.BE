@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserPassword(String phoneNumber, String newPassword,String opt){
         //验证格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)||!userParamsRulesConfig.passwordCheck(newPassword))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)|| !userParamsRulesConfig.passwordCheck(newPassword))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         //校验冷却期
         RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordCooldown(),userRedisKeyDurationConfig.getUpdatePasswordCooldown());
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordOpt()+phoneNumber,opt);
@@ -114,6 +114,19 @@ public class UserServiceImpl implements UserService {
         MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),userId,rabbitTemplate,log);
     }
 
+    //更改用户自身信息
+    @Override
+    public void updateUserMessage(UserDTO userDTO){
+        //获取Id并检验
+        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        //检验性别，姓名，生日时期（出生日期）
+        if (!userParamsRulesConfig.sexCheck(userDTO.getSex())||!userParamsRulesConfig.usernameCheck(userDTO.getUsername()) ||
+        !userParamsRulesConfig.birthdayCheck(userDTO.getBirthday())) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        //检查冷却
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdateMessageCooldown(),userRedisKeyDurationConfig.getUpdateMessageCooldown());
+        userDTO.setUserId(userId);
+        if(!userMapper.updateUserMessage(userDTO))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+    }
 
 
 

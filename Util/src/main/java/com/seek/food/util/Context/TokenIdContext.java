@@ -1,6 +1,11 @@
 package com.seek.food.util.Context;
 
 
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+
+import java.util.function.Function;
+
 public class TokenIdContext {
     public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
     public static String get() {
@@ -17,6 +22,11 @@ public class TokenIdContext {
     }
     public static boolean compareIsSame(long id) {
         return id==getAndToLong();
+    }
+    public static long getAndCheck(Function<Long, Boolean> check) {
+        long tokenId=getAndToLong();
+        if (!check.apply(tokenId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        return tokenId;
     }
 }
 

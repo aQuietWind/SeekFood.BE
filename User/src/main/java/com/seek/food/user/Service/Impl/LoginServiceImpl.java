@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -78,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public UserDTO loginByPassword(String phoneNumber, String password, HttpServletResponse response){
         //检验格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) ||!userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) || !userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         //获取冷却时间
         if (Boolean.FALSE.equals(stringRedisTemplate.opsForValue().setIfAbsent(
                 userRedisKeyNameConfig.getLoginPasswordCooldown() + phoneNumber, "true",

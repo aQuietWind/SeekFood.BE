@@ -10,4 +10,5 @@ public interface UserService {
     public String updateUserPasswordGetOpt(String phoneNumber);
     public void updateUserPassword(String phoneNumber, String newPassword,String opt);
     public void updateUserHeader(MultipartFile file);
+    public void updateUserMessage(UserDTO userDTO);
 }
