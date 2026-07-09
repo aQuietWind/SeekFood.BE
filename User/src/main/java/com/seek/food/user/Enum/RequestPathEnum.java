@@ -17,5 +17,6 @@ public class RequestPathEnum {
     public static final String User_Get_Detail = "/detail";
     public static final String User_Get_Self = "/self";
     public static final String User_Get_Simple = "/simple";
+    public static final String User_Get_Delete_Opt = "/delete/opt";
 
 }

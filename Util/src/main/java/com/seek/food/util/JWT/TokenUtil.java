@@ -1,6 +1,7 @@
 package com.seek.food.util.JWT;
 
 
+import com.seek.food.util.TimeUtil.DurationUtil;
 import com.seek.food.util.TimeUtil.TimeUtil;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -36,7 +37,7 @@ public class TokenUtil {
     , String redisKeyName, String maxStore, StringRedisTemplate stringRedisTemplate){
         if (tokenId==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //获取token，并且放在请求头上
-        String token=TokenUtil.getToken(
+        String token=getToken(
                 tokenId
                 , response
                 , secretKey
@@ -47,5 +48,12 @@ public class TokenUtil {
         stringRedisTemplate.execute(tokenAddScript         //执行脚本
                 , RedisUtil.toCollect(redisKeyName+tokenId)       //KEYS参数
                 ,maxStore,token, ""+ TimeUtil.getStampByNow());     //ARGV参数
+    }
+
+    //清空Token
+    public static void clearAllTokenAndCooldown(StringRedisTemplate stringRedisTemplate,String deleteRedisKey
+            ,String cooldownRedisKey,long duration){
+        stringRedisTemplate.delete(deleteRedisKey);
+        stringRedisTemplate.opsForValue().set(cooldownRedisKey,"true", DurationUtil.getSecondDuration(duration));
     }
 }

@@ -15,4 +15,6 @@ public class UserExchangeConfig {
     private String exchangeName;
     private QueueData registerFundQueue;
     private QueueData updateFileUserQueue;
+    private QueueData deleteUserQueue;
+    private QueueData deleteFundQueue;
 }

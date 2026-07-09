@@ -13,4 +13,6 @@ public interface UserMapper {
     public boolean updateUserMessage(UserDTO userDTO);
     public boolean increaseOrderAmount(long userId);
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds);
+    public String getPhoneNumber(long userId);
+    public boolean deleteUser(long userId);
 }

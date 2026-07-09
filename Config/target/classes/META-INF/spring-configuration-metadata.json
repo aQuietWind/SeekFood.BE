@@ -46,7 +46,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
     },
     {
-      "name": "user.self.jvm-caffeine.user",
+      "name": "user.self.jvm-caffeine",
       "type": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
     },
@@ -173,6 +173,16 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "mq.name.bind.user-exchange.delete-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.user-exchange.delete-user-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange.exchange-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -193,13 +203,13 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
     },
     {
-      "name": "user.self.jvm-caffeine.user.expire-time",
-      "type": "java.lang.Long",
+      "name": "user.self.jvm-caffeine.phone",
+      "type": "com.seek.food.config.Data.CaffeineData",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
     },
     {
-      "name": "user.self.jvm-caffeine.user.max-size",
-      "type": "java.lang.Integer",
+      "name": "user.self.jvm-caffeine.user",
+      "type": "com.seek.food.config.Data.CaffeineData",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserCaffeineConfig"
     },
     {
@@ -258,6 +268,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
     },
     {
+      "name": "user.self.redis.key.duration.caffeine-phone",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+    },
+    {
       "name": "user.self.redis.key.duration.login-password-cooldown",
       "type": "java.lang.Long",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
@@ -294,6 +309,11 @@
     },
     {
       "name": "user.self.redis.key.name.caffeine-message",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+    },
+    {
+      "name": "user.self.redis.key.name.caffeine-phone",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
     },

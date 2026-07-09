@@ -2,7 +2,6 @@ package com.seek.food.user.Caffeine;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.seek.food.config.NacosConfig.User.UserCaffeineConfig;
-import com.seek.food.dto.User.UserDTO;
 import com.seek.food.util.Caffeine.JvmCaffeineParent;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -12,11 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class UserCaffeine extends JvmCaffeineParent<Long,UserDTO> {
+public class PhoneCaffeine extends JvmCaffeineParent<Long,String> {
     // 构造注入配置
     private final UserCaffeineConfig userCaffeineConfig;
     @Autowired
-    public UserCaffeine(UserCaffeineConfig userCaffeineConfig) {
+    public PhoneCaffeine(UserCaffeineConfig userCaffeineConfig) {
         this.userCaffeineConfig = userCaffeineConfig;
     }
 

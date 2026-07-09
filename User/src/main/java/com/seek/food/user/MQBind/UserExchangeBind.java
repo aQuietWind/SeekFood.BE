@@ -44,6 +44,26 @@ public class UserExchangeBind {
     public Binding userFileUserBinding(){
         return BindingBuilder.bind(updateFileUserQueue()).to(userExchange()).with(userExchangeConfig.getUpdateFileUserQueue().getRoutingKey());
     }
+    //用户删除时用户操作队列
+    @Bean
+    public Queue deleteUserQueue(){
+        return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteUserQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteUserBinding(){
+        return BindingBuilder.bind(deleteUserQueue()).to(userExchange()).with(userExchangeConfig.getDeleteUserQueue().getRoutingKey());
+    }
+    //用户删除时资金操作队列
+    @Bean
+    public Queue deleteFundQueue(){
+        return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteFundQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteFundBinding(){
+        return BindingBuilder.bind(deleteFundQueue()).to(userExchange()).with(userExchangeConfig.getDeleteFundQueue().getRoutingKey());
+    }
 
 
 

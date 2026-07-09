@@ -16,6 +16,7 @@ public class UserRedisKeyDurationConfig {
     private long updateMessageCooldown;
     private long updatePasswordCooldown;
     private long caffeineMessage;
+    private long caffeinePhone;
     private long loginPasswordCooldown;
     private long loginRefreshCooldown;
 }

@@ -14,4 +14,6 @@ public interface UserService {
     public void updateUserHeader(MultipartFile file);
     public void updateUserMessage(UserDTO userDTO);
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds);
+    public String getUserDeleteOpt();
+    public void deleteUser(String opt);
 }

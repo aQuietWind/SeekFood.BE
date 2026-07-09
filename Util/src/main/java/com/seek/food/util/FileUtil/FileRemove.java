@@ -25,7 +25,7 @@ public class FileRemove {
     public static  void quickRemoveFile(Path path) {
         //检查路径是否存在
         if (!Files.exists(path)){
-            throw new BizException(ErrorCodeEnum.TOO_BIG_FILE);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         }
         //删除文件
         if(!path.toFile().delete()){

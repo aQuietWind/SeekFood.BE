@@ -17,5 +17,8 @@
         insert into fund (fund_id,account_id) values(#{fundId},#{accountId});
     </insert>
 
+    <update id="deleteFund">
+        update fund set is_delete=true where account_id=#{accountId} and is_delete=false
+    </update>
 
 </mapper>

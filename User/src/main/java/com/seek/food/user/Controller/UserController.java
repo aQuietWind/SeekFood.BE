@@ -56,10 +56,20 @@ public class UserController{
     }
     //多用户粗览信息获取
     @GetMapping(RequestPathEnum.User_Get_Simple)
-    public  Result<List<UserDTO>> getUsersSimpleMessage(@RequestBody List<Long> userIds){
+    public Result<List<UserDTO>> getUsersSimpleMessage(@RequestBody List<Long> userIds){
         return Result.success(userService.getUsersSimpleMessage(userIds));
     }
-
+    //用户删除获取验证码
+    @GetMapping(RequestPathEnum.User_Get_Delete_Opt)
+    public Result<String> deleteUserGetOpt(){
+        return Result.success(userService.getUserDeleteOpt());
+    }
+    //用户删除
+    @DeleteMapping
+    public Result<Void> deleteUser(String opt){
+        userService.deleteUser(opt);
+        return Result.success();
+    }
 
 
 

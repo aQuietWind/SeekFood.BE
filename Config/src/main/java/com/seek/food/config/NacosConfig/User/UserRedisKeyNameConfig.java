@@ -19,6 +19,7 @@ public class UserRedisKeyNameConfig {
     private String updateMessageCooldown;
     private String updatePasswordCooldown;
     private String caffeineMessage;
+    private String caffeinePhone;
     private String userIdCount;
     private String loginPasswordCooldown;
 }

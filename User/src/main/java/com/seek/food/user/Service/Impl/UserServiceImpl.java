@@ -1,10 +1,12 @@
 package com.seek.food.user.Service.Impl;
 
+import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
 import com.seek.food.dto.User.UserDTO;
+import com.seek.food.user.Caffeine.PhoneCaffeine;
 import com.seek.food.user.Caffeine.UserCaffeine;
 import com.seek.food.user.Mapper.UserMapper;
 import com.seek.food.user.Service.UserService;
@@ -12,6 +14,7 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
+import com.seek.food.util.JWT.TokenUtil;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
@@ -39,10 +42,13 @@ public class UserServiceImpl implements UserService {
     private final UserParamsRulesConfig userParamsRulesConfig;
     private final RabbitTemplate rabbitTemplate;
     private final UserExchangeConfig userExchangeConfig;
+    private final PhoneCaffeine phoneCaffeine;
+    private final CommonRedisKeyConfig commonRedisKeyConfig;
     @Autowired
     public UserServiceImpl(UserMapper userMapper,UserCaffeine userCaffeine,StringRedisTemplate stringRedisTemplate
     ,UserRedisKeyNameConfig userRedisKeyNameConfig,UserRedisKeyDurationConfig userRedisKeyDurationConfig
-    ,UserParamsRulesConfig userParamsRulesConfig,RabbitTemplate rabbitTemplate,UserExchangeConfig userExchangeConfig) {
+    ,UserParamsRulesConfig userParamsRulesConfig,RabbitTemplate rabbitTemplate,UserExchangeConfig userExchangeConfig
+    ,PhoneCaffeine phoneCaffeine,CommonRedisKeyConfig commonRedisKeyConfig) {
         this.userMapper = userMapper;
         this.userCaffeine = userCaffeine;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -51,6 +57,8 @@ public class UserServiceImpl implements UserService {
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.userExchangeConfig = userExchangeConfig;
+        this.phoneCaffeine = phoneCaffeine;
+        this.commonRedisKeyConfig = commonRedisKeyConfig;
     }
     // Bean 注入完成后再执行初始化
     @PostConstruct
@@ -140,6 +148,33 @@ public class UserServiceImpl implements UserService {
             if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         }
         return userMapper.getUsersSimpleMessage(userIds);
+    }
+
+    //删除所需获取验证码
+    @Override
+    public String getUserDeleteOpt(){
+        //获取userId并且校验
+        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        //获取手机号,只做业务的手机号获取模拟，无实际用途
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(userId,stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getCaffeinePhone(),userId)
+        ,userRedisKeyDurationConfig.getCaffeinePhone(),String.class, userMapper::getPhoneNumber);
+        //产生验证码
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getDeleteUserOpt(),userId),userRedisKeyDurationConfig.getOpt(),6);
+    }
+
+    //删除用户
+    @Override
+    public void deleteUser(String opt){
+        //userId获取
+        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        //检验验证码
+        OPTUtil.checkOPT(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getDeleteUserOpt(),userId),opt);
+        //逻辑删除用户
+        if (!userMapper.deleteUser(userId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //清空token
+        stringRedisTemplate.delete(RedisUtil.redisKeyMix(commonRedisKeyConfig.getLoginToken(),userId));
+        //传递消息队列进行其他模块后续操作
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteUserQueue().getRoutingKey(),userId,rabbitTemplate,log);
     }
 
 

@@ -23,7 +23,6 @@ public class OldFileClearScheduled {
     @Autowired
     public OldFileClearScheduled(StringRedisTemplate stringRedisTemplate,UserRedisStreamConfig userRedisStreamConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
-        System.err.println(userRedisStreamConfig);
         this.oldFileStream = userRedisStreamConfig.getOldFileStream();
     }
     @Scheduled(fixedDelay = 5000)

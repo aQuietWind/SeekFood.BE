@@ -67,7 +67,7 @@ public class RegisterServiceImpl implements RegisterService {
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,opt);
         long userId=IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate);
         //写入mysql,失败会报错
-        registerMapper.insertUser(userId,phoneNumber,password);
+        registerMapper.insertUser(userId, phoneNumber, password);
         MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getRegisterFundQueue().getRoutingKey(),userId,rabbitTemplate,logger);
         logger.info("phone number:{} ,成功注册用户",phoneNumber);
     }

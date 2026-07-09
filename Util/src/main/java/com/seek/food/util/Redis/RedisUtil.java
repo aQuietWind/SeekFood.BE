@@ -48,4 +48,9 @@ public class RedisUtil {
             stringRedisTemplate.opsForStream().createGroup(queueName,consumerGroupName);
         }catch (Exception ignored){}
     }
+
+    //key拼接
+    public static String redisKeyMix(String start,Object end){
+        return start+end;
+    }
 }

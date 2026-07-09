@@ -67,7 +67,13 @@
         </where>
     </select>
 
+    <select id="getPhoneNumber" resultType="java.lang.String">
+        select phone_number from user where user_id=#{userId} and is_delete=false
+    </select>
 
+    <update id="deleteUser">
+        update user set is_delete=true where user_id=#{userId} and is_delete=false
+    </update>
 
 
 
