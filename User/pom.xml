@@ -61,11 +61,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-        <!--        amqp依赖-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
         <!--        sentinel连接依赖-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -106,7 +101,6 @@
             <groupId>com.seek.food</groupId>
             <artifactId>Config</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

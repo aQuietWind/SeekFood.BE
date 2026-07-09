@@ -11,6 +11,7 @@ import com.seek.food.user.Mapper.RegisterMapper;
 import com.seek.food.user.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.OPT.OPTUtil;
+import com.seek.food.util.Redis.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -65,6 +66,9 @@ public class RegisterServiceImpl implements RegisterService {
         if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) || !userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         //检验验证码
         OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,opt);
+        //校验冷却期
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getRegisterCooldown()+phoneNumber,userRedisKeyDurationConfig.getRegisterCooldown());
+        //生成id
         long userId=IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate);
         //写入mysql,失败会报错
         registerMapper.insertUser(userId, phoneNumber, password);
