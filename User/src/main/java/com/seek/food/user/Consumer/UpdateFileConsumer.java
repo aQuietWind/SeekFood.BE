@@ -47,7 +47,6 @@ public class UpdateFileConsumer {
             log.error("addr:{},在删除时发生错误",addr,e);
             Map<String,Object> map = new HashMap<>();
             map.put(oldFileStream.getKeyName(),FileRemove.resolvePath(userParamsRulesConfig.getHeaderImageDest(),addr));
-            System.err.println(FileRemove.resolvePath(userParamsRulesConfig.getHeaderImageDest(),addr));
             stringRedisTemplate.opsForStream().add(oldFileStream.getName(),map);
         }
     }

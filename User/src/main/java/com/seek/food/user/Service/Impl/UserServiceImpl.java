@@ -24,6 +24,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RefreshScope
 @Slf4j
@@ -128,6 +131,16 @@ public class UserServiceImpl implements UserService {
         if(!userMapper.updateUserMessage(userDTO))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
+    //多用户粗览信息获取
+    @Override
+    public List<UserDTO> getUsersSimpleMessage(List<Long> userIds){
+        if (userIds.isEmpty())return new ArrayList<>();
+        //校验参数
+        for (Long userId:userIds){
+            if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        }
+        return userMapper.getUsersSimpleMessage(userIds);
+    }
 
 
 

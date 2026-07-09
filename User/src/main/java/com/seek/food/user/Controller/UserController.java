@@ -5,9 +5,12 @@ import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.User.UserDTO;
 import com.seek.food.user.Enum.RequestPathEnum;
 import com.seek.food.user.Service.UserService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(RequestPathEnum.User)
@@ -50,6 +53,11 @@ public class UserController{
     public Result<Void> updateUserMessage(@RequestBody UserDTO userDTO){
         userService.updateUserMessage(userDTO);
         return Result.success();
+    }
+    //多用户粗览信息获取
+    @GetMapping(RequestPathEnum.User_Get_Simple)
+    public  Result<List<UserDTO>> getUsersSimpleMessage(@RequestBody List<Long> userIds){
+        return Result.success(userService.getUsersSimpleMessage(userIds));
     }
 
 

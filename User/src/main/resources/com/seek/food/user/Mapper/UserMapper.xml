@@ -49,7 +49,23 @@
         where user_id=#{userId} and is_delete=false
     </update>
 
+    <update id="increaseOrderAmount">
+        update user set order_amomunt=order_amount+1 where user_id=#{userId} and is_delete=false
+    </update>
 
+    <select id="getUsersSimpleMessage" resultMap="UserResultMap">
+        select
+        user_id,
+        username,
+        header_image_addr
+        from user
+        <where>
+            <foreach collection="userIds" item="userId" separator="or">
+                user_id=#{userId}
+            </foreach>
+            and is_delete=false
+        </where>
+    </select>
 
 
 
