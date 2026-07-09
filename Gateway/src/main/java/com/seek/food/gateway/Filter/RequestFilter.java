@@ -21,13 +21,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.TimeUnit;
 
 @Order(2)
-//@Component
+@Component
 @RefreshScope
 public class RequestFilter implements GlobalFilter{
 
@@ -58,6 +59,7 @@ public class RequestFilter implements GlobalFilter{
         this.blackIpDuration= gatewayBlackConfig.getIp().getDuration();
         this.blackIdDuration= gatewayBlackConfig.getId().getDuration();
     }
+
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain){

@@ -178,11 +178,6 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
     },
     {
-      "name": "mq.name.bind.user-exchange.delete-user-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
-    },
-    {
       "name": "mq.name.bind.user-exchange.exchange-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"

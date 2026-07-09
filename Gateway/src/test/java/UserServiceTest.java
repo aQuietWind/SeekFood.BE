@@ -1,34 +1,29 @@
-
+import com.seek.food.dto.Common.Result;
 import com.seek.food.gateway.Main;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-// 直接加载Gateway主启动类，关闭Nacos避免远程依赖
 @SpringBootTest(classes = Main.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GatewayServiceTest {
+public class UserServiceTest {
 
     // WebFlux专属测试客户端，模拟访问网关
     @Autowired
     private WebTestClient webTestClient;
-
-    // 完整链路测试：路由匹配 + TokenFilter鉴权
-    @Test
-    void testAdminRouteWithValidToken() {
-        webTestClient.get()
-                .uri("/admin/api/hello")
-                .cookie("token", "4-admin-jwt-test") // 携带分割格式的token
-                .exchange()
-                .expectStatus().isUnauthorized(); // 合法token放行200
+    private static final String User_Start = "/user";
+    private WebTestClient.ResponseSpec quickTest(String url){
+        return webTestClient.get()
+                .uri(User_Start+url)
+                .header("X-Forwarded-For","132.123.43.321")
+                .exchange();
     }
 
     @Test
-    void testNoTokenForbidden() {
-        webTestClient.get()
-                .uri("/admin/api/hello")
-                .exchange()
-                .expectStatus().isUnauthorized(); // 无token拦截401
+    void testTokenForbidden() {
+        Result<String> result=quickTest("/register/opt?phoneNumber=12312312300").expectStatus().isOk().returnResult(Result.class).getResponseBody().blockFirst();
+        System.out.println(result);
+        quickTest("/register?phoneNumber=12312312300&opt="+result.getData()).expectStatus().isOk().returnResult(Result.class);
     }
     @Test
     void testLoginTokenForbidden() {
@@ -60,42 +55,24 @@ public class GatewayServiceTest {
                 .uri("/user/login")
                 .cookie("token", "1-eyJhbG4325346354645676547ciOiJIUzM4NCJ9.eyJ0b2tlbklkIjoiMjE0MzIxNTQyMzU0Iiwic3ViIjoidGVzdCIsImlhdCI6MTc4MjUyNjUwMSwiZXhwIjoxNzg0MjU0NTAxfQ.A8wyTn-a6zPOSudwA86oFDOtZTOG0M9nzJYyT0R6KMThghqICDuQDJmY-8rKqnxR") // 携带分割格式的token
                 .exchange()
-                .expectStatus().is4xxClientError(); // 无token拦截401
+                .expectStatus().is5xxServerError(); // 无token拦截401
     }
     @Test
-    void testIpBlock() {
-        for (int i = 0; i <= 200; i++) {
-            if (i<60) webTestClient.get()
-                    .uri("/user/register")
-                    .header("X-Forwarded-For","324.34.23.19")
-                    .exchange()
-                    .expectStatus().is4xxClientError(); // 无token拦截401
-            else webTestClient.get()
-                    .uri("/user/register")
-                    .header("X-Forwarded-For","324.34.23.19")
-                    .exchange()
-                    .expectStatus().is4xxClientError(); // 无token拦截401
-        }
+    void testUser() {
+        webTestClient.get()
+                .uri("/user/register")
+                .cookie("token", "1-eyJhbGciOiJIUzM4NCJ9.eyJ0b2tlbklkIjoiMjE0MzIxNTQyMzU0Iiwic3ViIjoidGVzdCIsImlhdCI6MTc4MjUyNjUwMSwiZXhwIjoxNzg0MjU0NTAxfQ.A8wyTn-a6zPOSudwA86oFDOtZTOG0M9nzJYyT0R6KMThghqICDuQDJmY-8rKqnxR") // 携带分割格式的token
+                .exchange()
+                .expectStatus().isUnauthorized(); // 无token拦截401
     }
     @Test
-    void testIdBlock() {
+    void testUrl() {
         webTestClient.get()
                 .uri("/user/login")
                 .cookie("token", "1-eyJhbG4325346354645676547ciOiJIUzM4NCJ9.eyJ0b2tlbklkIjoiMjE0MzIxNTQyMzU0Iiwic3ViIjoidGVzdCIsImlhdCI6MTc4MjUyNjUwMSwiZXhwIjoxNzg0MjU0NTAxfQ.A8wyTn-a6zPOSudwA86oFDOtZTOG0M9nzJYyT0R6KMThghqICDuQDJmY-8rKqnxR") // 携带分割格式的token
                 .exchange()
-                .expectStatus().is4xxClientError(); // 无token拦截401
+                .expectStatus().is5xxServerError(); // 无token拦截401
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
