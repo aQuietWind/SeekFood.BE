@@ -9,23 +9,12 @@ import org.springframework.context.annotation.Lazy;
 
 @Configuration
 // 绑定当前组件对应的属性类
-@EnableConfigurationProperties({UserParamsRulesConfig.class, UserRedisKeyDurationConfig.class, UserRedisKeyNameConfig.class
-        ,UserCaffeineConfig.class, UserRedisStreamConfig.class})
+@EnableConfigurationProperties({UserParamsRulesConfig.class,UserCaffeineConfig.class, UserRedisStreamConfig.class,UserRedisKeyConfig.class})
 public class UserSubConfig {
     @Bean
     @Lazy // 用到才实例化，启动不创建对象
     public UserParamsRulesConfig userParamsRulesConfig(UserParamsRulesConfig userParamsRulesConfig) {
         return userParamsRulesConfig;
-    }
-    @Bean
-    @Lazy // 用到才实例化，启动不创建对象
-    public UserRedisKeyDurationConfig userRedisKeyDurationConfig(UserRedisKeyDurationConfig userRedisKeyDurationConfig) {
-        return userRedisKeyDurationConfig;
-    }
-    @Bean
-    @Lazy // 用到才实例化，启动不创建对象
-    public UserRedisKeyNameConfig userRedisKeyNameConfig(UserRedisKeyNameConfig userRedisKeyNameConfig) {
-        return userRedisKeyNameConfig;
     }
     @Bean
     @Lazy // 用到才实例化，启动不创建对象
@@ -36,6 +25,11 @@ public class UserSubConfig {
     @Lazy // 用到才实例化，启动不创建对象
     public UserRedisStreamConfig userRedisStreamConfig(UserRedisStreamConfig userRedisStreamConfig) {
         return userRedisStreamConfig;
+    }
+    @Bean
+    @Lazy // 用到才实例化，启动不创建对象
+    public UserRedisKeyConfig userRedisKeyConfig(UserRedisKeyConfig userRedisKeyConfig) {
+        return userRedisKeyConfig;
     }
 
 

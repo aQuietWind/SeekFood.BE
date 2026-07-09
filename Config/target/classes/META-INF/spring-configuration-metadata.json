@@ -6,6 +6,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
     },
     {
+      "name": "common.param.rules",
+      "type": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
       "name": "common.redis.key.name",
       "type": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
@@ -56,14 +61,9 @@
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
     },
     {
-      "name": "user.self.redis.key.duration",
-      "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
-    },
-    {
-      "name": "user.self.redis.key.name",
-      "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+      "name": "user.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
       "name": "user.self.redis.stream",
@@ -111,6 +111,61 @@
       "name": "common.jwt.user",
       "type": "com.seek.food.config.Data.JWTData",
       "sourceType": "com.seek.food.config.NacosConfig.Common.JWTConfig"
+    },
+    {
+      "name": "common.param.rules.admin-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.cord-regex",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.id-capacity",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.image-size",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.image-type",
+      "type": "java.util.HashSet<java.lang.String>",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.merchant-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.password-regex",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.phone-number-regex",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.rider-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.sex-values",
+      "type": "java.util.HashSet<java.lang.Integer>",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.user-id-start",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
     },
     {
       "name": "common.redis.key.name.login-token",
@@ -213,159 +268,74 @@
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
     },
     {
-      "name": "user.self.params.rules.header-image-size",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.header-image-type",
-      "type": "java.util.HashSet<java.lang.String>",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.password-regex",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.phone-number-regex",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.sex-values",
-      "type": "java.util.HashSet<java.lang.Integer>",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.user-id-capacity",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.user-id-check",
-      "type": "java.util.function.Function<java.lang.Long,java.lang.Boolean>",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
-      "name": "user.self.params.rules.user-id-start",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
-    },
-    {
       "name": "user.self.params.rules.username-length-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserParamsRulesConfig"
     },
     {
-      "name": "user.self.redis.key.duration.caffeine-message",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.caffeine-message",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.caffeine-phone",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.caffeine-phone",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.login-password-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.delete-user-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.login-refresh-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.login-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.opt",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.login-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.register-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.login-refresh-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.update-header-image-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.register-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.update-message-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.register-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.duration.update-password-cooldown",
-      "type": "java.lang.Long",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig"
+      "name": "user.self.redis.key.update-header-image-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.name.caffeine-message",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+      "name": "user.self.redis.key.update-message-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.name.caffeine-phone",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+      "name": "user.self.redis.key.update-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.name.delete-user-opt",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+      "name": "user.self.redis.key.update-password-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
-      "name": "user.self.redis.key.name.login-opt",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.login-password-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.login-refresh-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.register-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.register-opt",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.update-header-image-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.update-message-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.update-password-cooldown",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.update-password-opt",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
-    },
-    {
-      "name": "user.self.redis.key.name.user-id-count",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig"
+      "name": "user.self.redis.key.user-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisKeyConfig"
     },
     {
       "name": "user.self.redis.stream.old-file-stream",

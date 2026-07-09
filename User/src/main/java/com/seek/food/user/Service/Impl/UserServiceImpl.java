@@ -1,10 +1,10 @@
 package com.seek.food.user.Service.Impl;
 
+import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyConfig;
 import com.seek.food.dto.User.UserDTO;
 import com.seek.food.user.Caffeine.PhoneCaffeine;
 import com.seek.food.user.Caffeine.UserCaffeine;
@@ -14,7 +14,6 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
-import com.seek.food.util.JWT.TokenUtil;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
@@ -37,28 +36,28 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final UserCaffeine userCaffeine;
     private final StringRedisTemplate stringRedisTemplate;
-    private final UserRedisKeyNameConfig userRedisKeyNameConfig;
-    private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private final UserParamsRulesConfig userParamsRulesConfig;
     private final RabbitTemplate rabbitTemplate;
     private final UserExchangeConfig userExchangeConfig;
     private final PhoneCaffeine phoneCaffeine;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
+    private final CommonParamRulesConfig commonParamRulesConfig;
+    private final UserRedisKeyConfig userRedisKeyConfig;
     @Autowired
     public UserServiceImpl(UserMapper userMapper,UserCaffeine userCaffeine,StringRedisTemplate stringRedisTemplate
-    ,UserRedisKeyNameConfig userRedisKeyNameConfig,UserRedisKeyDurationConfig userRedisKeyDurationConfig
     ,UserParamsRulesConfig userParamsRulesConfig,RabbitTemplate rabbitTemplate,UserExchangeConfig userExchangeConfig
-    ,PhoneCaffeine phoneCaffeine,CommonRedisKeyConfig commonRedisKeyConfig) {
+    ,PhoneCaffeine phoneCaffeine,CommonRedisKeyConfig commonRedisKeyConfig,CommonParamRulesConfig commonParamRulesConfig
+    ,UserRedisKeyConfig userRedisKeyConfig) {
         this.userMapper = userMapper;
         this.userCaffeine = userCaffeine;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.userRedisKeyNameConfig = userRedisKeyNameConfig;
-        this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.userExchangeConfig = userExchangeConfig;
         this.phoneCaffeine = phoneCaffeine;
         this.commonRedisKeyConfig = commonRedisKeyConfig;
+        this.commonParamRulesConfig = commonParamRulesConfig;
+        this.userRedisKeyConfig = userRedisKeyConfig;
     }
     // Bean 注入完成后再执行初始化
     @PostConstruct
@@ -71,16 +70,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUserDetailMessage(long userId){
         //验证id是否属于userId而不是别的
-        if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        commonParamRulesConfig.userIdCheck(userId);
         //从缓存中取出结果并且返回
-        return userCaffeine.getAndAutoLoad(userId,stringRedisTemplate,userRedisKeyNameConfig.getCaffeineMessage()+userId
-        ,userRedisKeyDurationConfig.getCaffeineMessage(),UserDTO.class,key->userMapper.getUserDetailMessage(userId));
+        return userCaffeine.getAndAutoLoad(userId,stringRedisTemplate,userRedisKeyConfig.getCaffeineMessage().getName()+userId
+        ,userRedisKeyConfig.getCaffeineMessage().getDuration(),UserDTO.class,key->userMapper.getUserDetailMessage(userId));
     }
 
     //获取用户个人信息
     @Override
     public  UserDTO getUserSelfMessage(){
-        long userId= TokenIdContext.getAndToLong();
+        long userId= TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
         return getUserDetailMessage(userId);
     }
 
@@ -88,20 +87,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public String updateUserPasswordGetOpt(String phoneNumber){
         //验证格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        commonParamRulesConfig.phoneNumberCheck(phoneNumber);
         //获取验证码
-        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordOpt()+phoneNumber
-                ,userRedisKeyDurationConfig.getOpt(),6);
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyConfig.getUpdatePasswordOpt().getName()+phoneNumber
+                ,userRedisKeyConfig.getUpdatePasswordOpt().getDuration(),6);
     }
 
     //更改密码
     @Override
     public void updateUserPassword(String phoneNumber, String newPassword,String opt){
         //验证格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)|| !userParamsRulesConfig.passwordCheck(newPassword))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        commonParamRulesConfig.phoneNumberCheck(phoneNumber);
+        commonParamRulesConfig.passwordCheck(newPassword);
         //校验冷却期
-        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordCooldown(),userRedisKeyDurationConfig.getUpdatePasswordCooldown());
-        OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getUpdatePasswordOpt()+phoneNumber,opt);
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getUpdatePasswordCooldown().getName()+phoneNumber,
+                userRedisKeyConfig.getUpdatePasswordCooldown().getDuration());
+        //检查验证码
+        OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyConfig.getUpdatePasswordOpt().getName()+phoneNumber,opt);
         //如果mysql无目标数据会返回false
         if (!userMapper.updateUserPassword(phoneNumber,newPassword))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
@@ -110,15 +112,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserHeader(MultipartFile file){
         //获取id
-        long userId=TokenIdContext.getAndToLong();
-        //校验id
-        if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        long userId=TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
         //冷却期校验
-        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdateHeaderImageCooldown()+userId
-                ,userRedisKeyDurationConfig.getUpdateHeaderImageCooldown());
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getUpdateHeaderImageCooldown().getName()+userId
+                ,userRedisKeyConfig.getUpdateHeaderImageCooldown().getDuration());
         //快速保存
-        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), userParamsRulesConfig.getHeaderImageSize()
-                , userParamsRulesConfig.getHeaderImageType());
+        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), commonParamRulesConfig.getImageSize()
+                , commonParamRulesConfig.getImageType());
         //检查是否成功
         if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //发送消息到mq中删除旧文件
@@ -129,12 +129,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserMessage(UserDTO userDTO){
         //获取Id并检验
-        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        long userId=TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
         //检验性别，姓名，生日时期（出生日期）
-        if (!userParamsRulesConfig.sexCheck(userDTO.getSex())||!userParamsRulesConfig.usernameCheck(userDTO.getUsername()) ||
-        !userParamsRulesConfig.birthdayCheck(userDTO.getBirthday())) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        commonParamRulesConfig.sexCheck(userDTO.getSex());
+        commonParamRulesConfig.birthdayCheck(userDTO.getBirthday());
+        userParamsRulesConfig.usernameCheck(userDTO.getUsername());
         //检查冷却
-        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getUpdateMessageCooldown(),userRedisKeyDurationConfig.getUpdateMessageCooldown());
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getUpdateMessageCooldown().getName()+userId
+                ,userRedisKeyConfig.getUpdateMessageCooldown().getDuration());
         userDTO.setUserId(userId);
         if(!userMapper.updateUserMessage(userDTO))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
@@ -144,9 +146,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds){
         if (userIds.isEmpty())return new ArrayList<>();
         //校验参数
-        for (Long userId:userIds){
-            if (!userParamsRulesConfig.userIdCheck(userId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-        }
+        for (Long userId:userIds) commonParamRulesConfig.userIdCheck(userId);
         return userMapper.getUsersSimpleMessage(userIds);
     }
 
@@ -154,21 +154,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getUserDeleteOpt(){
         //获取userId并且校验
-        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        long userId=TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
         //获取手机号,只做业务的手机号获取模拟，无实际用途
-        String phoneNumber=phoneCaffeine.getAndAutoLoad(userId,stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getCaffeinePhone(),userId)
-        ,userRedisKeyDurationConfig.getCaffeinePhone(),String.class, userMapper::getPhoneNumber);
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(userId,stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyConfig.getCaffeinePhone().getName(),userId)
+        ,userRedisKeyConfig.getCaffeinePhone().getDuration(),String.class, userMapper::getPhoneNumber);
         //产生验证码
-        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getDeleteUserOpt(),userId),userRedisKeyDurationConfig.getOpt(),6);
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyConfig.getDeleteUserOpt().getName(),userId),
+                userRedisKeyConfig.getDeleteUserOpt().getDuration(),6);
     }
 
     //删除用户
     @Override
     public void deleteUser(String opt){
         //userId获取
-        long userId=TokenIdContext.getAndCheck(userParamsRulesConfig.getUserIdCheck());
+        long userId=TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
         //检验验证码
-        OPTUtil.checkOPT(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyNameConfig.getDeleteUserOpt(),userId),opt);
+        OPTUtil.checkOPT(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyConfig.getDeleteUserOpt().getName(),userId),opt);
         //逻辑删除用户
         if (!userMapper.deleteUser(userId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //清空token

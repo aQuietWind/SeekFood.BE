@@ -1,11 +1,9 @@
 package com.seek.food.user.Service.Impl;
 
+import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyConfig;
 import com.seek.food.util.MQ.MQUtil;
-import com.seek.food.util.Exception.BizException;
-import com.seek.food.util.Exception.ErrorCodeEnum;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyDurationConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
 import com.seek.food.user.Mapper.RegisterMapper;
 import com.seek.food.user.Service.RegisterService;
@@ -26,26 +24,25 @@ import org.springframework.stereotype.Service;
 public class RegisterServiceImpl implements RegisterService {
     private final UserParamsRulesConfig userParamsRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
-    private final UserRedisKeyNameConfig userRedisKeyNameConfig;
-    private final UserRedisKeyDurationConfig userRedisKeyDurationConfig;
     private final RegisterMapper registerMapper;
     private final UserExchangeConfig userExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
+    private final CommonParamRulesConfig commonParamRulesConfig;
+    private final UserRedisKeyConfig userRedisKeyConfig;
     private static final Logger logger = LoggerFactory.getLogger(RegisterServiceImpl.class);
     @Autowired
     public RegisterServiceImpl(UserParamsRulesConfig userParamsRulesConfig, StringRedisTemplate stringRedisTemplate
-    , UserRedisKeyNameConfig userRedisKeyNameConfig, UserRedisKeyDurationConfig userRedisKeyDurationConfig
-    , RegisterMapper registerMapper , UserExchangeConfig userExchangeConfig, RabbitTemplate rabbitTemplate) {
+    , RegisterMapper registerMapper , UserExchangeConfig userExchangeConfig, RabbitTemplate rabbitTemplate
+    ,CommonParamRulesConfig commonParamRulesConfig,UserRedisKeyConfig userRedisKeyConfig) {
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.userRedisKeyNameConfig = userRedisKeyNameConfig;
-        this.userRedisKeyDurationConfig = userRedisKeyDurationConfig;
         this.registerMapper = registerMapper;
         this.userExchangeConfig = userExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
+        this.commonParamRulesConfig = commonParamRulesConfig;
+        this.userRedisKeyConfig = userRedisKeyConfig;
         //初始化userIdCount
-        stringRedisTemplate.opsForValue().setIfAbsent(userRedisKeyNameConfig.getUserIdCount(),
-                ""+userParamsRulesConfig.getUserIdCapacity());
+        stringRedisTemplate.opsForValue().setIfAbsent(userRedisKeyConfig.getUserIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
 
@@ -54,22 +51,24 @@ public class RegisterServiceImpl implements RegisterService {
     public String registerGetOpt(String phoneNumber) {
         logger.info("phone number:{} ,进行注册获取验证码",phoneNumber);
         //验证手机号
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber
-                ,userRedisKeyDurationConfig.getOpt(),6);
+        commonParamRulesConfig.phoneNumberCheck(phoneNumber);
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyConfig.getRegisterOpt().getName() + phoneNumber
+                ,userRedisKeyConfig.getRegisterOpt().getDuration(),6);
     }
 
     //注册用户
     @Override
     public void registerUser(String phoneNumber, String password, String opt) {
         //检验格式
-        if (!userParamsRulesConfig.phoneNumberCheck(phoneNumber) || !userParamsRulesConfig.passwordCheck(password))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        commonParamRulesConfig.phoneNumberCheck(phoneNumber);
+        commonParamRulesConfig.passwordCheck(password);
         //检验验证码
-        OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyNameConfig.getRegisterOpt() + phoneNumber,opt);
+        OPTUtil.checkOPT(stringRedisTemplate,userRedisKeyConfig.getRegisterOpt().getName() + phoneNumber,opt);
         //校验冷却期
-        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyNameConfig.getRegisterCooldown()+phoneNumber,userRedisKeyDurationConfig.getRegisterCooldown());
+        RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getRegisterCooldown().getName()+phoneNumber,
+                userRedisKeyConfig.getRegisterCooldown().getDuration());
         //生成id
-        long userId=IdUtil.IdGenerateByIncrease(userRedisKeyNameConfig.getUserIdCount(),stringRedisTemplate);
+        long userId=IdUtil.IdGenerateByIncrease(userRedisKeyConfig.getUserIdCount().getName(),stringRedisTemplate);
         //写入mysql,失败会报错
         registerMapper.insertUser(userId, phoneNumber, password);
         MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getRegisterFundQueue().getRoutingKey(),userId,rabbitTemplate,logger);

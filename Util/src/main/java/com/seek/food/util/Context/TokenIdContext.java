@@ -23,9 +23,9 @@ public class TokenIdContext {
     public static boolean compareIsSame(long id) {
         return id==getAndToLong();
     }
-    public static long getAndCheck(Function<Long, Boolean> check) {
+    public static long getAndCheck(int idStart,long idCapacity) {
         long tokenId=getAndToLong();
-        if (!check.apply(tokenId))throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (! ((tokenId/idCapacity)==idStart) ) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         return tokenId;
     }
 }

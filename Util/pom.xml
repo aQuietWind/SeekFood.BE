@@ -57,6 +57,11 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
         </dependency>
+        <!--        json序列化时间补齐依赖-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
         <!--        jvm缓存依赖-->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>

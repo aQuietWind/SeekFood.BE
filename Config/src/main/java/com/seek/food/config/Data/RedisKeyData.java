@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class RedisKeyData {
     private String name;
-    private long duration;
+    private Long duration;
 }

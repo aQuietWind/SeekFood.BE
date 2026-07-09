@@ -2,15 +2,24 @@ package com.seek.food.util.Caffeine;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.seek.food.util.TimeUtil.DurationUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 @Slf4j
 public class JvmCaffeineParent<T,E> {
     public static final String caffeineFail="n";
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper;
+    static{
+        Jackson2ObjectMapperBuilder builder=new Jackson2ObjectMapperBuilder();
+        mapper = builder.build();
+        // 注册Java8时间序列化模块
+        mapper.registerModule(new JavaTimeModule());
+    }
     // 全局单例缓存（唯一实例）
     protected Cache<T, E> CACHE;
 

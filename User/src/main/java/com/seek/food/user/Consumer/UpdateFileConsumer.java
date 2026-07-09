@@ -3,11 +3,9 @@ package com.seek.food.user.Consumer;
 import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyNameConfig;
+import com.seek.food.config.NacosConfig.User.UserRedisKeyConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisStreamConfig;
 import com.seek.food.user.Mapper.OldFileMapper;
-import com.seek.food.util.Exception.BizException;
-import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileRemove;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -24,15 +22,13 @@ public class UpdateFileConsumer {
     private OldFileMapper oldFileMapper;
     private UserParamsRulesConfig userParamsRulesConfig;
     private StringRedisTemplate stringRedisTemplate;
-    private UserRedisKeyNameConfig userRedisKeyNameConfig;
     private RedisStreamData oldFileStream;
     @Autowired
     public UpdateFileConsumer(OldFileMapper oldFileMapper,UserParamsRulesConfig userParamsRulesConfig
-    ,StringRedisTemplate stringRedisTemplate,UserRedisKeyNameConfig userRedisKeyNameConfig,UserRedisStreamConfig userRedisStreamConfig) {
+    ,StringRedisTemplate stringRedisTemplate,UserRedisStreamConfig userRedisStreamConfig) {
         this.oldFileMapper = oldFileMapper;
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.userRedisKeyNameConfig = userRedisKeyNameConfig;
         this.oldFileStream = userRedisStreamConfig.getOldFileStream();
     }
 
