@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserService {
         //清空token
         stringRedisTemplate.delete(RedisUtil.redisKeyMix(commonRedisKeyConfig.getLoginToken(),userId));
         //传递消息队列进行其他模块后续操作
-        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteUserQueue().getRoutingKey(),userId,rabbitTemplate,log);
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFundQueue().getRoutingKey(),userId,rabbitTemplate,log);
     }
 
 
