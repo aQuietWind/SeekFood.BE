@@ -5,14 +5,14 @@ gateway:
         caffeine-max-size: 10000 
         caffeine-time-unit: minute
         caffeine-expire-time: 10
-        counts: 120
+        counts: 60
         time-unit: hour
         duration: 24
       id:
         caffeine-max-size: 10000
         caffeine-time-unit: minute
         caffeine-expire-time: 10
-        counts: 9
+        counts: 180
         time-unit: hour
         duration: 12
     redis:
@@ -31,6 +31,7 @@ gateway:
         - /user/login/password
         - /user/register
         - /user/register/opt
+        - /user/user/password
         reject-path:
         - /testsetstes43435324634645746785
         - /654654

@@ -3,6 +3,7 @@ common:
     header-separator: "-"
     header-token-name: Token-Id
     request-token-name: access_token
+    max-store: 3
     user:
       secret-key: 1234567890123456789012345678901234567890123456789012
       header-sign: "1"

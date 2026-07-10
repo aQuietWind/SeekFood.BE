@@ -2,6 +2,93 @@ spring:
   #mysql的配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/merchant
+    url: jdbc:mysql://localhost:3306/seek_food_merchant
     username: root
     password: 439176
+
+merchant:
+  self:
+    params: 
+      rules:
+        merchant-name-max: 15
+        merchant-master-name-max: 50
+        proof-image-number-max: 6
+        show-image-number-max: 10
+        show-description-max: 300
+        merchant-addr-max: 60
+        proof-image-dest: "D:/home/admin/image/merchant/proof"
+        show-image-dest: "D:/home/admin/image/merchant/show"
+    redis:
+      key:
+        merchant-register-opt:
+          name: "merchant:register:opt:"
+          duration: 60
+        merchant-update-password-opt:
+          name: "merchant:update:password:opt:"
+          duration: 60
+        merchant-update-password-cooldown:
+          name: "merchant:update:password:cooldown:"
+          duration: 10
+        merchant-update-message-cooldown:
+          name: "merchant:update:message:cooldown:"
+          duration: 6
+        merchant-add-proof-cooldown:
+          name: "merchant:add:proof:cooldown:"
+          duration: 5
+        merchant-add-show-cooldown:
+          name: "merchant:add:show:cooldown:"
+          duration: 5
+        merchant-remove-proof-cooldown:
+          name: "merchant:remove:proof:cooldown:"
+          duration: 5
+        merchant-remove-show-cooldown:
+          name: "merchant:remove:show:cooldown:"
+          duration: 5
+        merchant-update-proof-cooldown:
+          name: "merchant:update:proof:cooldown:"
+          duration: 5
+        merchant-update-show-cooldown:
+          name: "merchant:update:show:cooldown:"
+          duration: 5
+        merchant-id-count:
+          name: "merchant:id:count:"
+          duration: null
+        merchant-message-caffeine:
+          name: "merchant:message:caffeine"
+          duration: 600
+        merchant-es-sync-record:
+          name: "merchant:es:sync:record"
+          duration: null
+      stream:
+        oldFileStream:
+          name: merchant:stream:old:file
+          key-name: fileName
+          consumer:
+            group-name: DeleteGroup
+            number: 1
+        esSyncStream:
+          name: merchant:stream:es:sync
+          key-name: merchantId
+          consumer:
+            group-name: SyncGroup
+            number: 1
+    jvm-caffeine:
+      merchant:
+        max-size: 100000
+        expire-time: 300
+      phone-number:
+        max-size: 100000
+        expire-time: 600
+    scheduled-druation:
+      es-sync: 3000
+
+
+
+
+
+
+
+
+
+
+

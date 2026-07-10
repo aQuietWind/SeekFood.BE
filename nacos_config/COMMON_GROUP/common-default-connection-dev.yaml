@@ -1,9 +1,14 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 4MB               #这个代表最大的单个文件大小
+      max-request-size: 16MB           #这个代表最大的单次请求传输的数据大小（应对一次传输数个文件）
   #rabbitmq的地址
   rabbitmq:
-    host: 127.0.0.1   #ip地址
+    host: localhost   #ip地址
     port: 5672        #端口
-    virtual-host: /   #虚拟主机
+    #虚拟主机
+    virtual-host: SeekFood
     username: guest   #用户名
     password: guest   #密码
     #监听者有关配置
@@ -37,6 +42,8 @@ spring:
       transport:
         #sentinel的地址
         dashboard: 127.0.0.1:8090
+      #开启web上下文聚合，进行全服务统一限制规则
+      web-context-unify: false
   data:
   #redis的地址
     redis:
