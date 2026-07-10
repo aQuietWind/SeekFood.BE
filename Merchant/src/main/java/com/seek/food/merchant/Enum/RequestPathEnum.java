@@ -2,6 +2,7 @@ package com.seek.food.merchant.Enum;
 
 public class RequestPathEnum {
     public static final String Register = "/register";
+    public static final String Register_Opt = "/opt";
 
     public static final String Login = "/login";
     public static final String Login_Opt = "/opt";

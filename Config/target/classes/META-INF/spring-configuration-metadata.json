@@ -46,6 +46,26 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "merchant.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
+    },
+    {
+      "name": "merchant.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.stream",
+      "type": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -226,6 +246,121 @@
       "name": "gateway.self.request.path.reject-path",
       "type": "java.util.HashSet<java.lang.String>",
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
+    },
+    {
+      "name": "merchant.self.jvm-caffeine.merchant",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
+    },
+    {
+      "name": "merchant.self.jvm-caffeine.phone-number",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.merchant-addr-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.merchant-master-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.merchant-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.proof-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.proof-image-number-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.show-description-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.show-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.params.rules.show-image-number-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-add-proof-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-add-show-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-register-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-remove-proof-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-remove-show-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-message-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-password-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-proof-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-show-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.stream.old-file-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
       "name": "mq.name.bind.user-exchange.delete-fund-queue",
