@@ -3,9 +3,7 @@ package com.seek.food.user.Consumer;
 import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisKeyConfig;
 import com.seek.food.config.NacosConfig.User.UserRedisStreamConfig;
-import com.seek.food.user.Mapper.OldFileMapper;
 import com.seek.food.util.FileUtil.FileRemove;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,25 +17,22 @@ import java.util.Map;
 @Component
 @Slf4j
 public class UpdateFileConsumer {
-    private OldFileMapper oldFileMapper;
     private UserParamsRulesConfig userParamsRulesConfig;
     private StringRedisTemplate stringRedisTemplate;
     private RedisStreamData oldFileStream;
     @Autowired
-    public UpdateFileConsumer(OldFileMapper oldFileMapper,UserParamsRulesConfig userParamsRulesConfig
+    public UpdateFileConsumer(UserParamsRulesConfig userParamsRulesConfig
     ,StringRedisTemplate stringRedisTemplate,UserRedisStreamConfig userRedisStreamConfig) {
-        this.oldFileMapper = oldFileMapper;
         this.userParamsRulesConfig = userParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.oldFileStream = userRedisStreamConfig.getOldFileStream();
     }
 
+
     @RabbitListener(queues = MQNameKeyEnum.User_Exchange_Update_File_Queue)
-    public void updateFileQueue(long userId){
-        String addr = oldFileMapper.getOldFileByUserId(userId).getFileAddr();
+    public void updateFileQueue(String addr){
         try {
             FileRemove.removeFile(userParamsRulesConfig.getHeaderImageDest(), addr);
-            oldFileMapper.deleteFile(addr);
         }catch (Exception e){
             //不再进行重试，而是留给spring后台线程进行定时处理
             log.error("addr:{},在删除时发生错误",addr,e);
@@ -46,7 +41,6 @@ public class UpdateFileConsumer {
             stringRedisTemplate.opsForStream().add(oldFileStream.getName(),map);
         }
     }
-
 
 
 

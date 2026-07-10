@@ -15,4 +15,5 @@ public interface UserMapper {
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds);
     public String getPhoneNumber(long userId);
     public boolean deleteUser(long userId);
+    public String getHeaderPath(long userId);
 }

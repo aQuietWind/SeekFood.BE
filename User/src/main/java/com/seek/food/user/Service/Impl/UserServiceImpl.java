@@ -116,13 +116,16 @@ public class UserServiceImpl implements UserService {
         //冷却期校验
         RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getUpdateHeaderImageCooldown().getName()+userId
                 ,userRedisKeyConfig.getUpdateHeaderImageCooldown().getDuration());
+        //获取旧头像路径
+        String oldPath=userMapper.getHeaderPath(userId);
         //快速保存
         String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), commonParamRulesConfig.getImageSize()
                 , commonParamRulesConfig.getImageType());
         //检查是否成功
         if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //发送消息到mq中删除旧文件
-        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),userId,rabbitTemplate,log);
+        if (oldPath!=null&&!oldPath.isBlank()) MQUtil.send(userExchangeConfig.getExchangeName()
+                ,userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),oldPath,rabbitTemplate,log);
     }
 
     //更改用户自身信息

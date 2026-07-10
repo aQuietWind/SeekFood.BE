@@ -75,6 +75,9 @@
         update user set is_delete=true where user_id=#{userId} and is_delete=false
     </update>
 
+    <select id="getHeaderPath" resultType="java.lang.String">
+        select header_image_addr from user where user_id=#{userId} and is_delete=false
+    </select>
 
 
 
