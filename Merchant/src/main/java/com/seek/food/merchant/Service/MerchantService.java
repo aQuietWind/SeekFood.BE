@@ -1,4 +1,4 @@
 package com.seek.food.merchant.Service;
 
-public class ServiceTest {
+public interface MerchantService {
 }

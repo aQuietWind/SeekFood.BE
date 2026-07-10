@@ -80,7 +80,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public  UserDTO getUserSelfMessage(){
         long userId= TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
-        return getUserDetailMessage(userId);
+        //直接返回mysql最新数据,避免用户自身的一致性问题
+        return userMapper.getUserDetailMessage(userId);
     }
 
     //获取更改密码所需的验证码
