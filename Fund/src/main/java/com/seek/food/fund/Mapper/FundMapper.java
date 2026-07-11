@@ -5,6 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface FundMapper {
-    public boolean insertFund(FundDTO fund);
+    public boolean insertFund(long fundId,long accountId);
     public boolean deleteFund(long accountId);
 }

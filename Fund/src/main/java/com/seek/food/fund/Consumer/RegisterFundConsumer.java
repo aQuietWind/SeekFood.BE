@@ -31,10 +31,12 @@ public class RegisterFundConsumer {
     }
 
     @RabbitListener(queues = MQNameKeyEnum.User_Exchange_Register_Fund_Queue)
-    public void registerFundQueue(long userId){
-            FundDTO fund = new FundDTO(IdUtil.IdGenerateByIncrease(fundRedisKeyNameConfig.getFundIdCount(), stringRedisTemplate),
-                    userId, null, null, null);
-            fundMapper.insertFund(fund);
+    public void registerFundQueue(long accountId){
+        try {
+            fundMapper.insertFund(IdUtil.IdGenerateByIncrease(fundRedisKeyNameConfig.getFundIdCount(), stringRedisTemplate),accountId);
+        }catch (Exception e){
+            log.error("account:{} ,新增Fund表数据时出现异常",accountId,e);
+        }
     }
 
 

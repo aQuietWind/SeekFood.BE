@@ -53,4 +53,24 @@ public class RedisUtil {
     public static String redisKeyMix(String start,Object end){
         return start+end;
     }
+
+    //全局BitMap设置值
+    public static boolean oftenSetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id
+            ,boolean value,long idCapacity){
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setBit(redisKeyName, (id % idCapacity), value));
+    }
+
+    //个体BitMap设置值
+    public static boolean setBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,boolean value){
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setBit(redisKeyName, 0, value));
+    }
+
+    //全局BitMap获取值
+    public static boolean oftenGetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id,long idCapacity){
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName, (id % idCapacity)));
+    }
+    //个体BitMap获取值
+    public static boolean getBit(StringRedisTemplate stringRedisTemplate,String redisKeyName){
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName, 0));
+    }
 }

@@ -15,12 +15,8 @@ public class RequestPathEnum {
     public static final String Merchant_Update_Master = "/master";
     public static final String Merchant_Update_Home_Image = "/home";
     public static final String Merchant_Update_Message = "/message";
-    public static final String Merchant_Add_Proof = "/add/proof";
-    public static final String Merchant_Add_Show = "/add/show";
-    public static final String Merchant_Remove_Proof = "/remove/proof";
-    public static final String Merchant_Remove_Show = "/remove/show";
-    public static final String Merchant_Update_Proof = "/update/proof";
-    public static final String Merchant_Update_Show = "/update/show";
+    public static final String Merchant_Proof = "/proof";
+    public static final String Merchant_Show = "/show";
     public static final String Merchant_Apply_Qualified = "/apply/qualified";
     public static final String Merchant_Open = "/open";
 

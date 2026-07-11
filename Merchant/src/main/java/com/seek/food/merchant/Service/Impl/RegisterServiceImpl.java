@@ -2,6 +2,7 @@ package com.seek.food.merchant.Service.Impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
+import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
 import com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig;
 import com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
@@ -10,9 +11,12 @@ import com.seek.food.merchant.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Es.EsUtil;
 import com.seek.food.util.JWT.TokenUtil;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,16 +33,20 @@ public class RegisterServiceImpl implements RegisterService {
     private final MerchantRedisKeyConfig merchantRedisKeyConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final ElasticsearchClient esClient;
-    private final MerchantEsTableConfig merchantEsTableConfig;;
+    private final MerchantEsTableConfig merchantEsTableConfig;
+    private final RabbitTemplate rabbitTemplate;
+    private final MerchantExchangeConfig merchantExchangeConfig;
     public RegisterServiceImpl(RegisterMapper registerMapper,StringRedisTemplate stringRedisTemplate
     ,MerchantRedisKeyConfig merchantRedisKeyConfig,CommonParamRulesConfig commonParamRulesConfig,ElasticsearchClient esClient
-    ,MerchantEsTableConfig merchantEsTableConfig) {
+    ,MerchantEsTableConfig merchantEsTableConfig,RabbitTemplate rabbitTemplate,MerchantExchangeConfig merchantExchangeConfig) {
         this.registerMapper = registerMapper;
         this.stringRedisTemplate = stringRedisTemplate;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.esClient=esClient;
         this.merchantEsTableConfig = merchantEsTableConfig;
+        this.rabbitTemplate = rabbitTemplate;
+        this.merchantExchangeConfig = merchantExchangeConfig;
         stringRedisTemplate.opsForValue().setIfAbsent(merchantRedisKeyConfig.getMerchantIdCount().getName(),
                 ""+commonParamRulesConfig.getMerchantIdStart()*commonParamRulesConfig.getIdCapacity());
     }
@@ -67,6 +75,8 @@ public class RegisterServiceImpl implements RegisterService {
         //插入es
         EsUtil.quickInsert(esClient,merchantEsTableConfig.getIndexName(),merchantId, new MerchantEsDTO(merchantId,"商家"+merchantId
                         ,0,0,null,false));
+        //发至mq,使其进行初始化
+        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getRegisterFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }
 
 

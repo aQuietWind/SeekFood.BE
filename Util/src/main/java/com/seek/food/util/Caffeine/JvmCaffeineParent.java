@@ -82,7 +82,7 @@ public class JvmCaffeineParent<T,E> {
     }
 
     //jvm-redis-mysql库修改，缓存共同删除方法
-    public void getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate, String redisKeyName,Function<T, Boolean> loader) {
+    public void updateAndRemoveCaffeine(T key, StringRedisTemplate stringRedisTemplate, String redisKeyName,Function<T, Boolean> loader) {
         if (key == null||key.equals("")) return;
         //执行修改或者删除操作，并且判断该操作是否成功
         if (!loader.apply(key)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);

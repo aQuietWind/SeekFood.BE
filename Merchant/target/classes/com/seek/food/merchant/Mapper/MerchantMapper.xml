@@ -33,8 +33,6 @@
             merchant_id,
             merchant_name,
             merchant_master_name,
-            merchant_master_image_addr,
-            merchant_master_phone_number,
             merchant_home_image_addr,
             merchant_proof_image_addr,
             merchant_show_image_addr,
@@ -51,4 +49,21 @@
             is_open
         from merchant where merchant_id=#{merchantId}
     </select>
+
+    <update id="setMerchantMaster">
+        update merchant set
+        merchant_master_name=#{merchantMasterName},merchant_master_code=#{merchantMasterCode},merchant_master_image_addr=#{merchantMasterImageAddr}
+        where merchant_id=#{merchantId}
+    </update>
+
+
+
+
+
+
+
+
+
+
+
 </mapper>

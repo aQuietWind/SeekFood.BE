@@ -8,12 +8,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.User_Exchange_Config)
+@ConfigurationProperties(ConfigKeyEnum.Merchant_Exchange_Config)
 @Data
-public class UserExchangeConfig {
+public class MerchantExchangeConfig {
     private String type;
     private String exchangeName;
     private QueueData registerFundQueue;
-    private QueueData updateFileUserQueue;
     private QueueData deleteFundQueue;
 }

@@ -10,11 +10,11 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Merchant_Params_Rules_Config)
 public class MerchantParamsRulesConfig {
     private int merchantNameMax;
-    private int merchantMasterNameMax;
     private int proofImageNumberMax;
     private int showImageNumberMax;
     private int showDescriptionMax;
     private int merchantAddrMax;
+    private String masterImageDest;
     private String proofImageDest;
     private String showImageDest;
 }

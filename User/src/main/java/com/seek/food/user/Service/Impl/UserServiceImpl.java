@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
         if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //发送消息到mq中删除旧文件
         if (oldPath!=null&&!oldPath.isBlank()) MQUtil.send(userExchangeConfig.getExchangeName()
-                ,userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),oldPath,rabbitTemplate,log);
+                ,userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),oldPath,rabbitTemplate);
     }
 
     //更改用户自身信息
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
         //清空token
         stringRedisTemplate.delete(RedisUtil.redisKeyMix(commonRedisKeyConfig.getLoginToken(),userId));
         //传递消息队列进行其他模块后续操作
-        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFundQueue().getRoutingKey(),userId,rabbitTemplate,log);
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFundQueue().getRoutingKey(),userId,rabbitTemplate);
     }
 
 

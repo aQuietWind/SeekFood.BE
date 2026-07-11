@@ -17,12 +17,14 @@ public class MerchantRedisKeyConfig {
     private RedisKeyData merchantLoginRefreshCooldown;
     private RedisKeyData merchantUpdatePasswordCooldown;
     private RedisKeyData merchantUpdateMessageCooldown;
+    private RedisKeyData merchantUpdateMasterCooldown;
     private RedisKeyData merchantAddProofCooldown;
     private RedisKeyData merchantAddShowCooldown;
     private RedisKeyData merchantRemoveProofCooldown;
     private RedisKeyData merchantRemoveShowCooldown;
     private RedisKeyData merchantUpdateProofCooldown;
     private RedisKeyData merchantUpdateShowCooldown;
+    private RedisKeyData merchantMasterIsSet;
     private RedisKeyData merchantIdCount;
     private RedisKeyData merchantMessageCaffeine;
 }

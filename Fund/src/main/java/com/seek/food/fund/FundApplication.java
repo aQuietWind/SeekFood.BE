@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MQImport
 @CommonImport
 @FundImport
-@UserImport
 public class FundApplication {
     public static void main(String[] args) {
         SpringApplication.run(FundApplication.class, args);
