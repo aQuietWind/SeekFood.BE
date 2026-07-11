@@ -10,8 +10,6 @@ public class ConfigKeyEnum {
     public static final String Gateway_Request_Path_Config="gateway.self.request.path";
 
     public static final String User_Params_Rules_Config="user.self.params.rules";
-    public static final String User_Redis_Key_Duration_Config="user.self.redis.key.duration";
-    public static final String User_Redis_Key_Name_Config="user.self.redis.key.name";
     public static final String User_Redis_Key_Config="user.self.redis.key";
     public static final String User_Caffeine_Config="user.self.jvm-caffeine";
     public static final String User_Redis_Stream_Config="user.self.redis.stream";
@@ -20,6 +18,7 @@ public class ConfigKeyEnum {
     public static final String Merchant_Redis_Key_Config="merchant.self.redis.key";
     public static final String Merchant_Caffeine_Config="merchant.self.jvm-caffeine";
     public static final String Merchant_Redis_Stream_Config="merchant.self.redis.stream";
+    public static final String Merchant_Es_Table_Config="merchant.self.es.merchant";
 
 
     public static final String User_Register_Exchange_Config="mq.name.bind.user-exchange";

@@ -36,12 +36,12 @@ Put http://localhost:9200/merchant
                          "type": "integer"
                        },
                        "merchant_home_image":{
-                         "type":"keyword"
+                         "type":"keyword",
+                         "index":false
                        },
                        "is_open":{
                           "type":"boolean"
                        }
-
                      }
                    }
                  }

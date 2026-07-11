@@ -46,6 +46,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "merchant.self.es.merchant",
+      "type": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
       "name": "merchant.self.jvm-caffeine",
       "type": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
@@ -248,6 +253,41 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "merchant.self.es.merchant.index-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.is-open",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-collect-amount",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-home-image",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-id",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-order-amount",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
       "name": "merchant.self.jvm-caffeine.merchant",
       "type": "com.seek.food.config.Data.CaffeineData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
@@ -309,6 +349,21 @@
     },
     {
       "name": "merchant.self.redis.key.merchant-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-login-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-login-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-login-refresh-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },

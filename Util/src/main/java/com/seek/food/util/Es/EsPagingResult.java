@@ -1,4 +1,4 @@
-package com.seek.food.util.CommonUtil;
+package com.seek.food.util.Es;
 
 import co.elastic.clients.elasticsearch._types.FieldValue;
 import co.elastic.clients.elasticsearch._types.SortOrder;

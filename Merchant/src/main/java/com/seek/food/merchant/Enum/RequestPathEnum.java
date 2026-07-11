@@ -7,6 +7,7 @@ public class RequestPathEnum {
     public static final String Login = "/login";
     public static final String Login_Opt = "/opt";
     public static final String Login_Password = "/password";
+    public static final String Login_Refresh = "/refresh";
 
     public static final String Merchant = "/merchant";
     public static final String Merchant_Detail = "/detail";

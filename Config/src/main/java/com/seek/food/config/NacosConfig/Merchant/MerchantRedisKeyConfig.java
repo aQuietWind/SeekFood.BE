@@ -11,7 +11,10 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Merchant_Redis_Key_Config)
 public class MerchantRedisKeyConfig {
     private RedisKeyData merchantRegisterOpt;
+    private RedisKeyData merchantLoginOpt;
     private RedisKeyData merchantUpdatePasswordOpt;
+    private RedisKeyData merchantLoginPasswordCooldown;
+    private RedisKeyData merchantLoginRefreshCooldown;
     private RedisKeyData merchantUpdatePasswordCooldown;
     private RedisKeyData merchantUpdateMessageCooldown;
     private RedisKeyData merchantAddProofCooldown;
