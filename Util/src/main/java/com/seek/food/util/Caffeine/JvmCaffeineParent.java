@@ -4,11 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.benmanes.caffeine.cache.Cache;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.TimeUtil.DurationUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import java.util.function.Function;
 
 @Slf4j
 public class JvmCaffeineParent<T,E> {
@@ -50,7 +54,7 @@ public class JvmCaffeineParent<T,E> {
 
     //jvm-redis-mysql多级缓存逻辑方法
     public E getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate,String redisKeyName,long duration
-            ,Class<E> resultClass,java.util.function.Function<T, E> loader) {
+            ,Class<E> resultClass,Function<T, E> loader) {
         if (key == null||key.equals("")) return null;
         return CACHE.get(key,k->{
             //从redis中获取分布式缓存
@@ -77,4 +81,13 @@ public class JvmCaffeineParent<T,E> {
         });
     }
 
+    //jvm-redis-mysql库修改，缓存共同删除方法
+    public void getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate, String redisKeyName,Function<T, Boolean> loader) {
+        if (key == null||key.equals("")) return;
+        //执行修改或者删除操作，并且判断该操作是否成功
+        if (!loader.apply(key)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //redis清除缓存
+        stringRedisTemplate.delete(redisKeyName);
+        CACHE.invalidate(key);
+    }
 }

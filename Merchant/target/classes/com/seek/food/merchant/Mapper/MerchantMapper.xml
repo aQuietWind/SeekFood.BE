@@ -1,0 +1,54 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seek.food.merchant.Mapper.MerchantMapper">
+
+    <!-- 全局统一字段映射 -->
+    <resultMap id="MerchantResultMap" type="com.seek.food.dto.Merchant.MerchantDTO">
+        <id property="merchantId" column="merchant_id"/>
+        <result property="merchantName" column="merchant_name"/>
+        <result property="merchantMasterPhoneNumber" column="merchant_master_name"/>
+        <result property="merchantMasterCode" column="merchant_master_code"/>
+        <result property="merchantMasterImageAddr" column="merchant_master_image_addr"/>
+        <result property="merchantMasterPhoneNumber" column="merchant_master_phone_number"/>
+        <result property="merchantHomeImageAddr" column="merchant_home_image_addr"/>
+        <result property="merchantProofImageAddr" column="merchant_proof_image_addr"/>
+        <result property="merchantShowImageAddr" column="merchant_show_image_addr"/>
+        <result property="merchantShowDescription" column="merchant_show_description"/>
+        <result property="merchantAddr" column="merchant_addr"/>
+        <result property="merchantOrderAmount" column="merchant_order_amount"/>
+        <result property="merchantFirstCommentAmount" column="merchant_first_comment_amount"/>
+        <result property="merchantLikeAmount" column="merchant_like_amount"/>
+        <result property="merchantCollectAmount" column="merchant_collect_amount"/>
+        <result property="merchantEmployeeAmount" column="merchant_employee_amount"/>
+        <result property="merchantScore" column="merchant_score"/>
+        <result property="merchantPassword" column="merchant_password"/>
+        <result property="createTime" column="create_time"/>
+        <result property="qualified" column="is_qualified" />
+        <result property="open" column="is_open" />
+    </resultMap>
+
+    <select id="getMerchantById" resultMap="MerchantResultMap">
+        select
+            merchant_id,
+            merchant_name,
+            merchant_master_name,
+            merchant_master_image_addr,
+            merchant_master_phone_number,
+            merchant_home_image_addr,
+            merchant_proof_image_addr,
+            merchant_show_image_addr,
+            merchant_show_description,
+            merchant_addr,
+            merchant_order_amount,
+            merchant_first_comment_amount,
+            merchant_like_amount,
+            merchant_collect_amount,
+            merchant_employee_amount,
+            merchant_score,
+            create_time,
+            is_qualified,
+            is_open
+        from merchant where merchant_id=#{merchantId}
+    </select>
+</mapper>

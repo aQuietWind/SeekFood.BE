@@ -28,7 +28,7 @@ public class MerchantSubConfig {
     }
     @Bean
     @Lazy // 用到才实例化，启动不创建对象
-    public MerchantParamsRulesConfig merchantRulesConfig(MerchantParamsRulesConfig merchantParamsRulesConfig) {
+    public MerchantParamsRulesConfig merchantParamsRulesConfig(MerchantParamsRulesConfig merchantParamsRulesConfig) {
         return merchantParamsRulesConfig;
     }
     @Bean
