@@ -4,7 +4,6 @@ import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.user.Mapper.UserMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 
 //@Component
@@ -14,7 +13,7 @@ public class OrderAmountConsumer {
     public OrderAmountConsumer(UserMapper userMapper) {
         this.userMapper = userMapper;
     }
-    @RabbitListener(queues = MQNameKeyEnum.User_Exchange_Update_File_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.User_Exchange_Delete_File_Queue)
     public void updateFileQueue(long userId){
         userMapper.increaseOrderAmount(userId);
     }

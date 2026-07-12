@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 public class FileRemove {
     //传输拼接路径下来
     public static void removeFile(String dest,String addr) {
-        quickRemoveFile(Paths.get(dest).resolve(addr));
+        quickRemoveFile(Paths.get(dest,addr));
     }
     //直接完整路径
     public static void removeFileByPath(String path) {
@@ -19,7 +19,7 @@ public class FileRemove {
 
     //拼接路径
     public static String resolvePath(String dest,String addr) {
-        return Paths.get(dest).resolve(addr).toString();
+        return Paths.get(dest,addr).toString();
     }
 
     public static  void quickRemoveFile(Path path) {

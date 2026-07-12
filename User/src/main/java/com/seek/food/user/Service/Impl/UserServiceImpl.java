@@ -26,6 +26,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    //获取某一用户详细信息
     @Override
     public UserDTO getUserDetailMessage(long userId){
         //验证id是否属于userId而不是别的
@@ -76,6 +78,7 @@ public class UserServiceImpl implements UserService {
         ,userRedisKeyConfig.getCaffeineMessage().getDuration(),UserDTO.class,key->userMapper.getUserDetailMessage(userId));
     }
 
+
     //获取用户个人信息
     @Override
     public  UserDTO getUserSelfMessage(){
@@ -83,6 +86,7 @@ public class UserServiceImpl implements UserService {
         //直接返回mysql最新数据,避免用户自身的一致性问题
         return userMapper.getUserDetailMessage(userId);
     }
+
 
     //获取更改密码所需的验证码
     @Override
@@ -93,6 +97,7 @@ public class UserServiceImpl implements UserService {
         return OPTUtil.generateOPTAndRecord(stringRedisTemplate,userRedisKeyConfig.getUpdatePasswordOpt().getName()+phoneNumber
                 ,userRedisKeyConfig.getUpdatePasswordOpt().getDuration(),6);
     }
+
 
     //更改密码
     @Override
@@ -109,6 +114,7 @@ public class UserServiceImpl implements UserService {
         if (!userMapper.updateUserPassword(phoneNumber,newPassword))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
+
     //更改头像
     @Override
     public void updateUserHeader(MultipartFile file){
@@ -118,16 +124,22 @@ public class UserServiceImpl implements UserService {
         RedisUtil.checkCooldown(stringRedisTemplate,userRedisKeyConfig.getUpdateHeaderImageCooldown().getName()+userId
                 ,userRedisKeyConfig.getUpdateHeaderImageCooldown().getDuration());
         //获取旧头像路径
-        String oldPath=userMapper.getHeaderPath(userId);
+        String oldAddr=userMapper.getHeaderPath(userId);
         //快速保存
-        String path=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), commonParamRulesConfig.getImageSize()
+        String addr=FileSave.quickCheckAndSaveFile(file,userParamsRulesConfig.getHeaderImageDest(), commonParamRulesConfig.getImageSize()
                 , commonParamRulesConfig.getImageType());
         //检查是否成功
-        if (!userMapper.updateUserHeader(userId,path))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        if (!userMapper.updateUserHeader(userId,addr,oldAddr)) {
+            //发消息使已经保存文件删除
+            MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFileUserQueue().getRoutingKey()
+                    , Paths.get(userParamsRulesConfig.getHeaderImageDest(),addr).toString(),rabbitTemplate);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        }
         //发送消息到mq中删除旧文件
-        if (oldPath!=null&&!oldPath.isBlank()) MQUtil.send(userExchangeConfig.getExchangeName()
-                ,userExchangeConfig.getUpdateFileUserQueue().getRoutingKey(),oldPath,rabbitTemplate);
+        if (oldAddr!=null&&!oldAddr.isBlank()) MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFileUserQueue().getRoutingKey()
+                , Paths.get(userParamsRulesConfig.getHeaderImageDest(),oldAddr).toString(),rabbitTemplate);
     }
+
 
     //更改用户自身信息
     @Override
@@ -145,6 +157,7 @@ public class UserServiceImpl implements UserService {
         if(!userMapper.updateUserMessage(userDTO))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
+
     //多用户粗览信息获取
     @Override
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds){
@@ -153,6 +166,7 @@ public class UserServiceImpl implements UserService {
         for (Long userId:userIds) commonParamRulesConfig.userIdCheck(userId);
         return userMapper.getUsersSimpleMessage(userIds);
     }
+
 
     //删除所需获取验证码
     @Override
@@ -166,6 +180,7 @@ public class UserServiceImpl implements UserService {
         return OPTUtil.generateOPTAndRecord(stringRedisTemplate,RedisUtil.redisKeyMix(userRedisKeyConfig.getDeleteUserOpt().getName(),userId),
                 userRedisKeyConfig.getDeleteUserOpt().getDuration(),6);
     }
+
 
     //删除用户
     @Override

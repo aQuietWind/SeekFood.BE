@@ -43,4 +43,14 @@ public class MerchantExchangeBind {
     public Binding deleteFundBinding(Queue deleteFundQueue, DirectExchange merchantExchange){
         return BindingBuilder.bind(deleteFundQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteFundQueue().getRoutingKey());
     }
+    //文件删除队列
+    @Bean
+    public Queue deleteFileMerchantQueue(){
+        return MQUtil.generateQuorumQueue(merchantExchangeConfig.getDeleteFileMerchantQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteFileMerchantBinding(Queue deleteFileMerchantQueue, DirectExchange merchantExchange){
+        return BindingBuilder.bind(deleteFileMerchantQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteFileMerchantQueue().getRoutingKey());
+    }
 }

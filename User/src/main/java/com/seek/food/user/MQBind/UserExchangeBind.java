@@ -34,12 +34,12 @@ public class UserExchangeBind {
     //用户文件更新队列
     @Bean
     public Queue updateFileUserQueue(){
-        return MQUtil.generateQuorumQueue(userExchangeConfig.getUpdateFileUserQueue().getName());
+        return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteFileUserQueue().getName());
     }
     //绑定交换机与队列
     @Bean
     public Binding userFileUserBinding(Queue updateFileUserQueue, DirectExchange userExchange){
-        return BindingBuilder.bind(updateFileUserQueue).to(userExchange).with(userExchangeConfig.getUpdateFileUserQueue().getRoutingKey());
+        return BindingBuilder.bind(updateFileUserQueue).to(userExchange).with(userExchangeConfig.getDeleteFileUserQueue().getRoutingKey());
     }
     //用户删除时资金操作队列
     @Bean

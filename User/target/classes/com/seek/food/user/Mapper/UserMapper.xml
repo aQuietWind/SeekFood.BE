@@ -36,7 +36,9 @@
     </update>
 
     <update id="updateUserHeader">
-        update user set header_image_addr=#{path} where user_id=#{userId} and is_delete=false
+        update user set header_image_addr=#{addr} where user_id=#{userId} and is_delete=false and header_image_addr
+        <if test="oldAddr!=null">=#{oldAddr}</if>
+        <if test="oldAddr==null">IS NULL</if>
     </update>
     
     <update id="updateUserMessage">

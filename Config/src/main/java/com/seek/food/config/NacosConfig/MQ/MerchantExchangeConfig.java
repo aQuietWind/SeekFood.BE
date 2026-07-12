@@ -15,4 +15,5 @@ public class MerchantExchangeConfig {
     private String exchangeName;
     private QueueData registerFundQueue;
     private QueueData deleteFundQueue;
+    private QueueData deleteFileMerchantQueue;
 }

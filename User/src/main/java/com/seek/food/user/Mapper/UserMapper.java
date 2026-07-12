@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserMapper {
     public UserDTO getUserDetailMessage(long userId);
     public boolean updateUserPassword(String phoneNumber,String newPassword);
-    public boolean updateUserHeader(long userId, String path);
+    public boolean updateUserHeader(long userId, String addr,String oldAddr);
     public boolean updateUserMessage(UserDTO userDTO);
     public boolean increaseOrderAmount(long userId);
     public List<UserDTO> getUsersSimpleMessage(List<Long> userIds);

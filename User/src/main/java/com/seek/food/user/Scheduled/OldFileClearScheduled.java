@@ -37,7 +37,7 @@ public class OldFileClearScheduled {
                     //获取数据并进行处理
                     FileRemove.removeFileByPath((String) record.getValue().get(oldFileStream.getKeyName()));
                 }catch (Exception e){
-                    log.error("有旧文件在定时重新删除时发生错误，需查看排错");
+                    log.error("有旧文件在定时重新删除时发生错误:",e);
                 }
                 //通过id确认消息
                 stringRedisTemplate.opsForStream().acknowledge(oldFileStream.getName(),oldFileStream.getConsumer().getGroupName(),record.getId());

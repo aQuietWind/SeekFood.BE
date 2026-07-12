@@ -57,12 +57,8 @@
     </update>
 
     <update id="addMerchantProofImage">
-        update merchant set merchant_proof_image_addr=JSON_MERGE_PRESERVE(merchant_proof_image_addr,JSON_ARRAY(
-        <foreach collection="addrList" item="item" separator=",">
-            #{item}
-        </foreach>
-        ))
-        where merchant_id=#{merchantId} and JSON_LENGTH(merchant_proof_image_addr)+#{addrList.length} &lt;= #{max}
+        update merchant set merchant_proof_image_addr=JSON_ARRAY_APPEND(merchant_proof_image_addr,'$',#{addr})
+        where merchant_id=#{merchantId} and JSON_LENGTH(merchant_proof_image_addr)+1 &lt;= #{max}
     </update>
 
     <select id="getMerchantProofImageByIndex" resultType="java.lang.String">
@@ -71,12 +67,31 @@
 
     <update id="removeMerchantProofImage">
         update merchant set merchant_proof_image_addr=JSON_REMOVE(merchant_proof_image_addr,concat('$[',#{index},']'))
-        where merchant_id=#{merchantId}
+        where merchant_id=#{merchantId} and JSON_UNQUOTE(JSON_EXTRACT(merchant_proof_image_addr, CONCAT('$[',#{index},']')))=#{oldAddr}
     </update>
 
-    <update id="updateMerchantProofImage">
+    <update id="replaceMerchantProofImage">
         update merchant set merchant_proof_image_addr=JSON_REPLACE(merchant_proof_image_addr,concat('$[',#{index},']'),#{addr})
-        where merchant_id=#{merchantId}
+        where merchant_id=#{merchantId} and JSON_UNQUOTE(JSON_EXTRACT(merchant_proof_image_addr, CONCAT('$[',#{index},']')))=#{oldAddr}
+    </update>
+
+    <update id="addShowImage">
+        update merchant set merchant_show_image_addr=JSON_ARRAY_APPEND(merchant_show_image_addr,'$',#{addr})
+        where merchant_id=#{merchantId} and JSON_LENGTH(merchant_show_image_addr)+1 &lt;= #{max}
+    </update>
+
+    <select id="getShowImageByIndex" resultType="java.lang.String">
+        select JSON_UNQUOTE(JSON_EXTRACT(merchant_show_image_addr, CONCAT('$[',#{index},']'))) from merchant where merchant_id=#{merchantId}
+    </select>
+
+    <update id="removeShowImage">
+        update merchant set merchant_show_image_addr=JSON_REMOVE(merchant_show_image_addr,concat('$[',#{index},']'))
+        where merchant_id=#{merchantId} and JSON_UNQUOTE(JSON_EXTRACT(merchant_show_image_addr, CONCAT('$[',#{index},']')))=#{oldAddr}
+    </update>
+
+    <update id="replaceShowImage">
+        update merchant set merchant_show_image_addr=JSON_REPLACE(merchant_show_image_addr,concat('$[',#{index},']'),#{addr})
+        where merchant_id=#{merchantId} and JSON_UNQUOTE(JSON_EXTRACT(merchant_show_image_addr, CONCAT('$[',#{index},']')))=#{oldAddr}
     </update>
 
 
