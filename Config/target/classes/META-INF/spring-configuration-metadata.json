@@ -204,7 +204,7 @@
     },
     {
       "name": "common.redis.key.name.login-token",
-      "type": "java.lang.String",
+      "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
     },
     {

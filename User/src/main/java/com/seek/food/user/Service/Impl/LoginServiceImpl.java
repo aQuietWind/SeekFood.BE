@@ -115,7 +115,7 @@ public class LoginServiceImpl implements LoginService {
                 , jwtConfig.getRequestTokenName()
                 , JWTUser.getHeaderSign()
                 , jwtConfig.getHeaderSeparator()
-                , commonRedisKeyConfig.getLoginToken()
+                , commonRedisKeyConfig.getLoginToken().getName()
                 , jwtConfig.getMaxStore()
                 , stringRedisTemplate);
     }

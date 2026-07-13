@@ -2,6 +2,7 @@ package com.seek.food.merchant.Service.Impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
+import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
 import com.seek.food.config.NacosConfig.Merchant.*;
 import com.seek.food.dto.Merchant.MerchantDTO;
@@ -13,6 +14,7 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
+import com.seek.food.util.JWT.TokenUtil;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
@@ -44,12 +46,13 @@ public class MerchantServiceImpl implements MerchantService {
     private final ElasticsearchClient esClient;
     private final MerchantExchangeConfig merchantExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
+    private final CommonRedisKeyConfig commonRedisKeyConfig;
 
     @Autowired
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
     , MerchantEsTableConfig merchantEsTableConfig, CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine
     , StringRedisTemplate stringRedisTemplate, ElasticsearchClient esClient, MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
-    ,RabbitTemplate rabbitTemplate,PhoneCaffeine phoneCaffeine) {
+    , RabbitTemplate rabbitTemplate, PhoneCaffeine phoneCaffeine, CommonRedisKeyConfig commonRedisKeyConfig) {
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.merchantParamsRulesConfig = merchantParamsRulesConfig;
@@ -67,6 +70,7 @@ public class MerchantServiceImpl implements MerchantService {
         FileSave.createDestDir(merchantParamsRulesConfig.getShowImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getHomeImageDest());
         this.merchantExchangeConfig = merchantExchangeConfig;
+        this.commonRedisKeyConfig = commonRedisKeyConfig;
     }
 
     //获取商家详细信息
@@ -333,12 +337,14 @@ public class MerchantServiceImpl implements MerchantService {
         );
         //检查验证码
         OPTUtil.checkOPT(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteOpt().getRedisKey(phoneNumber),opt);
-        //检查冷却期，防止恶意刷接口
-        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteCooldown().getRedisKey(merchantId)
+        //检查冷却期，防止恶意反复注销
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteCooldown().getRedisKey(phoneNumber)
                 ,merchantRedisKeyConfig.getMerchantDeleteCooldown().getDuration());
         //删除商家,并且删除缓存
         merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
                 ,k->merchantMapper.deleteMerchant(merchantId));
+        //删除token存储
+        stringRedisTemplate.delete(commonRedisKeyConfig.getLoginToken().getRedisKey(merchantId));
         //mq同步进行善后操作
         MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }

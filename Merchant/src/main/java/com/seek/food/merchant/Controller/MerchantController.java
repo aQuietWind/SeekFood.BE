@@ -104,7 +104,7 @@ public class MerchantController {
         return Result.success(merchantService.getDeleteMerchantOpt());
     }
     //注销账户
-    @PutMapping(RequestPathEnum.Merchant_Delete)
+    @DeleteMapping(RequestPathEnum.Merchant_Delete)
     public Result<Void> deleteMerchant(String opt){
         merchantService.deleteMerchant(opt);
         return Result.success();

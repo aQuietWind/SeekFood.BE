@@ -50,10 +50,4 @@ public class TokenUtil {
                 ,maxStore,token, ""+ TimeUtil.getStampByNow());     //ARGV参数
     }
 
-    //清空Token
-    public static void clearAllTokenAndCooldown(StringRedisTemplate stringRedisTemplate,String deleteRedisKey
-            ,String cooldownRedisKey,long duration){
-        stringRedisTemplate.delete(deleteRedisKey);
-        stringRedisTemplate.opsForValue().set(cooldownRedisKey,"true", DurationUtil.getSecondDuration(duration));
-    }
 }

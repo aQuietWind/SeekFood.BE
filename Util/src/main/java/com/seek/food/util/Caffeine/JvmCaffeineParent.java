@@ -60,12 +60,10 @@ public class JvmCaffeineParent<T,E> {
         return CACHE.get(key,k->{
             //从redis中获取分布式缓存
             String json=stringRedisTemplate.opsForValue().get(redisKeyName);
-            System.err.println("json:"+json);
             //判断是否为空
             if (json!=null&& !json.isEmpty()){
                 //判断是否为缓存穿透
                 if (caffeineFail.equals(json))return null;
-                System.err.println("json:"+json);
                 //返回正确值
                 try {
                     return mapper.readValue(json,resultClass);
@@ -75,7 +73,6 @@ public class JvmCaffeineParent<T,E> {
             }
             //从目标方法中获取值
             E result=loader.apply(k);
-            System.err.println("result:"+result);
             //防止缓存穿透,在分布式场景下预先写入redis中，除此，可用额外缓存空值代替方案进行jvm处直接判断是否为缓存
             if (result==null){
                 //切记不要误用set(String,String,long),这个会导致数据偏移，会造成实际字符串的不同,而且它和set(String,String,Duration)很像，也很容易误写
@@ -84,7 +81,6 @@ public class JvmCaffeineParent<T,E> {
             }
             //不是缓存穿透则存储到redis做分布式缓存后返回
             try {
-                System.err.println(1);
                 stringRedisTemplate.opsForValue().set(redisKeyName, mapper.writeValueAsString(result), DurationUtil.getSecondDuration(duration));}
             catch (JsonProcessingException e) {throw new RuntimeException(e);}
             return result;

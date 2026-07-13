@@ -104,7 +104,7 @@ public class TokenFilter implements GlobalFilter {
         }
         if (result.getResultId()==JWTUtil.FailResult)return JWTUtil.FailResult;
         //检验redis是否存在该token
-        if(stringRedisTemplate.opsForZSet().score(commonRedisKeyConfig.getLoginToken()+result.getResultId(), result.getToken())==null) return JWTUtil.FailResult;
+        if(stringRedisTemplate.opsForZSet().score(commonRedisKeyConfig.getLoginToken().getRedisKey(result.getResultId()), result.getToken())==null) return JWTUtil.FailResult;
         return result.getResultId();
     }
 
