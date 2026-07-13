@@ -81,6 +81,12 @@ public class MerchantController {
         merchantService.updateHomeImage(file);
         return Result.success();
     }
+    //更改商家的信息
+    @PutMapping(RequestPathEnum.Merchant_Update_Message)
+    public Result<Void> updateMessage(@RequestBody MerchantDTO merchant){
+        merchantService.updateMerchantMessage(merchant);
+        return Result.success();
+    }
 
 
 

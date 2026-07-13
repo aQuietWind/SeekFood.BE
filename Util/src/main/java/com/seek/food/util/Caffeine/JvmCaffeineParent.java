@@ -54,7 +54,7 @@ public class JvmCaffeineParent<T,E> {
 
     //jvm-redis-mysql多级缓存逻辑方法
     public E getAndAutoLoad(T key, StringRedisTemplate stringRedisTemplate,String redisKeyName,long duration
-            ,Class<E> resultClass,Function<T, E> loader) {
+            ,Class<E> resultClass,Function<T, E> loader){
         if (key == null||key.equals("")) return null;
         return CACHE.get(key,k->{
             //从redis中获取分布式缓存
@@ -64,7 +64,11 @@ public class JvmCaffeineParent<T,E> {
                 //判断是否为缓存穿透
                 if (json.equals(caffeineFail))return null;
                 //返回正确值
-                return mapper.convertValue(json,resultClass);
+                try {
+                    return mapper.readValue(json,resultClass);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
             }
             //从目标方法中获取值
             E result=loader.apply(k);
@@ -88,6 +92,16 @@ public class JvmCaffeineParent<T,E> {
         if (!loader.apply(key)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //redis清除缓存
         stringRedisTemplate.delete(redisKeyName);
+        //jvm清除缓存
+        CACHE.invalidate(key);
+    }
+
+    //删除redis-jvm缓存
+    public void deleteAllCaffeine(T key, StringRedisTemplate stringRedisTemplate,String redisKeyName) {
+        if (key == null||key.equals("")) return;
+        //redis清除缓存
+        stringRedisTemplate.delete(redisKeyName);
+        //jvm清除缓存
         CACHE.invalidate(key);
     }
 }

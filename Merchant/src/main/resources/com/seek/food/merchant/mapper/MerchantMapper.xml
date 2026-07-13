@@ -104,7 +104,15 @@
         <if test="oldAddr==null">IS NULL</if>
     </update>
 
-
+    <update id="updateMessage">
+        update merchant
+        <set>
+            <if test="merchantName!=null">merchant_name=#{merchantName},</if>
+            <if test="merchantShowDescription!=null">merchant_show_description=#{merchantShowDescription},</if>
+            <if test="merchantAddr!=null">merchant_addr=#{merchantAddr},</if>
+        </set>
+        where merchant_id=#{merchantId}
+    </update>
 
 
 

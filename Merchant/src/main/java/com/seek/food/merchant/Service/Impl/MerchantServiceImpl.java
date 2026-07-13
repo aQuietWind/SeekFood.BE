@@ -65,7 +65,7 @@ public class MerchantServiceImpl implements MerchantService {
         this.merchantExchangeConfig = merchantExchangeConfig;
     }
 
-
+    //获取商家详细信息
     @Override
     public MerchantDTO getMerchantDetail(long merchantId){
         commonParamRulesConfig.merchantIdCheck(merchantId);
@@ -73,7 +73,7 @@ public class MerchantServiceImpl implements MerchantService {
                 merchantRedisKeyConfig.getMerchantMessageCaffeine().getDuration(),MerchantDTO.class,k->merchantMapper.getMerchantById(merchantId));
     }
 
-
+    //获取商家自身详细信息
     @Override
     public MerchantDTO getMerchantSelf(){
         long merchantId= TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
@@ -82,8 +82,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     //设置店主信息
     @Override
-    public void setMerchantMaster(String masterName, String masterCode
-            , @RequestBody MultipartFile masterImage){
+    public void setMerchantMaster(String masterName, String masterCode, MultipartFile masterImage){
         //获取商家id
         long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
         //检查是否还未设置过该信息
@@ -98,7 +97,7 @@ public class MerchantServiceImpl implements MerchantService {
         //检查照片并且保存
         String addr=FileSave.quickCheckAndSaveFile(masterImage,merchantParamsRulesConfig.getMasterImageDest()
                 ,commonParamRulesConfig.getImageSize(),commonParamRulesConfig.getImageType());
-        //写入mysql
+        //写入mysql,并且清除缓存
         merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getName()+merchantId
                 , k->merchantMapper.setMerchantMaster(merchantId,masterName,masterCode,addr));
         //设置该信息已经被修改
@@ -123,6 +122,8 @@ public class MerchantServiceImpl implements MerchantService {
             quickToMQDeleteFile(merchantParamsRulesConfig.getProofImageDest(),addr);
             throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
         }
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
     //删除营业证明照片
@@ -135,8 +136,10 @@ public class MerchantServiceImpl implements MerchantService {
         String oldAddr=quickGetProofOldAddr(merchantId,index);
         //mysql删除该地址,防止可能出现的并发问题，虽然加了冷却期，但是仍旧提防
         if(!merchantMapper.removeMerchantProofImage(merchantId,oldAddr,index))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        //发消息使已经保存文件删除
+        //发消息使目标文件删除
         quickToMQDeleteFile(merchantParamsRulesConfig.getProofImageDest(),oldAddr);
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
     //更换营业证明照片
@@ -151,9 +154,15 @@ public class MerchantServiceImpl implements MerchantService {
         //检查文件，并且保存
         String addr=FileSave.quickCheckAndSaveFile(image,merchantParamsRulesConfig.getProofImageDest(),commonParamRulesConfig.getImageSize(),commonParamRulesConfig.getImageType());
         //mysql更新该地址,防止可能出现的并发问题，虽然加了冷却期，但是仍旧提防
-        if(!merchantMapper.replaceMerchantProofImage(merchantId,addr,oldAddr,index))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        //发消息使已经保存文件删除
+        if(!merchantMapper.replaceMerchantProofImage(merchantId,addr,oldAddr,index)) {
+            //发消息使已经刚刚保存的文件删除
+            quickToMQDeleteFile(merchantParamsRulesConfig.getProofImageDest(),addr);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        }
+        //发消息使已经旧文件删除
         quickToMQDeleteFile(merchantParamsRulesConfig.getProofImageDest(),oldAddr);
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
     //添加商家展示照片
@@ -173,6 +182,8 @@ public class MerchantServiceImpl implements MerchantService {
             quickToMQDeleteFile(merchantParamsRulesConfig.getShowImageDest(),addr);
             throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
         }
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
     //删除商家展示照片
@@ -186,11 +197,13 @@ public class MerchantServiceImpl implements MerchantService {
         String oldAddr=quickGetShowOldAddr(merchantId,index);
         //mysql删除该地址,防止可能出现的并发问题，虽然加了冷却期，但是仍旧提防
         if(!merchantMapper.removeShowImage(merchantId,oldAddr,index))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        //发消息使已经保存文件删除
+        //发消息使目标文件删除
         quickToMQDeleteFile(merchantParamsRulesConfig.getShowImageDest(),oldAddr);
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
-    //更新商家展示照片
+    //更换商家展示照片
     @Override
     public void replaceShowImage(MultipartFile image,int index){
         long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
@@ -203,9 +216,15 @@ public class MerchantServiceImpl implements MerchantService {
         String addr=FileSave.quickCheckAndSaveFile(image,merchantParamsRulesConfig.getShowImageDest()
                 ,commonParamRulesConfig.getImageSize(),commonParamRulesConfig.getImageType());
         //mysql更新该地址,防止可能出现的并发问题，虽然加了冷却期，但是仍旧提防
-        if(!merchantMapper.replaceShowImage(merchantId,addr,oldAddr,index))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        //发消息使已经保存文件删除
+        if(!merchantMapper.replaceShowImage(merchantId,addr,oldAddr,index)) {
+            //发消息使刚刚保存的文件删除
+            quickToMQDeleteFile(merchantParamsRulesConfig.getShowImageDest(),addr);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        }
+        //发消息使老文件删除
         quickToMQDeleteFile(merchantParamsRulesConfig.getShowImageDest(),oldAddr);
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
     }
 
     //更新商家的封面图片
@@ -229,6 +248,27 @@ public class MerchantServiceImpl implements MerchantService {
         }
         //如果成功,且旧地址不为空,发送消息到mq中删除旧文件
         if (oldAddr!=null&&!oldAddr.isEmpty()) quickToMQDeleteFile(merchantParamsRulesConfig.getHomeImageDest(),oldAddr);
+        //清除缓存
+        quickDeleteCaffeine(merchantId);
+    }
+
+    //更改商家的信息
+    @Override
+    public void updateMerchantMessage(MerchantDTO merchant){
+        //获取id
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //检查参数
+        merchantParamsRulesConfig.merchantNameCheck(merchant.getMerchantName());
+        merchantParamsRulesConfig.showDescriptionCheck(merchant.getMerchantShowDescription());
+        merchantParamsRulesConfig.merchantAddrCheck(merchant.getMerchantAddr());
+        //检查冷却期
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getDuration());
+        //将id放入merchant实体类
+        merchant.setMerchantId(merchantId);
+        //更新信息,并且删除缓存
+        merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getRedisKey(merchantId)
+                ,k->merchantMapper.updateMessage(merchant));
     }
 
     //快捷的发送至MQ删除文件
@@ -248,6 +288,10 @@ public class MerchantServiceImpl implements MerchantService {
         String oldAddr=merchantMapper.getShowImageByIndex(merchantId,index);
         if (oldAddr==null)throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         return oldAddr;
+    }
+    //快速清除商家缓存
+    private void quickDeleteCaffeine(long merchantId){
+        merchantCaffeine.deleteAllCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId));
     }
 
 
