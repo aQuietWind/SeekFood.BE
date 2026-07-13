@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +30,8 @@ public class DeleteFileMerchantConsumer {
     @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Delete_File_Queue)
     public void deleteFileUserQueue(String path){
         try {
-            FileRemove.removeFileByPath(path);
+            throw new RuntimeException();
+//            FileRemove.removeFileByPath(path);
         }catch (Exception e){
             //不再进行重试，而是留给spring后台线程进行定时处理
             log.error("path:{},在删除时发生错误",path,e);
