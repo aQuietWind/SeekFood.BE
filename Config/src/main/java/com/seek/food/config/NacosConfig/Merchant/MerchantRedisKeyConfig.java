@@ -13,6 +13,7 @@ public class MerchantRedisKeyConfig {
     private RedisKeyData merchantRegisterOpt;
     private RedisKeyData merchantLoginOpt;
     private RedisKeyData merchantUpdatePasswordOpt;
+    private RedisKeyData merchantDeleteOpt;
     private RedisKeyData merchantLoginPasswordCooldown;
     private RedisKeyData merchantLoginRefreshCooldown;
     private RedisKeyData merchantUpdatePasswordCooldown;
@@ -25,6 +26,8 @@ public class MerchantRedisKeyConfig {
     private RedisKeyData merchantReplaceProofCooldown;
     private RedisKeyData merchantReplaceShowCooldown;
     private RedisKeyData merchantUpdateHomeCooldown;
+    private RedisKeyData merchantDeleteCooldown;
+    private RedisKeyData merchantUpdateOpenCooldown;
     private RedisKeyData merchantMasterIsSet;
     private RedisKeyData merchantIdCount;
     private RedisKeyData merchantMessageCaffeine;

@@ -98,6 +98,23 @@ public class MerchantController {
         merchantService.updatePassword(newPassword,opt);
         return Result.success();
     }
+    //获取注销所需的验证码
+    @GetMapping(RequestPathEnum.Merchant_Delete_Opt)
+    public Result<String> deleteMerchant(){
+        return Result.success(merchantService.getDeleteMerchantOpt());
+    }
+    //注销账户
+    @PutMapping(RequestPathEnum.Merchant_Delete)
+    public Result<Void> deleteMerchant(String opt){
+        merchantService.deleteMerchant(opt);
+        return Result.success();
+    }
+    //开业或者停业
+    @PutMapping(RequestPathEnum.Merchant_Open)
+    public Result<Void> openMerchant(){
+        merchantService.updateOpen();
+        return Result.success();
+    }
 
 
 }

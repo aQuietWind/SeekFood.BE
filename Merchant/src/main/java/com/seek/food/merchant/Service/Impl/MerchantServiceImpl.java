@@ -271,11 +271,12 @@ public class MerchantServiceImpl implements MerchantService {
         //将id放入merchant实体类
         merchant.setMerchantId(merchantId);
         //更新信息,并且删除缓存
-        merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getRedisKey(merchantId)
+        merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
                 ,k->merchantMapper.updateMessage(merchant));
     }
 
     //获取更改商家密码的验证码
+    @Override
     public String getUpdatePasswordOpt(){
         //获取Id并且自动检查
         long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
@@ -287,7 +288,9 @@ public class MerchantServiceImpl implements MerchantService {
         return OPTUtil.generateOPTAndRecord(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdatePasswordOpt().getRedisKey(phoneNumber)
         ,merchantRedisKeyConfig.getMerchantUpdatePasswordOpt().getDuration(),6);
     }
+
     //改密码
+    @Override
     public void updatePassword(String newPassword, String opt){
         //检查密码格式
         commonParamRulesConfig.passwordCheck(newPassword);
@@ -302,7 +305,55 @@ public class MerchantServiceImpl implements MerchantService {
         //检查冷却期，防止恶意刷接口
         RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdatePasswordCooldown().getRedisKey(merchantId)
         ,merchantRedisKeyConfig.getMerchantUpdatePasswordCooldown().getDuration());
-        merchantMapper.updatePassword(merchantId,newPassword);
+        if (!merchantMapper.updatePassword(merchantId,newPassword)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+    }
+
+    //获取注销账户所需的验证码
+    @Override
+    public String getDeleteMerchantOpt(){
+        //获取Id并且自动检查
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //获取手机号，做发送手机号业务模拟
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getDuration(),String.class,k->merchantMapper.getPhoneNumber(merchantId)
+        );
+        //生成6位数验证码并且返回
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteOpt().getRedisKey(phoneNumber)
+                ,merchantRedisKeyConfig.getMerchantDeleteOpt().getDuration(),6);
+    }
+
+    //注销账户
+    @Override
+    public void deleteMerchant(String opt){
+        //获取Id并且自动检查
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //获取手机号，做发送手机号业务模拟
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getDuration(),String.class,k->merchantMapper.getPhoneNumber(merchantId)
+        );
+        //检查验证码
+        OPTUtil.checkOPT(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteOpt().getRedisKey(phoneNumber),opt);
+        //检查冷却期，防止恶意刷接口
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantDeleteCooldown().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantDeleteCooldown().getDuration());
+        //删除商家,并且删除缓存
+        merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
+                ,k->merchantMapper.deleteMerchant(merchantId));
+        //mq同步进行善后操作
+        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
+    }
+
+    //开业或者停业
+    @Override
+    public void updateOpen(){
+        //获取id
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //检查冷却
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateOpenCooldown().getRedisKey(merchantId)
+        ,merchantRedisKeyConfig.getMerchantUpdateOpenCooldown().getDuration());
+        //更新状态,并且删除缓存
+        merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
+                ,k->merchantMapper.updateOpen(merchantId));
     }
 
     //快捷的发送至MQ删除文件

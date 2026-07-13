@@ -20,4 +20,7 @@ public interface MerchantService {
     public void updateMerchantMessage(MerchantDTO merchant);
     public String getUpdatePasswordOpt();
     public void updatePassword(String newPassword, String opt);
+    public String getDeleteMerchantOpt();
+    public void deleteMerchant(String opt);
+    public void updateOpen();
 }

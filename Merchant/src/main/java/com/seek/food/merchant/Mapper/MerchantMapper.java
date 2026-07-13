@@ -20,5 +20,22 @@ public interface MerchantMapper {
     public boolean updateHomeImage(long merchantId,String addr,String oldAddr);
     public boolean updateMessage(MerchantDTO merchantDTO);
     public String getPhoneNumber(long merchantId);
-    public void updatePassword(long merchantId,String password);
+    public boolean updatePassword(long merchantId,String password);
+    public boolean deleteMerchant(long merchantId);
+    public boolean updateOpen(long merchantId);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

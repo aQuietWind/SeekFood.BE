@@ -122,6 +122,15 @@
         update merchant set merchant_password=#{password} where merchant_id=#{merchantId}
     </update>
 
+    <delete id="deleteMerchant">
+        delete from merchant where merchant_id=#{merchantId}
+    </delete>
+
+    <update id="updateOpen">
+        <!-- mysql底层为数字存储boolean值，所以可直接进行数字判断（1=true，0=false） -->
+        update merchant set is_open=1-is_open where merchant_id=#{merchantId} and is_qualified=1
+    </update>
+
 
 
 

@@ -72,6 +72,7 @@ public class JvmCaffeineParent<T,E> {
             }
             //从目标方法中获取值
             E result=loader.apply(k);
+            System.err.println(result);
             //防止缓存穿透,在分布式场景下预先写入redis中，除此，可用额外缓存空值代替方案进行jvm处直接判断是否为缓存
             if (result==null){
                 stringRedisTemplate.opsForValue().set(redisKeyName, caffeineFail, duration);
