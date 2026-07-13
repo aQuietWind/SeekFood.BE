@@ -79,6 +79,8 @@ public class JvmCaffeineParent<T,E> {
             }
             //不是缓存穿透则存储到redis做分布式缓存后返回
             try {
+                System.err.println(1);
+                System.out.println(redisKeyName);
                 stringRedisTemplate.opsForValue().set(redisKeyName, mapper.writeValueAsString(result), DurationUtil.getSecondDuration(duration));}
             catch (JsonProcessingException e) {throw new RuntimeException(e);}
             return result;

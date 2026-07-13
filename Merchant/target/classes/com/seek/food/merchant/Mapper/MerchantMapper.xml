@@ -114,7 +114,13 @@
         where merchant_id=#{merchantId}
     </update>
 
+    <select id="getPhoneNumber" resultType="java.lang.String">
+        select merchant_master_phone_number from merchant where merchant_id=#{merchantId}
+    </select>
 
+    <update id="updatePassword">
+        update merchant set merchant_password=#{password} where merchant_id=#{merchantId}
+    </update>
 
 
 

@@ -87,7 +87,17 @@ public class MerchantController {
         merchantService.updateMerchantMessage(merchant);
         return Result.success();
     }
-
+    //获取更改商家密码所需的验证码
+    @GetMapping(RequestPathEnum.Merchant_Update_Password_Opt)
+    public Result<String> getUpdatePasswordOpt(){
+        return Result.success(merchantService.getUpdatePasswordOpt());
+    }
+    //更改商家密码
+    @PutMapping(RequestPathEnum.Merchant_Update_Password)
+    public Result<Void> updatePassword(String newPassword, String opt){
+        merchantService.updatePassword(newPassword,opt);
+        return Result.success();
+    }
 
 
 }

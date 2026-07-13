@@ -393,6 +393,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },
     {
+      "name": "merchant.self.redis.key.merchant-phone-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
       "name": "merchant.self.redis.key.merchant-register-opt",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"

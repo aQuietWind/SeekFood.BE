@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
 import com.seek.food.config.NacosConfig.Merchant.*;
 import com.seek.food.dto.Merchant.MerchantDTO;
 import com.seek.food.merchant.Caffeine.MerchantCaffeine;
+import com.seek.food.merchant.Caffeine.PhoneCaffeine;
 import com.seek.food.merchant.Mapper.MerchantMapper;
 import com.seek.food.merchant.Service.MerchantService;
 import com.seek.food.util.Context.TokenIdContext;
@@ -13,6 +14,7 @@ import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
 import com.seek.food.util.MQ.MQUtil;
+import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -37,6 +39,7 @@ public class MerchantServiceImpl implements MerchantService {
     private final MerchantEsTableConfig merchantEsTableConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final MerchantCaffeine merchantCaffeine;
+    private final PhoneCaffeine phoneCaffeine;
     private final StringRedisTemplate stringRedisTemplate;
     private final ElasticsearchClient esClient;
     private final MerchantExchangeConfig merchantExchangeConfig;
@@ -46,7 +49,7 @@ public class MerchantServiceImpl implements MerchantService {
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
     , MerchantEsTableConfig merchantEsTableConfig, CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine
     , StringRedisTemplate stringRedisTemplate, ElasticsearchClient esClient, MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
-    ,RabbitTemplate rabbitTemplate) {
+    ,RabbitTemplate rabbitTemplate,PhoneCaffeine phoneCaffeine) {
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.merchantParamsRulesConfig = merchantParamsRulesConfig;
@@ -57,6 +60,7 @@ public class MerchantServiceImpl implements MerchantService {
         this.stringRedisTemplate = stringRedisTemplate;
         this.esClient = esClient;
         this.rabbitTemplate = rabbitTemplate;
+        this.phoneCaffeine = phoneCaffeine;
         //提前创建目录
         FileSave.createDestDir(merchantParamsRulesConfig.getMasterImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getProofImageDest());
@@ -269,6 +273,36 @@ public class MerchantServiceImpl implements MerchantService {
         //更新信息,并且删除缓存
         merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getRedisKey(merchantId)
                 ,k->merchantMapper.updateMessage(merchant));
+    }
+
+    //获取更改商家密码的验证码
+    public String getUpdatePasswordOpt(){
+        //获取Id并且自动检查
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //获取手机号，做发送手机号业务模拟
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getDuration(),String.class,k->merchantMapper.getPhoneNumber(merchantId)
+        );
+        //生成6位数验证码并且返回
+        return OPTUtil.generateOPTAndRecord(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdatePasswordOpt().getRedisKey(phoneNumber)
+        ,merchantRedisKeyConfig.getMerchantUpdatePasswordOpt().getDuration(),6);
+    }
+    //改密码
+    public void updatePassword(String newPassword, String opt){
+        //检查密码格式
+        commonParamRulesConfig.passwordCheck(newPassword);
+        //获取Id并且自动检查
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //获取手机号，做发送手机号业务模拟
+        String phoneNumber=phoneCaffeine.getAndAutoLoad(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantPhoneCaffeine().getDuration(),String.class,k->merchantMapper.getPhoneNumber(merchantId)
+        );
+        //检查验证码
+        OPTUtil.checkOPT(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdatePasswordOpt().getRedisKey(phoneNumber),opt);
+        //检查冷却期，防止恶意刷接口
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdatePasswordCooldown().getRedisKey(merchantId)
+        ,merchantRedisKeyConfig.getMerchantUpdatePasswordCooldown().getDuration());
+        merchantMapper.updatePassword(merchantId,newPassword);
     }
 
     //快捷的发送至MQ删除文件

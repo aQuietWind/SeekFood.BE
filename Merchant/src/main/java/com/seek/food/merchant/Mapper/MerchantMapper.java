@@ -19,4 +19,6 @@ public interface MerchantMapper {
     public String getHomeImage(long merchantId);
     public boolean updateHomeImage(long merchantId,String addr,String oldAddr);
     public boolean updateMessage(MerchantDTO merchantDTO);
+    public String getPhoneNumber(long merchantId);
+    public void updatePassword(long merchantId,String password);
 }

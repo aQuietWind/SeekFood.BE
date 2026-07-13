@@ -17,7 +17,8 @@ public class RequestPathEnum {
     public static final String Merchant_Update_Message = "/message";
     public static final String Merchant_Proof = "/proof";
     public static final String Merchant_Show = "/show";
-    public static final String Merchant_Apply_Qualified = "/apply/qualified";
+    public static final String Merchant_Update_Password_Opt = "/password/opt";
+    public static final String Merchant_Update_Password = "/password";
     public static final String Merchant_Open = "/open";
 
 }

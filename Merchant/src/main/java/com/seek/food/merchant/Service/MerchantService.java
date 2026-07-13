@@ -18,4 +18,6 @@ public interface MerchantService {
     public void replaceShowImage(MultipartFile image,int index);
     public void updateHomeImage(MultipartFile image);
     public void updateMerchantMessage(MerchantDTO merchant);
+    public String getUpdatePasswordOpt();
+    public void updatePassword(String newPassword, String opt);
 }

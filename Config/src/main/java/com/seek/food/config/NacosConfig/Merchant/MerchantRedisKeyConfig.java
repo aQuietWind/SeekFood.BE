@@ -28,4 +28,5 @@ public class MerchantRedisKeyConfig {
     private RedisKeyData merchantMasterIsSet;
     private RedisKeyData merchantIdCount;
     private RedisKeyData merchantMessageCaffeine;
+    private RedisKeyData merchantPhoneCaffeine;
 }
