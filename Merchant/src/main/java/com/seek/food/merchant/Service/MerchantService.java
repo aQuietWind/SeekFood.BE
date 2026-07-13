@@ -17,4 +17,5 @@ public interface MerchantService {
     public void addShowImage(MultipartFile image);
     public void removeShowImage(int index);
     public void replaceShowImage(MultipartFile image,int index);
+    public void updateHomeImage(MultipartFile image);
 }

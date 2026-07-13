@@ -16,4 +16,6 @@ public interface MerchantMapper {
     public String getShowImageByIndex(long merchantId, int index);
     public boolean removeShowImage(long merchantId,String oldAddr,int index);
     public boolean replaceShowImage(long merchantId,String addr,String oldAddr,int index);
+    public String getHomeImage(long merchantId);
+    public boolean updateHomeImage(long merchantId,String addr,String oldAddr);
 }

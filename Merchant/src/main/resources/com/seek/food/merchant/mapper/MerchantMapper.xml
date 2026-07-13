@@ -94,6 +94,15 @@
         where merchant_id=#{merchantId} and JSON_UNQUOTE(JSON_EXTRACT(merchant_show_image_addr, CONCAT('$[',#{index},']')))=#{oldAddr}
     </update>
 
+    <select id="getHomeImage" resultType="java.lang.String">
+        select merchant_home_image_addr from merchant where merchant_id=#{merchantId}
+    </select>
+
+    <update id="updateHomeImage">
+        update merchant set merchant_home_image_addr=#{addr} where merchant_id=#{merchantId} and merchant_home_image_addr
+        <if test="oldAddr!=null">=#{oldAddr}</if>
+        <if test="oldAddr==null">IS NULL</if>
+    </update>
 
 
 

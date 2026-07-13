@@ -75,6 +75,12 @@ public class MerchantController {
         merchantService.replaceShowImage(file,index);
         return Result.success();
     }
+    //更换封面图片
+    @PutMapping(RequestPathEnum.Merchant_Update_Home_Image)
+    public Result<Void> updateHomeImage(@RequestBody MultipartFile file){
+        merchantService.updateHomeImage(file);
+        return Result.success();
+    }
 
 
 

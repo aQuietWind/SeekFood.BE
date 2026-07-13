@@ -17,4 +17,5 @@ public class MerchantParamsRulesConfig {
     private String masterImageDest;
     private String proofImageDest;
     private String showImageDest;
+    private String homeImageDest;
 }

@@ -308,6 +308,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantCaffeineConfig"
     },
     {
+      "name": "merchant.self.params.rules.home-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
+    },
+    {
       "name": "merchant.self.params.rules.master-image-dest",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantParamsRulesConfig"
@@ -409,6 +414,11 @@
     },
     {
       "name": "merchant.self.redis.key.merchant-replace-show-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
+      "name": "merchant.self.redis.key.merchant-update-home-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },

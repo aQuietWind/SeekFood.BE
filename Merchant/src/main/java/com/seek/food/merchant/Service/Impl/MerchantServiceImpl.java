@@ -61,6 +61,7 @@ public class MerchantServiceImpl implements MerchantService {
         FileSave.createDestDir(merchantParamsRulesConfig.getMasterImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getProofImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getShowImageDest());
+        FileSave.createDestDir(merchantParamsRulesConfig.getHomeImageDest());
         this.merchantExchangeConfig = merchantExchangeConfig;
     }
 
@@ -207,7 +208,30 @@ public class MerchantServiceImpl implements MerchantService {
         quickToMQDeleteFile(merchantParamsRulesConfig.getShowImageDest(),oldAddr);
     }
 
-    //快捷的二次函数化
+    //更新商家的封面图片
+    @Override
+    public void updateHomeImage(MultipartFile image){
+        //获取id
+        long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+        //冷却期校验
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateHomeCooldown().getRedisKey(merchantId)
+                ,merchantRedisKeyConfig.getMerchantUpdateHomeCooldown().getDuration());
+        //获取旧头像路径
+        String oldAddr=merchantMapper.getHomeImage(merchantId);
+        //快速保存
+        String addr=FileSave.quickCheckAndSaveFile(image,merchantParamsRulesConfig.getHomeImageDest(), commonParamRulesConfig.getImageSize()
+                , commonParamRulesConfig.getImageType());
+        //检查是否成功
+        if (!merchantMapper.updateHomeImage(merchantId,addr,oldAddr)) {
+            //发消息使已经保存文件删除
+            quickToMQDeleteFile(merchantParamsRulesConfig.getHomeImageDest(),addr);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        }
+        //如果成功,且旧地址不为空,发送消息到mq中删除旧文件
+        if (oldAddr!=null&&!oldAddr.isEmpty()) quickToMQDeleteFile(merchantParamsRulesConfig.getHomeImageDest(),oldAddr);
+    }
+
+    //快捷的发送至MQ删除文件
     private void quickToMQDeleteFile(String dest,String addr){
         //发消息使已经保存文件删除
         MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFileMerchantQueue().getRoutingKey()
