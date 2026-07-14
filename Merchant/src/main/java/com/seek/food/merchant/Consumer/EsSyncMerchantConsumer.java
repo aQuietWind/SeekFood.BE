@@ -40,7 +40,7 @@ public class EsSyncMerchantConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Delete_File_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Es_Sync_Merchant_Queue)
     public void deleteFileUserQueue(long merchantId){
         MerchantEsDTO merchant=merchantMapper.getEsMerchant(merchantId);
         if (merchant==null) {

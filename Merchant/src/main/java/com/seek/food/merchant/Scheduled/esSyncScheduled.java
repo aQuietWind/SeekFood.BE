@@ -37,8 +37,8 @@ public class esSyncScheduled {
     public void clearOldFiles() {
         //通过快速方法直接进行处理
         RedisUtil.readStreamAndHandle(stringRedisTemplate,esSyncStream.getName()
-        ,esSyncStream.getConsumer().getGroupName(),1,3,1,esSyncStream.getKeyName(),data->{
-            long merchantId=(Long) data;
+        ,esSyncStream.getConsumer().getGroupName(),1,10,1,esSyncStream.getKeyName(),data->{
+            long merchantId=Long.parseLong((String) data);
             try {
                 //获取数据并进行处理
                 MQUtil.send(merchantExchangeConfig.getExchangeName(), merchantExchangeConfig.getEsSyncMerchantQueue().getRoutingKey(),

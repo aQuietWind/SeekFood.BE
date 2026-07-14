@@ -110,8 +110,6 @@ public class MerchantServiceImpl implements MerchantService {
         //设置该信息已经被修改
         RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantMasterIsSet().getName(),merchantId
                 ,true,commonParamRulesConfig.getIdCapacity());
-        //通知同步
-        esSync(merchantId);
     }
 
     //添加营业证明照片
@@ -375,18 +373,21 @@ public class MerchantServiceImpl implements MerchantService {
         MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFileMerchantQueue().getRoutingKey()
                 , Paths.get(dest,addr).toString(),rabbitTemplate);
     }
+
     //快速获取证明图片旧地址
     private String quickGetProofOldAddr(long merchantId,int index){
         String oldAddr=merchantMapper.getMerchantProofImageByIndex(merchantId,index);
         if (oldAddr==null)throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         return oldAddr;
     }
+
     //快速获取展示图片旧地址
     private String quickGetShowOldAddr(long merchantId,int index){
         String oldAddr=merchantMapper.getShowImageByIndex(merchantId,index);
         if (oldAddr==null)throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         return oldAddr;
     }
+
     //快速清除商家缓存
     private void quickDeleteCaffeine(long merchantId){
         merchantCaffeine.deleteAllCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId));
@@ -396,8 +397,8 @@ public class MerchantServiceImpl implements MerchantService {
     public void esSync(long merchantId){
         RedisUtil.oftenSetBitAndAct(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId
         ,true,commonParamRulesConfig.getIdCapacity(),()->{
-            Map<String,Object> map = new HashMap<>();
-            map.put(esSyncStream.getKeyName(),merchantId);
+            Map<String,String> map = new HashMap<>();
+            map.put(esSyncStream.getKeyName(),""+merchantId);
             stringRedisTemplate.opsForStream().add(esSyncStream.getName(),map);
         });
     }

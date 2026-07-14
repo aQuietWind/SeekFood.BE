@@ -27,6 +27,15 @@
         <result property="qualified" column="is_qualified" />
         <result property="open" column="is_open" />
     </resultMap>
+    <!-- Es-Mysql字段映射 -->
+    <resultMap id="EsMerchantResultMap" type="com.seek.food.dto.Merchant.MerchantEsDTO">
+        <id property="merchant_id" column="merchant_id"/>
+        <result property="merchant_name" column="merchant_name"/>
+        <result property="merchant_home_image_addr" column="merchant_home_image_addr"/>
+        <result property="merchant_order_amount" column="merchant_order_amount"/>
+        <result property="merchant_collect_amount" column="merchant_collect_amount"/>
+        <result property="is_open" column="is_open" />
+    </resultMap>
 
     <select id="getMerchantById" resultMap="MerchantResultMap">
         select
@@ -131,7 +140,16 @@
         update merchant set is_open=1-is_open where merchant_id=#{merchantId} and is_qualified=1
     </update>
 
-
+    <select id="getEsMerchant" resultMap="EsMerchantResultMap">
+        select
+            merchant_id,
+            merchant_name,
+            merchant_home_image_addr,
+            merchant_collect_amount,
+            merchant_order_amount,
+            is_open
+        from merchant where merchant_id=#{merchantId}
+    </select>
 
 
 

@@ -61,7 +61,7 @@ public class EsUtil{
     public static void quickUpdate(ElasticsearchClient esClient, String index, long docId, Object value){
         try{
             esClient.update(u -> u
-                    .index("test_index")
+                    .index(index)
                     .id(""+docId)
                     // 传入完整对象，全量覆盖原有文档字段
                     .doc(value)
