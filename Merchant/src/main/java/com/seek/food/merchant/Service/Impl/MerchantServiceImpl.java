@@ -40,12 +40,10 @@ public class MerchantServiceImpl implements MerchantService {
     private final MerchantMapper merchantMapper;
     private final MerchantRedisKeyConfig merchantRedisKeyConfig;
     private final MerchantParamsRulesConfig merchantParamsRulesConfig;
-    private final MerchantEsTableConfig merchantEsTableConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final MerchantCaffeine merchantCaffeine;
     private final PhoneCaffeine phoneCaffeine;
     private final StringRedisTemplate stringRedisTemplate;
-    private final ElasticsearchClient esClient;
     private final MerchantExchangeConfig merchantExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
@@ -53,17 +51,15 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
-    , MerchantEsTableConfig merchantEsTableConfig, CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine
-    , StringRedisTemplate stringRedisTemplate, ElasticsearchClient esClient, MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
+    , CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine, StringRedisTemplate stringRedisTemplate
+    , MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
     , RabbitTemplate rabbitTemplate, PhoneCaffeine phoneCaffeine, CommonRedisKeyConfig commonRedisKeyConfig) {
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.merchantParamsRulesConfig = merchantParamsRulesConfig;
-        this.merchantEsTableConfig = merchantEsTableConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.merchantCaffeine = merchantCaffeine;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.esClient = esClient;
         this.rabbitTemplate = rabbitTemplate;
         this.phoneCaffeine = phoneCaffeine;
         this.esSyncStream = merchantRedisStreamConfig.getEsSyncStream();

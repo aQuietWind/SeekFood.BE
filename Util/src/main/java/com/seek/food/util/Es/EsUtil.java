@@ -2,9 +2,12 @@ package com.seek.food.util.Es;
 
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch._types.ElasticsearchException;
+import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch._types.Script;
 import co.elastic.clients.elasticsearch._types.ScriptSource;
 import co.elastic.clients.elasticsearch.core.UpdateRequest;
+import co.elastic.clients.elasticsearch.core.UpdateResponse;
 import co.elastic.clients.json.JsonData;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -14,7 +17,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Slf4j
-public class EsUtil {
+public class EsUtil{
     //返回一个对某一字段自行自增自减的请求
     public static UpdateRequest getUpdateStepRequest(String index,String id
     ,String field,int step){
@@ -28,7 +31,6 @@ public class EsUtil {
                     }
                 """)
         );
-
         //构建 Script,并且将参数填充
         Script script = Script.of(s -> s
                 .source(scriptSource)
@@ -37,8 +39,7 @@ public class EsUtil {
                         "step", JsonData.of(step)
                 ))
         );
-
-        // 3. 构建 UpdateRequest并且返回
+        //构建 UpdateRequest并且返回
         return UpdateRequest.of(u -> u
                 .index(index)
                 .id(id)
@@ -46,7 +47,7 @@ public class EsUtil {
         );
     }
 
-    //快速构建新增脚本
+    //快速新增
     public static void quickInsert(ElasticsearchClient esClient, String index, long id, Object value){
         try {
             esClient.index(i -> i.index(index)
@@ -57,4 +58,32 @@ public class EsUtil {
             throw new BizException(ErrorCodeEnum.SERVER_ERROR);
         }
     }
+
+    //快速进行全量更新
+    public static void quickUpdate(ElasticsearchClient esClient, String index, long docId, Object value){
+        try{
+            esClient.update(u -> u
+                    .index("test_index")
+                    .id(""+docId)
+                    // 传入完整对象，全量覆盖原有文档字段
+                    .doc(value)
+                    // 关键：关闭自动新增，文档不存在直接返回not found
+                    .docAsUpsert(false)
+                    // 并发乐观锁冲突自动重试3次
+                    .retryOnConflict(3) ,Void.class);
+        } catch (IOException e) {
+            log.error("ES更新IO异常 index:{}, id:{}", index, docId, e);
+            throw new BizException(ErrorCodeEnum.SERVER_ERROR);
+        }catch (ElasticsearchException e) {
+            // 文档不存在/索引不存在都会返回404
+            if (e.status() == 404) return;
+            // 其他ES服务异常（版本冲突、集群不可用等）
+            log.error("ES服务执行异常 index:{}, id:{}", index, docId, e);
+            throw new BizException(ErrorCodeEnum.SERVER_ERROR);
+        } catch (Exception e) {
+            log.error("ES更新未知异常 index:{}, id:{}", index, docId, e);
+            throw new BizException(ErrorCodeEnum.SERVER_ERROR);
+        }
+    }
+
 }

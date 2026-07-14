@@ -1,6 +1,7 @@
 package com.seek.food.merchant.Mapper;
 
 import com.seek.food.dto.Merchant.MerchantDTO;
+import com.seek.food.dto.Merchant.MerchantEsDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 
@@ -23,6 +24,7 @@ public interface MerchantMapper {
     public boolean updatePassword(long merchantId,String password);
     public boolean deleteMerchant(long merchantId);
     public boolean updateOpen(long merchantId);
+    public MerchantEsDTO getEsMerchant(long merchantId);
 
 
 
