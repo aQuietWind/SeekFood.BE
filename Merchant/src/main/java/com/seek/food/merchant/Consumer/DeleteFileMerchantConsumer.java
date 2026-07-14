@@ -28,7 +28,7 @@ public class DeleteFileMerchantConsumer {
 
 
     @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Delete_File_Queue)
-    public void deleteFileUserQueue(String path){
+    public void deleteFileMerchantQueue(String path){
         try {
             FileRemove.removeFileByPath(path);
         }catch (Exception e){

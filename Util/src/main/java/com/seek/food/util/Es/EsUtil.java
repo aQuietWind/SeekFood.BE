@@ -3,11 +3,9 @@ package com.seek.food.util.Es;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
-import co.elastic.clients.elasticsearch._types.Result;
 import co.elastic.clients.elasticsearch._types.Script;
 import co.elastic.clients.elasticsearch._types.ScriptSource;
 import co.elastic.clients.elasticsearch.core.UpdateRequest;
-import co.elastic.clients.elasticsearch.core.UpdateResponse;
 import co.elastic.clients.json.JsonData;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -84,6 +82,14 @@ public class EsUtil{
             log.error("ES更新未知异常 index:{}, id:{}", index, docId, e);
             throw new BizException(ErrorCodeEnum.SERVER_ERROR);
         }
+    }
+
+    //快速删除
+    public static void quickDelete(ElasticsearchClient esClient, String index, long docId) throws IOException {
+        esClient.delete(d -> d
+                .index("test_index")
+                .id(""+docId)
+        );
     }
 
 }
