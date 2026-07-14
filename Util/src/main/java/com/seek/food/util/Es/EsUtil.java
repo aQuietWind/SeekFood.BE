@@ -87,7 +87,7 @@ public class EsUtil{
     //快速删除
     public static void quickDelete(ElasticsearchClient esClient, String index, long docId) throws IOException {
         esClient.delete(d -> d
-                .index("test_index")
+                .index(index)
                 .id(""+docId)
         );
     }

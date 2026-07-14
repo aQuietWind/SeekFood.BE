@@ -373,6 +373,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },
     {
+      "name": "merchant.self.redis.key.merchant-es-sync-record",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
       "name": "merchant.self.redis.key.merchant-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
@@ -463,9 +468,19 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },
     {
+      "name": "merchant.self.redis.stream.es-sync-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
+    },
+    {
       "name": "merchant.self.redis.stream.old-file-stream",
       "type": "com.seek.food.config.Data.RedisStreamData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
+    },
+    {
+      "name": "mq.name.bind.merchant-exchange.delete-es-merchant-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
     {
       "name": "mq.name.bind.merchant-exchange.delete-file-merchant-queue",
@@ -474,6 +489,11 @@
     },
     {
       "name": "mq.name.bind.merchant-exchange.delete-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.merchant-exchange.es-sync-merchant-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
