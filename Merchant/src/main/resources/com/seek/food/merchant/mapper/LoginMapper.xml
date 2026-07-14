@@ -16,6 +16,8 @@
         <result property="merchantShowImageAddr" column="merchant_show_image_addr"/>
         <result property="merchantShowDescription" column="merchant_show_description"/>
         <result property="merchantAddr" column="merchant_addr"/>
+        <result property="merchantLon" column="merchant_lon"/>
+        <result property="merchantLat" column="merchant_lat"/>
         <result property="merchantOrderAmount" column="merchant_order_amount"/>
         <result property="merchantFirstCommentAmount" column="merchant_first_comment_amount"/>
         <result property="merchantLikeAmount" column="merchant_like_amount"/>
@@ -38,6 +40,8 @@
             merchant_show_image_addr,
             merchant_show_description,
             merchant_addr,
+            merchant_lon,
+            merchant_lat,
             merchant_order_amount,
             merchant_first_comment_amount,
             merchant_like_amount,
@@ -59,6 +63,8 @@
             merchant_show_image_addr,
             merchant_show_description,
             merchant_addr,
+            merchant_lon,
+            merchant_lat,
             merchant_order_amount,
             merchant_first_comment_amount,
             merchant_like_amount,

@@ -19,6 +19,8 @@ public class MerchantDTO {
     private String merchantShowImageAddr;
     private String merchantShowDescription;
     private String merchantAddr;
+    private Double merchantLon;
+    private Double merchantLat;
     private Integer merchantOrderAmount;
     private Integer merchantFirstCommentAmount;
     private Integer merchantLikeAmount;

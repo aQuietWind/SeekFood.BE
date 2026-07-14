@@ -1,6 +1,5 @@
 package com.seek.food.merchant.Service.Impl;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
@@ -15,7 +14,6 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
-import com.seek.food.util.JWT.TokenUtil;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
@@ -26,7 +24,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
@@ -270,6 +267,7 @@ public class MerchantServiceImpl implements MerchantService {
         merchantParamsRulesConfig.merchantNameCheck(merchant.getMerchantName());
         merchantParamsRulesConfig.showDescriptionCheck(merchant.getMerchantShowDescription());
         merchantParamsRulesConfig.merchantAddrCheck(merchant.getMerchantAddr());
+        commonParamRulesConfig.lonAndLatCheck(merchant.getMerchantLon(),merchant.getMerchantLat());
         //检查冷却期
         RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getRedisKey(merchantId)
                 ,merchantRedisKeyConfig.getMerchantUpdateMessageCooldown().getDuration());

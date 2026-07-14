@@ -39,6 +39,10 @@ Put http://localhost:9200/merchant
                          "type":"keyword",
                          "index":false
                        },
+                       "merchant_location":{
+                         "type":"geo_point",
+                         "index":false
+                       },
                        "is_open":{
                           "type":"boolean"
                        }

@@ -16,6 +16,8 @@
         <result property="merchantShowImageAddr" column="merchant_show_image_addr"/>
         <result property="merchantShowDescription" column="merchant_show_description"/>
         <result property="merchantAddr" column="merchant_addr"/>
+        <result property="merchantLon" column="merchant_lon"/>
+        <result property="merchantLat" column="merchant_lat"/>
         <result property="merchantOrderAmount" column="merchant_order_amount"/>
         <result property="merchantFirstCommentAmount" column="merchant_first_comment_amount"/>
         <result property="merchantLikeAmount" column="merchant_like_amount"/>
@@ -34,6 +36,7 @@
         <result property="merchant_home_image_addr" column="merchant_home_image_addr"/>
         <result property="merchant_order_amount" column="merchant_order_amount"/>
         <result property="merchant_collect_amount" column="merchant_collect_amount"/>
+        <result property="merchant_location" column="merchant_location"/>
         <result property="is_open" column="is_open" />
     </resultMap>
 
@@ -47,6 +50,8 @@
             merchant_show_image_addr,
             merchant_show_description,
             merchant_addr,
+            merchant_lon,
+            merchant_lat,
             merchant_order_amount,
             merchant_first_comment_amount,
             merchant_like_amount,
@@ -119,6 +124,7 @@
             <if test="merchantName!=null">merchant_name=#{merchantName},</if>
             <if test="merchantShowDescription!=null">merchant_show_description=#{merchantShowDescription},</if>
             <if test="merchantAddr!=null">merchant_addr=#{merchantAddr},</if>
+            <if test="merchantLon!=null and merchantLat!=null">merchant_lon=#{merchantLon},merchant_lat=#{merchantLat},</if>
         </set>
         where merchant_id=#{merchantId}
     </update>
@@ -147,6 +153,8 @@
             merchant_home_image_addr,
             merchant_collect_amount,
             merchant_order_amount,
+            <!-- es的字符串格式为纬经度格式，所以这里需要反转 -->
+            concat(merchant_lat,',',merchant_lon) as merchant_location,
             is_open
         from merchant where merchant_id=#{merchantId}
     </select>

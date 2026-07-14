@@ -41,12 +41,16 @@ public class EsSyncMerchantConsumer {
 
 
     @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Es_Sync_Merchant_Queue)
-    public void deleteFileUserQueue(long merchantId){
+    public void esSyncMerchantQueue(long merchantId){
         MerchantEsDTO merchant=merchantMapper.getEsMerchant(merchantId);
+        //校验该商家是否已经删除
         if (merchant==null) {
             ackState(merchantId);
             return;
         }
+        //检验是否为空
+        if (merchant.getMerchant_location().equals(",")) merchant.setMerchant_location(null);
+        System.err.println(merchant.getMerchant_location());
         //尝试同步
         try {
             EsUtil.quickUpdate(esClient,merchantEsTableConfig.getIndexName(),merchantId,merchant);

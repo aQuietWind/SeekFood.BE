@@ -13,6 +13,8 @@ CREATE TABLE `merchant` (
                             `merchant_show_image_addr` JSON NOT NULL COMMENT '店家展示照片',
                             `merchant_show_description` varchar(300) COMMENT '店家简介',
                             `merchant_addr` varchar(60) COMMENT '店家地址',
+                            `merchant_lon` double COMMENT '店家经度',
+                            `merchant_lat` double COMMENT '店家纬度',
                             `merchant_order_amount` int NOT NULL DEFAULT 0 COMMENT '完成的订单总数',
                             `merchant_first_comment_amount` int NOT NULL DEFAULT 0 COMMENT '拥有的一级评论数',
                             `merchant_like_amount` int NOT NULL DEFAULT 0 COMMENT '点赞数',

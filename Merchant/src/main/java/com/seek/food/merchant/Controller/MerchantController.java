@@ -44,12 +44,14 @@ public class MerchantController {
         merchantService.addMerchantProofImage(file);
         return Result.success();
     }
+
     //删除商家的营业证明
     @DeleteMapping(RequestPathEnum.Merchant_Proof)
     public Result<Void> removeMerchantProofImage(int index){
         merchantService.removeMerchantProofImage(index);
         return Result.success();
     }
+
     //替换商家的营业证明
     @PutMapping(RequestPathEnum.Merchant_Proof)
     public Result<Void> replaceMerchantProofImage(@RequestBody MultipartFile file,int index){
@@ -63,52 +65,61 @@ public class MerchantController {
         merchantService.addShowImage(file);
         return Result.success();
     }
+
     //删除商家的展示图
     @DeleteMapping(RequestPathEnum.Merchant_Show)
     public Result<Void> removeShowImage(int index){
         merchantService.removeShowImage(index);
         return Result.success();
     }
+
     //替换商家的展示图
     @PutMapping(RequestPathEnum.Merchant_Show)
     public Result<Void> replaceShowImage(@RequestBody MultipartFile file,int index){
         merchantService.replaceShowImage(file,index);
         return Result.success();
     }
+
     //更换封面图片
     @PutMapping(RequestPathEnum.Merchant_Update_Home_Image)
     public Result<Void> updateHomeImage(@RequestBody MultipartFile file){
         merchantService.updateHomeImage(file);
         return Result.success();
     }
+
     //更改商家的信息
     @PutMapping(RequestPathEnum.Merchant_Update_Message)
     public Result<Void> updateMessage(@RequestBody MerchantDTO merchant){
         merchantService.updateMerchantMessage(merchant);
         return Result.success();
     }
+
     //获取更改商家密码所需的验证码
     @GetMapping(RequestPathEnum.Merchant_Update_Password_Opt)
     public Result<String> getUpdatePasswordOpt(){
         return Result.success(merchantService.getUpdatePasswordOpt());
     }
+
     //更改商家密码
     @PutMapping(RequestPathEnum.Merchant_Update_Password)
     public Result<Void> updatePassword(String newPassword, String opt){
         merchantService.updatePassword(newPassword,opt);
         return Result.success();
     }
+
     //获取注销所需的验证码
     @GetMapping(RequestPathEnum.Merchant_Delete_Opt)
     public Result<String> deleteMerchant(){
         return Result.success(merchantService.getDeleteMerchantOpt());
     }
+
     //注销账户
     @DeleteMapping(RequestPathEnum.Merchant_Delete)
     public Result<Void> deleteMerchant(String opt){
         merchantService.deleteMerchant(opt);
         return Result.success();
     }
+
     //开业或者停业
     @PutMapping(RequestPathEnum.Merchant_Open)
     public Result<Void> openMerchant(){

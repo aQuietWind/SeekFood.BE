@@ -58,6 +58,11 @@ public class CommonParamRulesConfig {
     public void personNameCheck(String personName) {
         if(personName==null||personName.length()>personNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
-
+    public void lonAndLatCheck(Double lon, Double lat) {
+        if (lon!=null&&lat==null) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (lon==null&&lat!=null) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (lon==null)return;
+        if (lon>180||lon< -180||lat>90||lat< -90) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
 
 }
