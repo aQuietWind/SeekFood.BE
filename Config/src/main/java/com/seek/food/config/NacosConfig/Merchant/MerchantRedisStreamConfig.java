@@ -11,4 +11,5 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Merchant_Redis_Stream_Config)
 public class MerchantRedisStreamConfig {
     private RedisStreamData oldFileStream;
+    private RedisStreamData esSyncStream;
 }

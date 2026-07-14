@@ -1,6 +1,7 @@
 package com.seek.food.merchant.Service.Impl;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RefreshScope
@@ -37,7 +40,6 @@ public class MerchantServiceImpl implements MerchantService {
     private final MerchantMapper merchantMapper;
     private final MerchantRedisKeyConfig merchantRedisKeyConfig;
     private final MerchantParamsRulesConfig merchantParamsRulesConfig;
-    private final MerchantRedisStreamConfig merchantRedisStreamConfig;
     private final MerchantEsTableConfig merchantEsTableConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final MerchantCaffeine merchantCaffeine;
@@ -47,6 +49,7 @@ public class MerchantServiceImpl implements MerchantService {
     private final MerchantExchangeConfig merchantExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
+    private final RedisStreamData esSyncStream;
 
     @Autowired
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
@@ -56,7 +59,6 @@ public class MerchantServiceImpl implements MerchantService {
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.merchantParamsRulesConfig = merchantParamsRulesConfig;
-        this.merchantRedisStreamConfig = merchantRedisStreamConfig;
         this.merchantEsTableConfig = merchantEsTableConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.merchantCaffeine = merchantCaffeine;
@@ -64,6 +66,7 @@ public class MerchantServiceImpl implements MerchantService {
         this.esClient = esClient;
         this.rabbitTemplate = rabbitTemplate;
         this.phoneCaffeine = phoneCaffeine;
+        this.esSyncStream = merchantRedisStreamConfig.getEsSyncStream();
         //提前创建目录
         FileSave.createDestDir(merchantParamsRulesConfig.getMasterImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getProofImageDest());
@@ -383,6 +386,16 @@ public class MerchantServiceImpl implements MerchantService {
     //快速清除商家缓存
     private void quickDeleteCaffeine(long merchantId){
         merchantCaffeine.deleteAllCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId));
+    }
+
+    //通知进行同步
+    public void esSync(long merchantId){
+        RedisUtil.oftenSetBitAndAct(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId
+        ,true,commonParamRulesConfig.getIdCapacity(),()->{
+            Map<String,Object> map = new HashMap<>();
+            map.put(esSyncStream.getKeyName(),merchantId);
+            stringRedisTemplate.opsForStream().add(esSyncStream.getName(),map);
+        });
     }
 
 

@@ -2,6 +2,8 @@ package com.seek.food.util.Redis;
 
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.Function.RunFunction;
+import com.seek.food.util.Function.RunWithParam;
 import com.seek.food.util.TimeUtil.DurationUtil;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.connection.stream.*;
@@ -41,6 +43,22 @@ public class RedisUtil {
         );      //返回值是一个定义好的MapRecord的List形式
     }
 
+    //快速进行Stream获取消息并且消费,直至无法获取到消息
+    public static void readStreamAndHandle(StringRedisTemplate stringRedisTemplate, String streamName, String consumerGroupName, int consumerId
+            , int count, int waitSeconds,String streamKeyName, RunWithParam<Object> handler){
+        for (;true;) {
+            List<MapRecord<String, Object, Object>> records = RedisUtil.readStreamLastest(stringRedisTemplate, streamName
+                    , consumerGroupName, consumerId, count, waitSeconds);
+            if (records.isEmpty()) break;
+            //以下为业务逻辑
+            for (MapRecord<String, Object, Object> record : records) {
+                handler.function(record.getValue().get(streamKeyName));
+                //通过id确认消息
+                stringRedisTemplate.opsForStream().acknowledge(streamName,consumerGroupName,record.getId());
+            }
+        }
+    }
+
     //创建消费者组
     public static void createStreamConsumerGroup(StringRedisTemplate stringRedisTemplate,String queueName,String consumerGroupName){
         //可能已经存在生产者组
@@ -69,8 +87,28 @@ public class RedisUtil {
     public static boolean oftenGetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id,long idCapacity){
         return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName, (id % idCapacity)));
     }
+
     //个体BitMap获取值
     public static boolean getBit(StringRedisTemplate stringRedisTemplate,String redisKeyName){
         return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName, 0));
     }
+
+    //设置BitMap值成功后执行函数
+    public static void oftenSetBitAndAct(StringRedisTemplate stringRedisTemplate, String redisKeyName, long id
+            , boolean value, long idCapacity, RunFunction runFunction){
+        if (oftenSetBit(stringRedisTemplate,redisKeyName,id,value,idCapacity)) runFunction.function();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
