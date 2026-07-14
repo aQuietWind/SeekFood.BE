@@ -2,4 +2,6 @@ common:
   redis:
     key:
       name:
-        login-token: "common:token:login:Id:"
+        login-token: 
+          name: "common:token:login:Id:"
+          duration: null

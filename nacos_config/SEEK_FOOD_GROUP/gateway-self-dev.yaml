@@ -31,7 +31,12 @@ gateway:
         - /user/login/password
         - /user/register
         - /user/register/opt
-        - /user/user/password
+        - /merchant/register
+        - /merchant/register/opt
+        - /merchant/login
+        - /merchant/login/opt
+        - /merchant/login/password
+        - /merchant/login/password
         reject-path:
         - /testsetstes43435324634645746785
         - /654654

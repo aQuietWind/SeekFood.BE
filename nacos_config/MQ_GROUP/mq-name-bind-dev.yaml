@@ -11,12 +11,30 @@ mq:
         exchange-name: userExchange
         type: direct
         register-fund-queue:
-          name: userRegisterFundQueue
+          name: registerFundQueue
           routing-key: register
-        update-file-user-queue:
-          name: updateFileUserQueue
-          routing-key: file
+        delete-file-user-queue:
+          name: deleteFileUserQueue
+          routing-key: deleteFile
         delete-fund-queue:
           name: deleteFundQueue
           routing-key: delete
+      merchant-exchange:
+        exchange-name: merchantExchange
+        type: direct
+        register-fund-queue:
+          name: registerFundQueue
+          routing-key: register
+        delete-fund-queue:
+          name: deleteFundQueue
+          routing-key: delete
+        delete-file-merchant-queue:
+          name: deleteFileMerchantQueue
+          routing-key: deleteFile
+        delete-es-merchant-queue:
+          name: deleteEsMerchantQueue
+          routing-key: delete
+        es-sync-merchant-queue:
+          name: esSyncMerchantQueue
+          routing-key: esSync
 

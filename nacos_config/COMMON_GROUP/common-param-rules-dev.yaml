@@ -9,6 +9,7 @@ common:
       phone-number-regex: "\\d{11}"
       password-regex: "(?-U)\\w{8,20}"
       code-regex: "\\d{18}"
+      person-name-max: 50
       sex-values:
         - 1
         - 2
