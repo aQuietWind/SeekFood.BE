@@ -16,5 +16,6 @@ public class MerchantExchangeConfig {
     private QueueData registerFundQueue;
     private QueueData deleteFundQueue;
     private QueueData deleteFileMerchantQueue;
+    private QueueData deleteEsMerchantQueue;
     private QueueData esSyncMerchantQueue;
 }

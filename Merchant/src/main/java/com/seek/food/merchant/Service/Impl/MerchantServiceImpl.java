@@ -110,6 +110,8 @@ public class MerchantServiceImpl implements MerchantService {
         //设置该信息已经被修改
         RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantMasterIsSet().getName(),merchantId
                 ,true,commonParamRulesConfig.getIdCapacity());
+        //通知同步
+        esSync(merchantId);
     }
 
     //添加营业证明照片
@@ -257,6 +259,8 @@ public class MerchantServiceImpl implements MerchantService {
         if (oldAddr!=null&&!oldAddr.isEmpty()) quickToMQDeleteFile(merchantParamsRulesConfig.getHomeImageDest(),oldAddr);
         //清除缓存
         quickDeleteCaffeine(merchantId);
+        //通知同步
+        esSync(merchantId);
     }
 
     //更改商家的信息
@@ -276,6 +280,8 @@ public class MerchantServiceImpl implements MerchantService {
         //更新信息,并且删除缓存
         merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
                 ,k->merchantMapper.updateMessage(merchant));
+        //通知同步
+        esSync(merchantId);
     }
 
     //获取更改商家密码的验证码
@@ -345,7 +351,7 @@ public class MerchantServiceImpl implements MerchantService {
         //删除token存储
         stringRedisTemplate.delete(commonRedisKeyConfig.getLoginToken().getRedisKey(merchantId));
         //mq同步进行善后操作
-        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
+        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.gw完成etDeleteFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }
 
     //开业或者停业
@@ -359,6 +365,8 @@ public class MerchantServiceImpl implements MerchantService {
         //更新状态,并且删除缓存
         merchantCaffeine.updateAndRemoveCaffeine(merchantId,stringRedisTemplate,merchantRedisKeyConfig.getMerchantMessageCaffeine().getRedisKey(merchantId)
                 ,k->merchantMapper.updateOpen(merchantId));
+        //通知同步
+        esSync(merchantId);
     }
 
     //快捷的发送至MQ删除文件
