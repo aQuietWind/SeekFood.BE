@@ -16,5 +16,6 @@ public class MerchantEsTableConfig {
     private String merchantCollectAmount;
     private String merchantOrderAmount;
     private String merchantHomeImage;
+    private String merchantLocation;
     private String isOpen;
 }

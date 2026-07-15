@@ -173,6 +173,16 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
     },
     {
+      "name": "common.param.rules.need-number-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.need-number-min",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
       "name": "common.param.rules.password-regex",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
@@ -193,8 +203,18 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
     },
     {
+      "name": "common.param.rules.seed-number-max",
+      "type": "java.lang.Long",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
       "name": "common.param.rules.sex-values",
       "type": "java.util.HashSet<java.lang.Integer>",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
+      "name": "common.param.rules.should-amount-max",
+      "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
     },
     {
@@ -284,6 +304,11 @@
     },
     {
       "name": "merchant.self.es.merchant.merchant-id",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
+      "name": "merchant.self.es.merchant.merchant-location",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
     },

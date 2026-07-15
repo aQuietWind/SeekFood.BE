@@ -26,6 +26,10 @@ public class CommonParamRulesConfig {
     private HashSet<Integer> sexValues;
     private HashSet<String> imageType;
     private long imageSize;
+    private int needNumberMin;
+    private int needNumberMax;
+    private long seedNumberMax;
+    private int shouldAmountMax;
     //------------------------
     //校验参数
     public void userIdCheck(long userId) {
@@ -63,6 +67,15 @@ public class CommonParamRulesConfig {
         if (lon==null&&lat!=null) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         if (lon==null)return;
         if (lon>180||lon< -180||lat>90||lat< -90) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public void needNumberCheck(int needNumber) {
+        if (needNumber>needNumberMax||needNumber<needNumberMin) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public void seedNumberCheck(long seedNumber) {
+        if (seedNumber>needNumberMax||seedNumber<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public void shouldAmountCheck(int shouldAmount) {
+        if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
 }
