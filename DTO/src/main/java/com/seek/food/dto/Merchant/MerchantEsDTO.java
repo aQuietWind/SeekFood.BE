@@ -3,12 +3,16 @@ package com.seek.food.dto.Merchant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(indexName = "merchant")
 public class MerchantEsDTO {
+    @Id
     private Long merchantId;
     private String merchantName;
     private Integer merchantCollectAmount;

@@ -39,8 +39,8 @@
         </dependency>
         <!--        es核心客户端依赖 -->
         <dependency>
-            <groupId>co.elastic.clients</groupId>
-            <artifactId>elasticsearch-java</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
         </dependency>
         <!--        MQ的amqp连接依赖-->
         <dependency>

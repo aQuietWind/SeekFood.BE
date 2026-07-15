@@ -36,7 +36,6 @@
         <mybatis.version>3.0.5</mybatis.version>
         <springCloud.version>2025.0.2</springCloud.version>
         <springCloudAlibaba.version>2023.0.1.0</springCloudAlibaba.version>
-        <es.version>9.3.2</es.version>
         <jvmCaffeine.version>3.1.8</jvmCaffeine.version>
         <swagger.version>2.8.15</swagger.version>
         <self.version>1.0-SNAPSHOT</self.version>
@@ -68,18 +67,6 @@
                 <version>${springCloudAlibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <!-- es客户端依赖 -->
-            <dependency>
-                <groupId>co.elastic.clients</groupId>
-                <artifactId>elasticsearch-java</artifactId>
-                <version>${es.version}</version>
-            </dependency>
-            <!-- es传输层依赖（底层 HTTP 通信） -->
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-client</artifactId>
-                <version>${es.version}</version>
             </dependency>
             <!-- jvm缓存 -->
             <dependency>

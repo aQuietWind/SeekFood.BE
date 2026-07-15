@@ -72,7 +72,7 @@ public class CommonParamRulesConfig {
         if (needNumber>needNumberMax||needNumber<needNumberMin) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void seedNumberCheck(long seedNumber) {
-        if (seedNumber>needNumberMax||seedNumber<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (seedNumber>seedNumberMax||seedNumber<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void shouldAmountCheck(int shouldAmount) {
         if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);

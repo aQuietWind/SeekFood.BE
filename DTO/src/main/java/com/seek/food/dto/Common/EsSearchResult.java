@@ -5,6 +5,7 @@ import co.elastic.clients.elasticsearch.core.search.Hit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.core.SearchHit;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,12 +18,13 @@ public class EsSearchResult<T> {
     private List<T> results=new ArrayList<>();
     private List<Object> lastSortValues;
 
-    public static <T> EsSearchResult<T> success(List<Hit<T>> hits) {
+    public static <T> EsSearchResult<T> success(List<SearchHit<T>> hits) {
+        if (hits==null|| hits.isEmpty()) return null;
         EsSearchResult<T> esSearchResult = new EsSearchResult<>();
-        for (Hit<T> hit:hits) esSearchResult.getResults().add(hit.source());
-        //获取SearchAfter的值
-        List<FieldValue> lastSortValues = hits.getLast().sort();
-        esSearchResult.setLastSortValues(Collections.singletonList(lastSortValues));
+        //设置data内容
+        for (SearchHit<T> hit:hits) esSearchResult.getResults().add(hit.getContent());
+        //设置SearchAfter的值
+        esSearchResult.setLastSortValues(hits.getLast().getSortValues());
         return esSearchResult;
     }
 

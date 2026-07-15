@@ -1,103 +1,106 @@
 package com.seek.food.merchant.Mapper;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch._types.FieldValue;
+import co.elastic.clients.elasticsearch._types.SortOptions;
 import co.elastic.clients.elasticsearch._types.SortOrder;
-import co.elastic.clients.elasticsearch._types.query_dsl.FunctionBoostMode;
+import co.elastic.clients.elasticsearch._types.query_dsl.*;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig;
 import com.seek.food.dto.Common.EsSearchResult;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
-import com.seek.food.util.Exception.BizException;
-import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.merchant.EsRepository.MerchantRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.elasticsearch.core.query.GeoDistanceOrder;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Mapper
+
+@Component
 @Slf4j
 public class SearchMapper {
 
     private final MerchantEsTableConfig merchantEsTableConfig;
-    private final ElasticsearchClient esClient;
+    private final MerchantRepository merchantRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    SearchMapper(MerchantEsTableConfig merchantEsTableConfig, ElasticsearchClient esClient) {
+    SearchMapper(MerchantEsTableConfig merchantEsTableConfig, MerchantRepository merchantRepository
+    , ElasticsearchOperations elasticsearchOperations) {
         this.merchantEsTableConfig = merchantEsTableConfig;
-        this.esClient = esClient;
+        this.merchantRepository = merchantRepository;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
     //获取随机推送的提问
     public EsSearchResult<MerchantEsDTO> feedMerchant(double lon, double lat, int distance , long seed, int need, int shouldAmount
             ,Double docScore,Long docId) {
-        SearchRequest request=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,docScore,docId);
-        //根据搜索请求的模板来发送请求
-        SearchResponse<MerchantEsDTO> response= null;
-        try {
-            response = esClient.search(request, MerchantEsDTO.class);
-        } catch (Exception e) {
-            log.error("推送商家出现异常{}",e.getMessage());
-            throw new RuntimeException(e);
-        }
+        SearchHits<MerchantEsDTO> result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,List.of(docScore,docId));
+        System.out.println(result.getSearchHits());
         //返回结果
-        return EsSearchResult.success(response.hits().hits());
+        return EsSearchResult.success(result.getSearchHits());
     }
 
-    private SearchRequest getFeedRequest(double lon,double lat,int distance , long seed, int need,int shouldAmount
-    ,Double docScore,Long docId){
-        SearchRequest.Builder builder=new SearchRequest.Builder()
-                .index(merchantEsTableConfig.getIndexName())
-                .query(q -> q.functionScore(fs -> fs
-                        //基础查询
-                        .query(q1 -> q1.bool(b -> b
-                                //必须开业
-                                .filter(mn -> mn.term(t -> t
-                                        .field(merchantEsTableConfig.getIsOpen())
-                                        .value(true)
-                                ))
-                                //必须在范围内
-                                .must(mu -> mu.geoDistance(g -> g
-                                        .field(merchantEsTableConfig.getMerchantLocation())
-                                        // 中心点：用户当前的经纬度
-                                        .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
-                                        // 半径：查询范围内的文档（单位：km/m）
-                                        .distance(distance+"km")
-                                ))
-                                //最好是高收藏的
-                                .should(sh -> sh.range(r -> r
-                                        .date(d-> d.field(merchantEsTableConfig.getMerchantCollectAmount())
-                                                .gte(""+shouldAmount)      //大于等于
-                                        )))
-                        ))
-                        //定义重算分
-                        .functions(f -> f
-                                //确保种子固定时可以通过search来查询，并且权重随种子一起变化
-                                .weight((double) (seed%10))     //权重，即种子的加分范围(0,weight)
-                                .randomScore(r -> r.seed(""+seed).field(merchantEsTableConfig.getMerchantId()))
-                        )
-                        //随机分+算分主导的最终分
+    private SearchHits<MerchantEsDTO> getFeedRequest(double lon, double lat, int distance , long seed, int need, int shouldAmount
+    , List<Object> lastSearch){
+        //构建bool查询函数
+        Query boolQuery = QueryBuilders.bool(b -> b
+                //过滤不营业商户
+                .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsOpen()).value(false)))
+                //限定坐标半径内
+                .must(m -> m.geoDistance(g -> g
+                        .field(merchantEsTableConfig.getMerchantLocation())
+                        .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
+                        .distance(distance + "km")
+                ))
+                //对收藏量达标的商家加分
+                .should(s -> s.range(r -> r.number(num -> num
+                        .field(merchantEsTableConfig.getMerchantCollectAmount())
+                        .gte((double) shouldAmount)
+                )))
+        );
+
+        //重打分函数，固定seed保证分页稳定
+        FunctionScore functionScore = FunctionScore.of(f -> f
+                .randomScore(
+                        RandomScoreFunction.of( r -> r
+                        .seed(String.valueOf(seed))
+                        .field(merchantEsTableConfig.getMerchantId()) )
+                )
+                .weight((double) (seed % 10))
+        );
+
+        //排序函数
+        List<SortOptions> sortList = List.of(
+                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
+                SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc)))
+        );
+
+        //构建请求模板,并且绑定查询函数与排序函数
+        NativeQueryBuilder searchQuery = NativeQuery.builder()
+                //包裹bool主查询与重算分,并且总分求和
+                .withQuery(QueryBuilders.functionScore(fs -> fs
+                        .query(boolQuery)
+                        .functions(functionScore)
                         .boostMode(FunctionBoostMode.Sum)
                 ))
-                .size(need);
-        //当作第一次来查询
-        if (docScore==null||docId==null) return builder
-                .sort(s -> s.field(f -> f.field("_score").order(SortOrder.Desc)))
-                .sort(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Desc)))
-                .build();
-        //进行SearchAfter查询
-        List<FieldValue> fieldValues=new ArrayList<>();
-        fieldValues.add(FieldValue.of(docScore));
-        fieldValues.add(FieldValue.of(docId));
-        return builder
-                .sort(s -> s.field(f -> f.field("_score").order(SortOrder.Desc)))
-                .sort(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Desc)))
-                .searchAfter(fieldValues)
-                .build();
+                //绑定排序
+                .withSort(sortList)
+                //分页
+                .withPageable(PageRequest.of(0,need));
+        //判断是否需要进行SearchAfter
+        if (lastSearch != null&&!lastSearch.isEmpty()) searchQuery.withSearchAfter(lastSearch);
+        // 执行查询，自动映射MerchantEsDTO
+        return elasticsearchOperations.search(searchQuery.build(), MerchantEsDTO.class);
     }
 
 

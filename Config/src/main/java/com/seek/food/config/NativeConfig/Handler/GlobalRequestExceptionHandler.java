@@ -27,8 +27,8 @@ public class GlobalRequestExceptionHandler {
     }
 
     // 参数校验异常
-    @ExceptionHandler(IllegalArgumentException.class)
-    public Result<?> handleParamError(IllegalArgumentException e, HttpServletResponse response) {
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    public Result<?> handleParamError(Exception e, HttpServletResponse response) {
         return Result.error(ErrorCodeEnum.PARAM_ERROR,response);
     }
 
