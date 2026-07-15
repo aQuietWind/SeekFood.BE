@@ -6,16 +6,7 @@
 
     <!-- 全局统一字段映射 -->
     <resultMap id="UserResultMap" type="com.seek.food.dto.User.UserDTO">
-        <id property="userId" column="user_id"/>
-        <result property="username" column="username"/>
-        <result property="phoneNumber" column="phone_number"/>
-        <result property="password" column="password"/>
-        <result property="sex" column="sex"/>
-        <result property="headerImageAddr" column="header_image_addr"/>
-        <result property="birthday" column="birthday"/>
-        <result property="createTime" column="create_time"/>
         <result property="delete" column="is_delete" />
-        <result property="orderAmount" column="order_amount"/>
     </resultMap>
 
     <select id="getUserByPhoneNumber" resultMap="UserResultMap">

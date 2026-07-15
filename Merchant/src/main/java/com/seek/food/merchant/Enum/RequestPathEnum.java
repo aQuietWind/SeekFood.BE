@@ -23,4 +23,7 @@ public class RequestPathEnum {
     public static final String Merchant_Delete = "/delete";
     public static final String Merchant_Open = "/open";
 
+    public static final String Search = "/search";
+    public static final String Search_Feed = "/feed";
+
 }

@@ -25,6 +25,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+        <!-- 父工程自带版本管控，无需指定version -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.seek.food</groupId>
             <artifactId>Util</artifactId>
