@@ -29,20 +29,18 @@ public class EsSyncMerchantConsumer {
     private final MerchantRedisKeyConfig merchantRedisKeyConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final ElasticsearchOperations elasticsearchOperations;
-    private final ElasticsearchConverter elasticsearchConverter;
     private final MerchantEsTableConfig merchantEsTableConfig;
     private final MerchantRepository merchantRepository;
 
     @Autowired
     public EsSyncMerchantConsumer(StringRedisTemplate stringRedisTemplate
     , MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, CommonParamRulesConfig commonParamRulesConfig
-    , ElasticsearchOperations elasticsearchOperations, ElasticsearchConverter elasticsearchConverter, MerchantEsTableConfig merchantEsTableConfig, MerchantRepository merchantRepository) {
+    , ElasticsearchOperations elasticsearchOperations, MerchantEsTableConfig merchantEsTableConfig, MerchantRepository merchantRepository) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.elasticsearchOperations = elasticsearchOperations;
-        this.elasticsearchConverter = elasticsearchConverter;
         this.merchantEsTableConfig = merchantEsTableConfig;
         this.merchantRepository = merchantRepository;
     }

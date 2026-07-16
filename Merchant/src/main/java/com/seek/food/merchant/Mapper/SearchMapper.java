@@ -44,7 +44,9 @@ public class SearchMapper {
     //获取随机推送的提问
     public EsSearchResult<MerchantEsDTO> feedMerchant(double lon, double lat, int distance , long seed, int need, int shouldAmount
             ,Double docScore,Long docId) {
-        SearchHits<MerchantEsDTO> result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,List.of(docScore,docId));
+        SearchHits<MerchantEsDTO> result;
+        if (docId == null||docScore==null) result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,null);
+        else result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,List.of(docScore,docId));
         System.out.println(result.getSearchHits());
         //返回结果
         return EsSearchResult.success(result.getSearchHits());
@@ -54,15 +56,15 @@ public class SearchMapper {
     , List<Object> lastSearch){
         //构建bool查询函数
         Query boolQuery = QueryBuilders.bool(b -> b
-                //过滤不营业商户
-                .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsOpen()).value(false)))
-                //限定坐标半径内
+//                //过滤不营业商户
+                .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsOpen()).value(true)))
+//                //限定坐标半径内
                 .must(m -> m.geoDistance(g -> g
                         .field(merchantEsTableConfig.getMerchantLocation())
                         .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
                         .distance(distance + "km")
                 ))
-                //对收藏量达标的商家加分
+//                //对收藏量达标的商家加分
                 .should(s -> s.range(r -> r.number(num -> num
                         .field(merchantEsTableConfig.getMerchantCollectAmount())
                         .gte((double) shouldAmount)
