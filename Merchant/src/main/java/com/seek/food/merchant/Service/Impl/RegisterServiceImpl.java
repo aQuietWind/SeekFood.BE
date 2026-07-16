@@ -65,7 +65,7 @@ public class RegisterServiceImpl implements RegisterService {
         registerMapper.insertMerchant(merchantId,phoneNumber,password);
         //插入es
         merchantRepository.save(new MerchantEsDTO(merchantId,"商家"+merchantId
-                ,0,0,"",null,false,false));
+                ,0,0,null,null,false,false));
         //发至mq,使其进行初始化
         MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getRegisterFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }

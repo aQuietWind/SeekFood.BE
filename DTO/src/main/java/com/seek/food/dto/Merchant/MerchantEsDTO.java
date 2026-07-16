@@ -18,7 +18,7 @@ public class MerchantEsDTO {
     private String merchantName;
     private Integer merchantCollectAmount;
     private Integer merchantOrderAmount;
-    private String merchantHomeImage;
+    private String merchantHomeImageAddr;
     private String merchantLocation;
     @Field("is_open")
     private Boolean open;

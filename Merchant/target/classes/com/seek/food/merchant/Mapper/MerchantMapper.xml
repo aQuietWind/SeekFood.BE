@@ -116,7 +116,7 @@
 
     <update id="deleteMerchant">
         <!-- 删除后防止后续插入新商家时唯一约束报错 -->
-        update merchant set is_delete=true and merchant_master_phone_number=concat(merchant_id,"删除",merchant_master_phone_number)
+        update merchant set is_delete=true,merchant_master_phone_number=concat(merchant_id,"删除",merchant_master_phone_number)
         where merchant_id=#{merchantId} and is_delete=false
     </update>
 
@@ -136,7 +136,7 @@
             concat(merchant_lat,',',merchant_lon) as merchant_location,
             is_open,
             is_delete
-        from merchant where merchant_id=#{merchantId} and is_delete=false
+        from merchant where merchant_id=#{merchantId}
     </select>
 
     <select id="getDeleteMerchant" resultMap="MerchantResultMap">

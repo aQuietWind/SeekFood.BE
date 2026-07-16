@@ -52,10 +52,14 @@ public class FileRemove {
         }
     }
 
-    public static void removeFileList(String dest, List<String> addrs) {
+    public static void removeFileListOutError(String dest, List<String> addrs) {
         if (addrs==null||addrs.isEmpty())return;
         for (String addr:addrs){
-            removeFile(dest,addr);
+            try {
+                removeFile(dest,addr);
+            }catch (Exception e){
+                log.error("删除文件:{} ,出现异常:",Paths.get(dest,addr),e);
+            }
         }
     }
 
@@ -65,7 +69,7 @@ public class FileRemove {
             try {
                 removeFile(dest,addr);
             }catch (Exception e){
-                log.error("删除文件:{} ,出现异常:",Paths.get(dest,addr).toString(),e);
+                log.error("删除文件:{} ,出现异常:",Paths.get(dest,addr),e);
             }
         }
     }
