@@ -1,14 +1,14 @@
-package com.seek.food.config.NacosConfig.Employee;
+package com.seek.food.config.NacosConfig.MQ;
 
-import com.seek.food.config.Data.CaffeineData;
+import com.seek.food.config.Data.QueueData;
 import com.seek.food.config.Enum.ConfigKeyEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.Employee_Caffeine_Config)
+@ConfigurationProperties(ConfigKeyEnum.Employee_Exchange_Config)
 @Data
-public class EmployeeCaffeineConfig {
-    private CaffeineData employee;
+public class EmployeeExchangeConfig {
+    private QueueData changeEmployeeAmountQueue;
 }
