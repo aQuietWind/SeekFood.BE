@@ -7,10 +7,12 @@ import com.seek.food.merchant.Mapper.SearchMapper;
 import com.seek.food.merchant.Service.SearchService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RefreshScope
 public class SearchServiceImpl implements SearchService {
 
     private final SearchMapper searchMapper;

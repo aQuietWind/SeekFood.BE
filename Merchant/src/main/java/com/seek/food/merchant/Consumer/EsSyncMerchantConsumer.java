@@ -55,7 +55,7 @@ public class EsSyncMerchantConsumer {
             return;
         }
         //检验是否为空
-        if (merchant.getMerchantLocation().equals(",")) merchant.setMerchantLocation(null);
+        if (merchant.getMerchantLocation()==null||merchant.getMerchantLocation().equals(",")) merchant.setMerchantLocation(null);
         System.err.println(merchant.getMerchantLocation());
         //尝试同步
         updateOnly(merchant);
