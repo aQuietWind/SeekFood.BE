@@ -28,24 +28,20 @@ public class OldFileClearScheduled {
     }
     @Scheduled(fixedDelay = 5000)
     public void clearOldFiles() {
-        for (;true;) {
-            List<MapRecord<String,Object,Object>> records=RedisUtil.readStreamLastest(stringRedisTemplate,oldFileStream.getName(),
-                    oldFileStream.getConsumer().getGroupName(),1,3,1);
-            if (records.isEmpty()) break;
-            //以下为业务逻辑
-            for (MapRecord<String,Object,Object> record : records) {
-                String path=(String)record.getValue().get(oldFileStream.getKeyName());
-                try {
-                    //获取数据并进行处理
-                    FileRemove.removeFileByPath(path);
-                }catch (Exception e){
-                    log.error("有旧文件:{}在定时重新删除时发生错误:",path,e);
-                }
-                //通过id确认消息
-                stringRedisTemplate.opsForStream().acknowledge(oldFileStream.getName(),oldFileStream.getConsumer().getGroupName(),record.getId());
-            }
-        }
+        //快速进行读取与处理
+        RedisUtil.readStreamAndHandle(stringRedisTemplate,oldFileStream.getName(),
+                oldFileStream.getConsumer().getGroupName(),1,3,1,oldFileStream.getKeyName()
+                ,data-> {
+                    String path = (String) data;
+                    try {
+                        //获取数据并进行处理
+                        FileRemove.removeFileByPath(path);
+                    } catch (Exception e) {
+                        log.error("有旧文件:{}在定时重新删除时发生错误:", path, e);
+                    }
+                });
     }
+
     @PostConstruct
     public void init(){
         RedisUtil.createStreamConsumerGroup(stringRedisTemplate,oldFileStream.getName(),oldFileStream.getConsumer().getGroupName());

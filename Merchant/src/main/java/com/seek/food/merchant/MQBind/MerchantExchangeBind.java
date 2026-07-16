@@ -18,7 +18,7 @@ public class MerchantExchangeBind {
     public MerchantExchangeBind(MerchantExchangeConfig merchantExchangeConfig) {
         this.merchantExchangeConfig= merchantExchangeConfig;
     }
-    //创建一个用于用户注册消息投递的交换机
+    //创建一个用于商家消息投递的交换机
     @Bean
     public DirectExchange merchantExchange() {
         return new DirectExchange(merchantExchangeConfig.getExchangeName());
@@ -62,6 +62,16 @@ public class MerchantExchangeBind {
     @Bean
     public Binding deleteMerchantBinding(Queue deleteMerchantQueue, DirectExchange merchantExchange){
         return BindingBuilder.bind(deleteMerchantQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteMerchantQueue().getRoutingKey());
+    }
+    //职员删除销毁队列
+    @Bean
+    public Queue deleteAllEmployeeQueue(){
+        return MQUtil.generateQuorumQueue(merchantExchangeConfig.getDeleteAllEmployeeQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteAllEmployeeBinding(Queue deleteAllEmployeeQueue, DirectExchange merchantExchange){
+        return BindingBuilder.bind(deleteAllEmployeeQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteAllEmployeeQueue().getRoutingKey());
     }
     //es同步队列
     @Bean

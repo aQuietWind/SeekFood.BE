@@ -10,5 +10,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Employee_Exchange_Config)
 @Data
 public class EmployeeExchangeConfig {
+    private String type;
+    private String exchangeName;
     private QueueData changeEmployeeAmountQueue;
+    private QueueData deleteFileEmployeeQueue;
 }
