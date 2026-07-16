@@ -30,6 +30,7 @@ public class DeleteMerchantConsumer {
     @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Delete_Merchant_Queue)
     public void deleteMerchantQueue(long merchantId) throws JsonProcessingException {
         MerchantDTO merchant=merchantMapper.getDeleteMerchant(merchantId);
+        System.err.println(merchant);
         //删除店主照片
         FileRemove.removeFileOutError(merchantParamsRulesConfig.getMasterImageDest(),merchant.getMerchantMasterImageAddr());
         //删除封面照片
@@ -42,7 +43,7 @@ public class DeleteMerchantConsumer {
 
     private String[] quickToStringArray(String json){
         if (json == null||json.isBlank())return null;
-        return json.substring(1,json.length()-1).split(",");
+        return json.substring(1,json.length()-1).replace("\"","").split(",");
     }
 
 

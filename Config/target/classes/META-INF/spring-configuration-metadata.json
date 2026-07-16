@@ -153,6 +153,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
     },
     {
+      "name": "common.param.rules.id-bitmap-area-number",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"
+    },
+    {
       "name": "common.param.rules.id-capacity",
       "type": "java.lang.Long",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig"

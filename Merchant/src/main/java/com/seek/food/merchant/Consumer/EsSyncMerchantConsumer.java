@@ -53,7 +53,6 @@ public class EsSyncMerchantConsumer {
         }
         //检验是否为空
         if (merchant.getMerchantLocation()==null||merchant.getMerchantLocation().equals(",")) merchant.setMerchantLocation(null);
-        System.err.println(merchant.getMerchantLocation());
         //尝试同步
         try {
             updateOnly(merchant);
@@ -70,7 +69,7 @@ public class EsSyncMerchantConsumer {
     //快速修改状态
     private void ackState(long merchantId){
         RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId,
-                false,commonParamRulesConfig.getIdCapacity());
+                false,commonParamRulesConfig.getIdCapacity(),commonParamRulesConfig.getIdBitmapAreaNumber());
     }
 
 
@@ -78,8 +77,6 @@ public class EsSyncMerchantConsumer {
         // 执行更新，无文档则无任何写入
         elasticsearchOperations.update(merchant, IndexCoordinates.of(merchantEsTableConfig.getIndexName()));
     }
-
-
 
 
 

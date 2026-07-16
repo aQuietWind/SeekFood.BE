@@ -106,7 +106,7 @@ public class MerchantServiceImpl implements MerchantService {
                 , k->merchantMapper.setMerchantMaster(merchantId,masterName,masterCode,addr));
         //设置该信息已经被修改
         RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantMasterIsSet().getName(),merchantId
-                ,true,commonParamRulesConfig.getIdCapacity());
+                ,true,commonParamRulesConfig.getIdCapacity(),commonParamRulesConfig.getIdBitmapAreaNumber());
     }
 
     //添加营业证明照片
@@ -260,6 +260,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     //更改商家的信息
     @Override
+    @Transactional
     public void updateMerchantMessage(MerchantDTO merchant){
         //获取id
         long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
@@ -396,7 +397,7 @@ public class MerchantServiceImpl implements MerchantService {
     //通知进行同步
     public void esSync(long merchantId){
         RedisUtil.oftenSetBitAndAct(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId
-        ,true,commonParamRulesConfig.getIdCapacity(),()->{
+        ,true,commonParamRulesConfig.getIdCapacity(),commonParamRulesConfig.getIdBitmapAreaNumber(),()->{
             Map<String,String> map = new HashMap<>();
             map.put(esSyncStream.getKeyName(),""+merchantId);
             stringRedisTemplate.opsForStream().add(esSyncStream.getName(),map);

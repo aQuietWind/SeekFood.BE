@@ -35,7 +35,6 @@ public class esSyncScheduled {
     }
     @Scheduled(fixedDelay = 5000)
     public void esSync() {
-        System.err.println("开始运行定时任务");
         //通过快速方法直接进行处理
         RedisUtil.readStreamAndHandle(stringRedisTemplate,esSyncStream.getName()
         ,esSyncStream.getConsumer().getGroupName(),1,10,1,esSyncStream.getKeyName(),data->{

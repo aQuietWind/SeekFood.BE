@@ -19,6 +19,7 @@ public class CommonParamRulesConfig {
     private int riderIdStart;
     private int adminIdStart;
     private int personNameMax;
+    private int idBitmapAreaNumber;
     private long idCapacity;
     private String phoneNumberRegex;
     private String passwordRegex;
