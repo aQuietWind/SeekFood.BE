@@ -1,8 +1,8 @@
 package com.seek.food.user;
 
-import com.seek.food.config.Interface.CommonImport;
-import com.seek.food.config.Interface.MQImport;
-import com.seek.food.config.Interface.UserImport;
+import com.seek.food.config.Import.CommonImport;
+import com.seek.food.config.Import.MQImport;
+import com.seek.food.config.Import.UserImport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;

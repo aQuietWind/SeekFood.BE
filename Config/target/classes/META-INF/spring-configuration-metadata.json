@@ -16,19 +16,34 @@
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
     },
     {
+      "name": "employee.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Employee.EmployeeCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeCaffeineConfig"
+    },
+    {
+      "name": "employee.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.stream",
+      "type": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisStreamConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisStreamConfig"
+    },
+    {
       "name": "fund.self.params.rules",
       "type": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
     },
     {
-      "name": "fund.self.redis.key.duration",
-      "type": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyDurationConfig",
-      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyDurationConfig"
-    },
-    {
-      "name": "fund.self.redis.key.name",
-      "type": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig",
-      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig"
+      "name": "fund.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
     {
       "name": "gateway.self.black",
@@ -243,9 +258,9 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
     },
     {
-      "name": "fund.self.redis.key.name.fund-id-count",
-      "type": "java.lang.String",
-      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyNameConfig"
+      "name": "fund.self.redis.key.fund-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
     {
       "name": "gateway.self.black.id",

@@ -1,10 +1,8 @@
 package com.seek.food.fund;
 
-import com.seek.food.config.Interface.CommonImport;
-import com.seek.food.config.Interface.FundImport;
-import com.seek.food.config.Interface.MQImport;
-import com.seek.food.config.Interface.UserImport;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import com.seek.food.config.Import.CommonImport;
+import com.seek.food.config.Import.FundImport;
+import com.seek.food.config.Import.MQImport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

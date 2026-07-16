@@ -1,4 +1,4 @@
-package com.seek.food.config.Interface;
+package com.seek.food.config.Import;
 
 import com.seek.food.config.AutoConfig.MQSubConfig;
 import org.springframework.context.annotation.Import;
