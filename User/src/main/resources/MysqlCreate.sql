@@ -4,7 +4,7 @@ drop table if exists  `user`;
 CREATE TABLE `user` (
                         `user_id` bigint NOT NULL COMMENT '用户id',
                         `username` varchar(15) NOT NULL COMMENT '用户名',
-                        `phone_number` varchar(11) NOT NULL UNIQUE COMMENT '手机号',
+                        `phone_number` varchar(30) NOT NULL UNIQUE COMMENT '手机号',
                         `password` varchar(20) NOT NULL COMMENT '密码',
                         `sex` tinyint COMMENT '性别',
                         `header_image_addr` varchar(50) COMMENT '头像地址',

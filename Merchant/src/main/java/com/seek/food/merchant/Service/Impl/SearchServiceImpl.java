@@ -6,6 +6,8 @@ import com.seek.food.dto.Common.EsSearchResult;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
 import com.seek.food.merchant.Mapper.SearchMapper;
 import com.seek.food.merchant.Service.SearchService;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -42,6 +44,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public EsSearchResult<MerchantEsDTO> searchMerchant(String merchantName,double lon, double lat, int distance,int need
             ,Double docScore,Long docId) {
+        if (merchantName==null)throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         merchantParamsRulesConfig.merchantNameCheck(merchantName);
         commonParamRulesConfig.lonAndLatCheck(lon, lat);
         commonParamRulesConfig.needNumberCheck(need);

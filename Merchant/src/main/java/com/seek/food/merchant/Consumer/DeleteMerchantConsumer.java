@@ -30,7 +30,7 @@ public class DeleteMerchantConsumer {
         //删除店主照片
         FileRemove.removeFileOutError(merchantParamsRulesConfig.getMasterImageDest(),merchant.getMerchantMasterImageAddr());
         //删除封面照片
-        FileRemove.removeFileOutError(merchantParamsRulesConfig.getHomeImageDest(),merchant.getMerchantMasterImageAddr());
+        FileRemove.removeFileOutError(merchantParamsRulesConfig.getHomeImageDest(),merchant.getMerchantHomeImageAddr());
         //删除证明照片
         FileRemove.removeFileArrayOutError(merchantParamsRulesConfig.getProofImageDest(),merchant.getMerchantProofImageAddr().split(","));
         //删除展示照片

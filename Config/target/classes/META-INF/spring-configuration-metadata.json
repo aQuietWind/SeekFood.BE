@@ -288,6 +288,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
     },
     {
+      "name": "merchant.self.es.merchant.is-delete",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
+    },
+    {
       "name": "merchant.self.es.merchant.is-open",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
@@ -503,17 +508,17 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
-      "name": "mq.name.bind.merchant-exchange.delete-es-merchant-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
-    },
-    {
       "name": "mq.name.bind.merchant-exchange.delete-file-merchant-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
     {
       "name": "mq.name.bind.merchant-exchange.delete-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.merchant-exchange.delete-merchant-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },

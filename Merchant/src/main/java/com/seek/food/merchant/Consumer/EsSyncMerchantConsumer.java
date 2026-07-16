@@ -69,7 +69,8 @@ public class EsSyncMerchantConsumer {
 
     //快速修改状态
     private void ackState(long merchantId){
-        RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId,true,commonParamRulesConfig.getIdCapacity());
+        RedisUtil.oftenSetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId,
+                false,commonParamRulesConfig.getIdCapacity());
     }
 
 

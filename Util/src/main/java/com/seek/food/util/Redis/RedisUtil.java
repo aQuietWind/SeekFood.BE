@@ -75,7 +75,10 @@ public class RedisUtil {
     //全局BitMap设置值
     public static boolean oftenSetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id
             ,boolean value,long idCapacity){
-        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().setBit(redisKeyName, (id % idCapacity), value));
+        //注意返回值是原来的位置状态
+        Boolean originBit=stringRedisTemplate.opsForValue().setBit(redisKeyName, (id % idCapacity), value);
+        if (originBit==null)return false;
+        return value!=originBit;
     }
 
     //个体BitMap设置值
@@ -96,7 +99,9 @@ public class RedisUtil {
     //设置BitMap值成功后执行函数
     public static void oftenSetBitAndAct(StringRedisTemplate stringRedisTemplate, String redisKeyName, long id
             , boolean value, long idCapacity, RunFunction runFunction){
-        if (oftenSetBit(stringRedisTemplate,redisKeyName,id,value,idCapacity)) runFunction.function();
+        boolean result=oftenSetBit(stringRedisTemplate,redisKeyName,id,value,idCapacity);
+        System.err.println(result);
+        if (result) runFunction.function();
     }
 
 

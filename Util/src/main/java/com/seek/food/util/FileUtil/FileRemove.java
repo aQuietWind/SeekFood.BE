@@ -60,7 +60,7 @@ public class FileRemove {
     }
 
     public static void removeFileArrayOutError(String dest, String[] addrs) {
-        if (addrs == null)return;
+        if (addrs == null||addrs.length==0)return;
         for (String addr:addrs){
             try {
                 removeFile(dest,addr);

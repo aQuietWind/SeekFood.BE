@@ -28,7 +28,6 @@ public class OldFileClearScheduled {
     }
     @Scheduled(fixedDelay = 5000)
     public void clearOldFiles() {
-        System.err.println("开始运行定时任务1");
         for (;true;) {
             List<MapRecord<String,Object,Object>> records=RedisUtil.readStreamLastest(stringRedisTemplate,oldFileStream.getName(),
                     oldFileStream.getConsumer().getGroupName(),1,3,1);

@@ -115,7 +115,9 @@
     </update>
 
     <update id="deleteMerchant">
-        update merchant set is_delete=true where merchant_id=#{merchantId} and is_delete=false
+        <!-- 删除后防止后续插入新商家时唯一约束报错 -->
+        update merchant set is_delete=true and merchant_master_phone_number=concat(merchant_id,"删除",merchant_master_phone_number)
+        where merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="updateOpen">
