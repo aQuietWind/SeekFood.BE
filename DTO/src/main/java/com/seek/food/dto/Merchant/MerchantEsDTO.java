@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+//注解属性只能硬编码，没办法
 @Document(indexName = "merchant")
 public class MerchantEsDTO {
     @Id
@@ -21,4 +22,6 @@ public class MerchantEsDTO {
     private String merchantLocation;
     @Field("is_open")
     private Boolean open;
+    @Field("is_delete")
+    private Boolean delete;
 }

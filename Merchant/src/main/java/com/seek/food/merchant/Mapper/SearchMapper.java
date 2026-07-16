@@ -67,6 +67,7 @@ public class SearchMapper {
         Query boolQuery = QueryBuilders.bool(b -> b
                 //只查询目标商户
                 .filter(f -> f.match(m -> m.field(merchantEsTableConfig.getMerchantName()).query(merchantName) ))
+                .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsDelete()).value(false)))
                 //只查询限定坐标半径内
                 .must(m -> m.geoDistance(g -> g
                                 .field(merchantEsTableConfig.getMerchantLocation())
@@ -98,6 +99,7 @@ public class SearchMapper {
         Query boolQuery = QueryBuilders.bool(b -> b
                 //过滤不营业商户
                 .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsOpen()).value(true)))
+                .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsDelete()).value(false)))
                 //限定坐标半径内
                 .must(m -> m.geoDistance(g -> g
                         .field(merchantEsTableConfig.getMerchantLocation())

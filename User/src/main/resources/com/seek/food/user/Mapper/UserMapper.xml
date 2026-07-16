@@ -72,6 +72,10 @@
         select header_image_addr from user where user_id=#{userId} and is_delete=false
     </select>
 
+    <select id="getDeleteHeaderPath" resultType="java.lang.String">
+        select header_image_addr from user where user_id=#{userId} and is_delete=true
+    </select>
+
 
 
 

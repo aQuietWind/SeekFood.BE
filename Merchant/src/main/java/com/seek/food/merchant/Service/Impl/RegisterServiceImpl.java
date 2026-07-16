@@ -1,9 +1,7 @@
 package com.seek.food.merchant.Service.Impl;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
-import com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig;
 import com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
 import com.seek.food.merchant.EsRepository.MerchantRepository;
@@ -67,7 +65,7 @@ public class RegisterServiceImpl implements RegisterService {
         registerMapper.insertMerchant(merchantId,phoneNumber,password);
         //插入es
         merchantRepository.save(new MerchantEsDTO(merchantId,"商家"+merchantId
-                ,0,0,"",null,false));
+                ,0,0,"",null,false,false));
         //发至mq,使其进行初始化
         MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getRegisterFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }

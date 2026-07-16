@@ -6,7 +6,6 @@ import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig;
 import com.seek.food.dto.Merchant.MerchantDTO;
-import com.seek.food.dto.User.UserDTO;
 import com.seek.food.merchant.Mapper.LoginMapper;
 import com.seek.food.merchant.Service.LoginService;
 import com.seek.food.util.Context.TokenIdContext;

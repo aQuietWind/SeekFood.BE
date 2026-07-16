@@ -193,6 +193,9 @@ public class UserServiceImpl implements UserService {
         if (!userMapper.deleteUser(userId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //清空token
         stringRedisTemplate.delete(commonRedisKeyConfig.getLoginToken().getRedisKey(userId));
+        //删除旧照片
+        MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFundQueue().getRoutingKey()
+        ,Paths.get(userParamsRulesConfig.getHeaderImageDest(),userMapper.getDeleteHeaderPath(userId)).toString(),rabbitTemplate);
         //传递消息队列进行其他模块后续操作
         MQUtil.send(userExchangeConfig.getExchangeName(),userExchangeConfig.getDeleteFundQueue().getRoutingKey(),userId,rabbitTemplate);
     }

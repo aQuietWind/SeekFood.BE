@@ -25,5 +25,6 @@ CREATE TABLE `merchant` (
                             `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                             `is_qualified` boolean NOT NULL DEFAULT true COMMENT '是否有资格营业',
                             `is_open` boolean NOT NULL DEFAULT false COMMENT '是否被开业',
-                            INDEX phone_index(merchant_master_phone_number)
+                            `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否删除',
+                            INDEX phone_index(merchant_master_phone_number,is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家表';

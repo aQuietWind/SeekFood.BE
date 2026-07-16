@@ -16,4 +16,5 @@ public interface UserMapper {
     public String getPhoneNumber(long userId);
     public boolean deleteUser(long userId);
     public String getHeaderPath(long userId);
+    public String getDeleteHeaderPath(long userId);
 }

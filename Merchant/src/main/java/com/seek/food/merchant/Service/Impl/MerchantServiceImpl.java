@@ -346,8 +346,10 @@ public class MerchantServiceImpl implements MerchantService {
                 ,k->merchantMapper.deleteMerchant(merchantId));
         //删除token存储
         stringRedisTemplate.delete(commonRedisKeyConfig.getLoginToken().getRedisKey(merchantId));
-        //mq同步进行善后操作
-        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteFundQueue().getRoutingKey(),merchantId,rabbitTemplate);
+        //mq同步Es进行逻辑删除操作
+        esSync(merchantId);
+        //mq通知进行后续销毁操作
+        MQUtil.send(merchantExchangeConfig.getExchangeName(),merchantExchangeConfig.getDeleteMerchantQueue().getRoutingKey(),merchantId,rabbitTemplate);
     }
 
     //开业或者停业

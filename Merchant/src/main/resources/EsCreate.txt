@@ -45,6 +45,9 @@ Put http://localhost:9200/merchant
                        },
                        "is_open":{
                           "type":"boolean"
+                       },
+                       "is_delete":{
+                          "type":"boolean"
                        }
                      }
                    }

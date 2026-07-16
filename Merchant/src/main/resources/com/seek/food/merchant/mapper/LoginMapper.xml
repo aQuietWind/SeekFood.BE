@@ -30,7 +30,7 @@
             create_time,
             is_qualified,
             is_open
-        from merchant where merchant_master_phone_number=#{phoneNumber}
+        from merchant where merchant_master_phone_number=#{phoneNumber} and is_delete=false
     </select>
     <select id="loginByPassword" resultMap="MerchantResultMap">
         select
@@ -53,6 +53,6 @@
             create_time,
             is_qualified,
             is_open
-        from merchant where merchant_master_phone_number=#{phoneNumber} and merchant_password=#{password}
+        from merchant where merchant_master_phone_number=#{phoneNumber} and merchant_password=#{password} and is_delete=false
     </select>
 </mapper>

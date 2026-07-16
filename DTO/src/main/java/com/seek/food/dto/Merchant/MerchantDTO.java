@@ -31,4 +31,5 @@ public class MerchantDTO {
     private String createTime;
     private Boolean qualified;
     private Boolean open;
+    private Boolean delete;
 }
