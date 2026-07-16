@@ -114,9 +114,9 @@
         update merchant set merchant_password=#{password} where merchant_id=#{merchantId} and is_delete=false
     </update>
 
-    <delete id="deleteMerchant">
-        delete from merchant where merchant_id=#{merchantId} and is_delete=false
-    </delete>
+    <update id="deleteMerchant">
+        update merchant set is_delete=true where merchant_id=#{merchantId} and is_delete=false
+    </update>
 
     <update id="updateOpen">
         <!-- mysql底层为数字存储boolean值，所以可直接进行数字判断（1=true，0=false） -->
@@ -137,7 +137,30 @@
         from merchant where merchant_id=#{merchantId} and is_delete=false
     </select>
 
-
+    <select id="getDeleteMerchant" resultMap="MerchantResultMap">
+        select
+            merchant_id,
+            merchant_name,
+            merchant_master_name,
+            merchant_home_image_addr,
+            merchant_proof_image_addr,
+            merchant_show_image_addr,
+            merchant_show_description,
+            merchant_addr,
+            merchant_lon,
+            merchant_lat,
+            merchant_order_amount,
+            merchant_first_comment_amount,
+            merchant_like_amount,
+            merchant_collect_amount,
+            merchant_employee_amount,
+            merchant_score,
+            create_time,
+            is_qualified,
+            is_open,
+            is_delete
+        from merchant where merchant_id=#{merchantId} and is_delete=true
+    </select>
 
 
 </mapper>

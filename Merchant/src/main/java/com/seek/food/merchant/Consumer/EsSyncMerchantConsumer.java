@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.convert.ElasticsearchConverter;
-import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -58,9 +55,15 @@ public class EsSyncMerchantConsumer {
         if (merchant.getMerchantLocation()==null||merchant.getMerchantLocation().equals(",")) merchant.setMerchantLocation(null);
         System.err.println(merchant.getMerchantLocation());
         //尝试同步
-        updateOnly(merchant);
-        //无论失败成功都更改状态，防止出现永远不更新的问题
-        ackState(merchantId);
+        try {
+            updateOnly(merchant);
+        }catch (Exception e){
+            log.error("merchantId:{},同步es时出现异常:",merchantId,e);
+            throw new RuntimeException(e);
+        }finally {
+            //无论失败成功都更改状态，防止出现永远不更新的问题
+            ackState(merchantId);
+        }
         merchantRepository.save(merchant);
     }
 
