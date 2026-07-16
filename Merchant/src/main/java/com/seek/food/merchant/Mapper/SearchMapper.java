@@ -37,7 +37,7 @@ public class SearchMapper {
         this.elasticsearchOperations = elasticsearchOperations;
     }
 
-    //获取随机推送的提问
+    //获取随机推送的商家
     public EsSearchResult<MerchantEsDTO> feedMerchant(double lon, double lat, int distance , long seed, int need, int shouldAmount
             ,Double docScore,Long docId) {
         SearchHits<MerchantEsDTO> result;
@@ -48,19 +48,63 @@ public class SearchMapper {
         return EsSearchResult.success(result.getSearchHits());
     }
 
+
+    //获取搜索的商家
+    public EsSearchResult<MerchantEsDTO> searchMerchant(String merchantName,double lon, double lat, int distance,int need
+            ,Double docScore,Long docId) {
+        SearchHits<MerchantEsDTO> result;
+        if (docId == null||docScore==null) result=getSearchRequest(merchantName,lon,lat,distance,need,null);
+        else result=getSearchRequest(merchantName,lon,lat,distance,need,List.of(docScore,docId));
+        System.out.println(result.getSearchHits());
+        //返回结果
+        return EsSearchResult.success(result.getSearchHits());
+    }
+
+    //构建搜索请求
+    public SearchHits<MerchantEsDTO> getSearchRequest(String merchantName,double lon, double lat, int distance,int need
+    ,List<Object> lastSearch){
+        //构建bool查询函数
+        Query boolQuery = QueryBuilders.bool(b -> b
+                //只查询目标商户
+                .filter(f -> f.match(m -> m.field(merchantEsTableConfig.getMerchantName()).query(merchantName) ))
+                //只查询限定坐标半径内
+                .must(m -> m.geoDistance(g -> g
+                                .field(merchantEsTableConfig.getMerchantLocation())
+                                .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
+                                .distance(distance + "km")
+                        ))
+        );
+
+        //排序函数
+        List<SortOptions> sortList = List.of(
+                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
+                SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc)))
+        );
+
+        //汇总查询条件
+        Query allQuery=QueryBuilders.functionScore(fs -> fs
+                .query(boolQuery)
+                .boostMode(FunctionBoostMode.Sum)
+        );
+        // 执行查询，自动映射MerchantEsDTO
+        return elasticsearchOperations.search(quickGetNativeQuery(allQuery,sortList,lastSearch,need), MerchantEsDTO.class);
+    }
+
+
+    //构建推送请求
     private SearchHits<MerchantEsDTO> getFeedRequest(double lon, double lat, int distance , long seed, int need, int shouldAmount
     , List<Object> lastSearch){
         //构建bool查询函数
         Query boolQuery = QueryBuilders.bool(b -> b
-//                //过滤不营业商户
+                //过滤不营业商户
                 .filter(f -> f.term(t -> t.field(merchantEsTableConfig.getIsOpen()).value(true)))
-//                //限定坐标半径内
+                //限定坐标半径内
                 .must(m -> m.geoDistance(g -> g
                         .field(merchantEsTableConfig.getMerchantLocation())
                         .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
                         .distance(distance + "km")
                 ))
-//                //对收藏量达标的商家加分
+                //对收藏量达标的商家加分
                 .should(s -> s.range(r -> r.number(num -> num
                         .field(merchantEsTableConfig.getMerchantCollectAmount())
                         .gte((double) shouldAmount)
@@ -83,22 +127,30 @@ public class SearchMapper {
                 SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc)))
         );
 
+        Query allQuery=QueryBuilders.functionScore(fs -> fs
+                .query(boolQuery)
+                .functions(functionScore)
+                .boostMode(FunctionBoostMode.Sum)
+        );
+
+        // 执行查询，自动映射MerchantEsDTO
+        return elasticsearchOperations.search(quickGetNativeQuery(allQuery,sortList,lastSearch,need)
+                , MerchantEsDTO.class);
+    }
+
+    //快速汇总所有条件
+    private NativeQuery quickGetNativeQuery(Query allQuery,List<SortOptions> sortList,List<Object> lastSearch,int need){
         //构建请求模板,并且绑定查询函数与排序函数
         NativeQueryBuilder searchQuery = NativeQuery.builder()
                 //包裹bool主查询与重算分,并且总分求和
-                .withQuery(QueryBuilders.functionScore(fs -> fs
-                        .query(boolQuery)
-                        .functions(functionScore)
-                        .boostMode(FunctionBoostMode.Sum)
-                ))
+                .withQuery(allQuery)
                 //绑定排序
                 .withSort(sortList)
                 //分页
                 .withPageable(PageRequest.of(0,need));
         //判断是否需要进行SearchAfter
         if (lastSearch != null&&!lastSearch.isEmpty()) searchQuery.withSearchAfter(lastSearch);
-        // 执行查询，自动映射MerchantEsDTO
-        return elasticsearchOperations.search(searchQuery.build(), MerchantEsDTO.class);
+        return searchQuery.build();
     }
 
 

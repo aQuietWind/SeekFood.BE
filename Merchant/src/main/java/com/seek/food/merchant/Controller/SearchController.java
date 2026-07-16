@@ -27,7 +27,14 @@ public class SearchController {
     @GetMapping(RequestPathEnum.Search_Feed)
     public Result<EsSearchResult<MerchantEsDTO>> feedMerchant(int need, int distance, double lon, double lat, long seed, int shouldAmount
             ,Double docScore,Long docId){
-        return Result.success(searchService.searchMerchant(need,distance,lon,lat,seed,shouldAmount,docScore,docId));
+        return Result.success(searchService.feedMerchant(need,distance,lon,lat,seed,shouldAmount,docScore,docId));
+    }
+
+    //搜索商家，参数主要由前端决定
+    @GetMapping
+    public Result<EsSearchResult<MerchantEsDTO>> feedMerchant(String merchantName,double lon, double lat, int distance,int need
+            ,Double docScore,Long docId){
+        return Result.success(searchService.searchMerchant(merchantName,lon,lat,distance,need,docScore,docId));
     }
 
 
