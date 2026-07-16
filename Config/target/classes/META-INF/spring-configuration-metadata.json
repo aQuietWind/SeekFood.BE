@@ -86,6 +86,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
+      "name": "mq.name.bind.employee-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.merchant-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
@@ -246,6 +251,76 @@
       "name": "common.redis.key.name.login-token",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.jvm-caffeine.employee",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeCaffeineConfig"
+    },
+    {
+      "name": "employee.self.params.rules.employee-addr-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.params.rules.employee-dep-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.params.rules.employee-description-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.params.rules.employee-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.params.rules.employee-position-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.params.rules.person-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-delete-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-update-message-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-update-resign-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.stream.old-file-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisStreamConfig"
     },
     {
       "name": "fund.self.params.rules.fund-id-capacity",
@@ -526,6 +601,31 @@
       "name": "merchant.self.redis.stream.old-file-stream",
       "type": "com.seek.food.config.Data.RedisStreamData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
+    },
+    {
+      "name": "mq.name.bind.employee-exchange.change-employee-amount-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.employee-exchange.delete-file-employee-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.employee-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.employee-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.merchant-exchange.delete-all-employee-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
     {
       "name": "mq.name.bind.merchant-exchange.delete-file-merchant-queue",

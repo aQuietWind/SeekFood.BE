@@ -26,6 +26,7 @@ public interface MerchantMapper {
     public boolean updateOpen(long merchantId);
     public MerchantEsDTO getEsMerchant(long merchantId);
     public MerchantDTO getDeleteMerchant(long merchantId);
+    public boolean updateEmployeeAmount(long merchantId,int changeNumber);
 
 
 
