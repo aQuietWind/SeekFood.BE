@@ -14,6 +14,6 @@ public interface EmployeeService {
     public EmployeeDTO getDetailEmployee(long employeeId);
     public void updateEmployeeMessage(EmployeeDTO employeeDTO);
     public void updatePersonImage(MultipartFile file,long employeeId);
-    public void updateResignEmployee(long employeeId);
+    public void updateEmployeeResign(long employeeId);
     public void deleteEmployee(long employeeId);
 }

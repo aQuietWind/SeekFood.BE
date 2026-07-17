@@ -21,11 +21,9 @@ import java.util.Map;
 @Slf4j
 public class ChangeEmployeeAmountConsumer {
     private final MerchantMapper merchantMapper;
-    private final MerchantUtil merchantUtil;
     @Autowired
-    public ChangeEmployeeAmountConsumer(MerchantMapper merchantMapper, MerchantUtil merchantUtil) {
+    public ChangeEmployeeAmountConsumer(MerchantMapper merchantMapper) {
         this.merchantMapper = merchantMapper;
-        this.merchantUtil = merchantUtil;
     }
 
 
@@ -33,7 +31,6 @@ public class ChangeEmployeeAmountConsumer {
     public void changeEmployeeAmountQueue(ChangeAmountDTO changeAmountDTO) {
         if (!merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
             log.warn("merchantId:{} ,在增减职员数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
-            merchantUtil.esSync(changeAmountDTO.getId());
         }
     }
 

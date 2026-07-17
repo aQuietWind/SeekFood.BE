@@ -58,6 +58,7 @@ public class FileRemove {
     public static void removeFileListOutError(String dest, List<String> addrs, RunWithTwoParams<String,Exception> function) {
         if (addrs==null||addrs.isEmpty())return;
         for (String addr:addrs){
+            if (addr==null||addr.isBlank()) continue;
             try {
                 removeFile(dest,addr);
             }catch (Exception e){
@@ -69,6 +70,7 @@ public class FileRemove {
     public static void removeFileArrayOutError(String dest, String[] addrs,RunWithTwoParams<String,Exception> function) {
         if (addrs == null||addrs.length==0)return;
         for (String addr:addrs){
+            if (addr==null||addr.isBlank()) continue;
             try {
                 removeFile(dest,addr);
             }catch (Exception e){

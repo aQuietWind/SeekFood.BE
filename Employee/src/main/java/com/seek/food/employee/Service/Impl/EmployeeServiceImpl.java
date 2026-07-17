@@ -178,7 +178,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     //更改职员任职状态
     @Override
-    public void updateResignEmployee(long employeeId){
+    public void updateEmployeeResign(long employeeId){
         //检查格式
         commonParamRulesConfig.commonIdCheck(employeeId);
         //获取商家id
@@ -213,6 +213,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private void quickDeletePersonImage(String addr){
+        if (addr==null||addr.isBlank()) return;
         MQUtil.send(employeeExchangeConfig.getExchangeName(), employeeExchangeConfig.getDeleteFileEmployeeQueue().getRoutingKey()
                 , Paths.get(employeeParamsRulesConfig.getPersonImageDest(),addr).toString(),rabbitTemplate);
     }

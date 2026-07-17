@@ -119,7 +119,10 @@
 
     <update id="updatePersonImage">
         update employee set employee_person_image_addr=#{addr}
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId} and employee_person_image_addr=#{oldAddr}
+        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        and employee_person_image_addr
+        <if test="oldAddr!=null">=#{oldAddr}</if>
+        <if test="oldAddr==null"> is null</if>
     </update>
 
     <update id="updateResign">
