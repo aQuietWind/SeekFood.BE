@@ -12,7 +12,6 @@ public class EmployeeController {
 
     @PostMapping
     public Result<Void> insertEmployee() {
-
         return Result.success();
     }
 }

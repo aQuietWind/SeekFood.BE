@@ -13,8 +13,11 @@ public interface EmployeeMapper {
     public List<EmployeeDTO> getSimpleByName(String employeeName,int start,int need,long merchantId);
     public List<EmployeeDTO> getSimpleByDep(String depName,int start,int need,long merchantId);
     public EmployeeDTO getDetailEmployee(long employeeId,long merchantId);
-    public void updateEmployee(EmployeeDTO employeeDTO);
-    public void resignEmployee(long employeeId,long merchantId);
-    public void deleteEmployee(long employeeId,long merchantId);
+    public String getPersonImageAddr(long employeeId,long merchantId);
+    public List<String> getAllPersonImageAddr(long merchantId);
+    public boolean updateEmployee(EmployeeDTO employeeDTO);
+    public boolean updatePersonImage(String addr, String oldAddr, long employeeId, long merchantId);
+    public boolean resignEmployee(long employeeId,long merchantId);
+    public boolean deleteEmployee(long employeeId,long merchantId);
     public void deleteAllEmployee(long merchantId);
 }

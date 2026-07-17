@@ -1,6 +1,7 @@
 package com.seek.food.config.NacosConfig.Employee;
 
 import com.seek.food.config.Enum.ConfigKeyEnum;
+import com.seek.food.dto.Employee.EmployeeDTO;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import lombok.Data;
@@ -23,10 +24,17 @@ public class EmployeeParamsRulesConfig {
     public void depNameCheck(String employeeDepName) {
         if (employeeDepName != null&& employeeDepName.length()>employeeDepNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
-    public void addressCheck(String employeeAddr) {
+    public void addrCheck(String employeeAddr) {
         if (employeeAddr!=null&&employeeAddr.length()>employeeAddrMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void descriptionCheck(String employeeDescription) {
         if (employeeDescription!=null&&employeeDescription.length()>employeeDescriptionMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public void employeeCheck(EmployeeDTO employee) {
+        addrCheck(employee.getEmployeeAddr());
+        descriptionCheck(employee.getEmployeeDescription());
+        positionNameCheck(employee.getEmployeePositionName());
+        depNameCheck(employee.getEmployeeDepName());
     }
 }

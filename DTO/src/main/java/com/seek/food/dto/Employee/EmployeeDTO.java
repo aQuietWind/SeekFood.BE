@@ -11,18 +11,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class EmployeeDTO {
     private Long employeeId;
-    private Long merchant_id;
-    private String employee_name;
-    private String employee_code;
-    private String employee_phone_number;
-    private String employee_addr;
-    private String employee_person_image_addr;
-    private Integer employee_month_salary;
-    private Integer employee_year_salary;
-    private String employee_description;
-    private String employee_position_name;
-    private String employee_dep_name;
-    private LocalDateTime create_time;
-    private Boolean is_resign;
-    private Boolean is_delete;
+    private Long merchantId;
+    private String employeeName;
+    private String employeeCode;
+    private String employeePhoneNumber;
+    private String employeeAddr;
+    private String employeePersonImageAddr;
+    private Integer employeeMonthSalary;
+    private Integer employeeYearSalary;
+    private String employeeDescription;
+    private String employeePositionName;
+    private String employeeDepName;
+    private LocalDateTime createTime;
+    private Boolean resign;
+    private Boolean delete;
 }

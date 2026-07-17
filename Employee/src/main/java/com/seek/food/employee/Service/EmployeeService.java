@@ -1,6 +1,7 @@
 package com.seek.food.employee.Service;
 
 import com.seek.food.dto.Employee.EmployeeDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ public interface EmployeeService {
     public List<EmployeeDTO> searchSimpleByName(String employeeName,int start,int need);
     public List<EmployeeDTO> searchSimpleByDep(String depName,int start,int need);
     public EmployeeDTO getDetailEmployee(long employeeId);
-    public void updateEmployee(EmployeeDTO employeeDTO);
-    public void resignEmployee(long employeeId);
+    public void updateEmployeeMessage(EmployeeDTO employeeDTO);
+    public void updatePersonImage(MultipartFile file,long employeeId);
+    public void updateResignEmployee(long employeeId);
     public void deleteEmployee(long employeeId);
 }

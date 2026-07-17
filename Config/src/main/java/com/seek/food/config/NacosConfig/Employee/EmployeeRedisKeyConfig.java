@@ -13,6 +13,7 @@ public class EmployeeRedisKeyConfig {
     private RedisKeyData employeeInsertCooldown;
     private RedisKeyData employeeGetSimpleCooldown;
     private RedisKeyData employeeUpdateMessageCooldown;
+    private RedisKeyData employeeUpdatePersonImageCooldown;
     private RedisKeyData employeeDeleteCooldown;
     private RedisKeyData employeeUpdateResignCooldown;
     private RedisKeyData employeeIdCount;

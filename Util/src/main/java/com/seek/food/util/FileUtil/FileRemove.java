@@ -2,6 +2,9 @@ package com.seek.food.util.FileUtil;
 
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.Function.RunFunction;
+import com.seek.food.util.Function.RunWithParam;
+import com.seek.food.util.Function.RunWithTwoParams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -52,24 +55,24 @@ public class FileRemove {
         }
     }
 
-    public static void removeFileListOutError(String dest, List<String> addrs) {
+    public static void removeFileListOutError(String dest, List<String> addrs, RunWithTwoParams<String,Exception> function) {
         if (addrs==null||addrs.isEmpty())return;
         for (String addr:addrs){
             try {
                 removeFile(dest,addr);
             }catch (Exception e){
-                log.error("删除文件:{} ,出现异常:",Paths.get(dest,addr),e);
+                function.function(Paths.get(dest,addr).toString(),e);
             }
         }
     }
 
-    public static void removeFileArrayOutError(String dest, String[] addrs) {
+    public static void removeFileArrayOutError(String dest, String[] addrs,RunWithTwoParams<String,Exception> function) {
         if (addrs == null||addrs.length==0)return;
         for (String addr:addrs){
             try {
                 removeFile(dest,addr);
             }catch (Exception e){
-                log.error("删除文件:{} ,出现异常:",Paths.get(dest,addr),e);
+                function.function(Paths.get(dest,addr).toString(),e);
             }
         }
     }
