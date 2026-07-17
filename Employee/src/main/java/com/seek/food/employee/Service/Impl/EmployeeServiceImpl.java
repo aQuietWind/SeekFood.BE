@@ -54,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRedisKeyConfig = employeeRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.rabbitTemplate = rabbitTemplate;
-        stringRedisTemplate.opsForValue().setIfAbsent(employeeRedisKeyConfig.getEmployeeIdCount().getName(),"0");
+        stringRedisTemplate.opsForValue().setIfAbsent(employeeRedisKeyConfig.getEmployeeIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
         FileSave.createDestDir(employeeParamsRulesConfig.getPersonImageDest());
     }
 
@@ -141,17 +141,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployeeMessage(EmployeeDTO employee){
         //检查格式
-        log.error("1");
         commonParamRulesConfig.commonIdCheck(employee.getEmployeeId());
-        log.error("2");
         if (employee.getEmployeeName()!=null) commonParamRulesConfig.personNameCheck(employee.getEmployeeName());
-        log.error("3");
         if (employee.getEmployeeCode()!=null) commonParamRulesConfig.codeCheck(employee.getEmployeeCode());
-        log.error("4");
         if (employee.getEmployeePhoneNumber()!=null) commonParamRulesConfig.phoneNumberCheck(employee.getEmployeePhoneNumber());
-        log.error("5");
         employeeParamsRulesConfig.employeeCheck(employee);
-        log.error("6");
         //获取商家id
         long merchantId=quickGetMerchantId();
         //放入其中

@@ -79,7 +79,7 @@ public class CommonParamRulesConfig {
         if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void commonIdCheck(Long id){
-        if (id==null||id>idCapacity||id<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (id==null||(id-idCapacity)>idCapacity||id<idCapacity) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
 }

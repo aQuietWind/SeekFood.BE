@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Employee/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Fund/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/Meal/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Merchant/src/main/resources/EsCreate.txt" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Merchant/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/User/src/main/resources/MysqlCreate.sql" dialect="MySQL" />

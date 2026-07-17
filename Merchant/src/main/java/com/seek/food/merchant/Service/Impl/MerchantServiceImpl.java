@@ -45,11 +45,10 @@ public class MerchantServiceImpl implements MerchantService {
     private final MerchantExchangeConfig merchantExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
-    private final RedisStreamData esSyncStream;
     private final MerchantUtil merchantUtil;
 
     @Autowired
-    public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
+    public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig
     , CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine, StringRedisTemplate stringRedisTemplate
     , MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
     , RabbitTemplate rabbitTemplate, PhoneCaffeine phoneCaffeine, CommonRedisKeyConfig commonRedisKeyConfig, MerchantUtil merchantUtil) {
@@ -61,7 +60,6 @@ public class MerchantServiceImpl implements MerchantService {
         this.stringRedisTemplate = stringRedisTemplate;
         this.rabbitTemplate = rabbitTemplate;
         this.phoneCaffeine = phoneCaffeine;
-        this.esSyncStream = merchantRedisStreamConfig.getEsSyncStream();
         this.merchantUtil = merchantUtil;
         //提前创建目录
         FileSave.createDestDir(merchantParamsRulesConfig.getMasterImageDest());
