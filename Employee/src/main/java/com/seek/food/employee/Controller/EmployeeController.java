@@ -45,7 +45,7 @@ public class EmployeeController {
     }
 
     //根据部门名称获取职员简易信息
-    @GetMapping(RequestPathEnum.Employee_Search_By_Dep)
+    @GetMapping(RequestPathEnum.Employee_Simple_Message_By_Dep)
     public Result<List<EmployeeDTO>> getEmployeesByDep(String depName,int start,int need){
         return Result.success(employeeService.searchSimpleByDep(depName,start,need));
     }

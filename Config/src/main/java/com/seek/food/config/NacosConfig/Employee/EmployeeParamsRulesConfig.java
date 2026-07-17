@@ -5,9 +5,11 @@ import com.seek.food.dto.Employee.EmployeeDTO;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
+@Slf4j
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Employee_Params_Rules_Config)
 @Data

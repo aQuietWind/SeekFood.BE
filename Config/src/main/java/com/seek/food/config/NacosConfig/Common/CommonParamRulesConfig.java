@@ -78,8 +78,8 @@ public class CommonParamRulesConfig {
     public void shouldAmountCheck(int shouldAmount) {
         if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
-    public void commonIdCheck(long id){
-        if (id>idCapacity||id<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void commonIdCheck(Long id){
+        if (id==null||id>idCapacity||id<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
 }

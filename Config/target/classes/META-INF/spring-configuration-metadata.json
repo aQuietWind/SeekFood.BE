@@ -273,11 +273,6 @@
       "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
     },
     {
-      "name": "employee.self.params.rules.employee-name-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
-    },
-    {
       "name": "employee.self.params.rules.employee-position-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeParamsRulesConfig"
@@ -289,6 +284,11 @@
     },
     {
       "name": "employee.self.redis.key.employee-delete-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-get-simple-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
     },
@@ -309,6 +309,11 @@
     },
     {
       "name": "employee.self.redis.key.employee-update-message-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
+    },
+    {
+      "name": "employee.self.redis.key.employee-update-person-image-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Employee.EmployeeRedisKeyConfig"
     },

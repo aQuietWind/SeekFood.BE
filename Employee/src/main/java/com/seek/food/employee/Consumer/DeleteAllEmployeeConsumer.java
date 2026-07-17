@@ -34,7 +34,7 @@ public class DeleteAllEmployeeConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Employee_Exchange_Change_Amount_Employee_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Merchant_Exchange_Delete_All_Employee_Queue)
     public void deleteAllEmployeeQueue(long merchantId){
         //先获取所有职员的头像地址
         List<String> personImageAddrs=employeeMapper.getAllPersonImageAddr(merchantId);

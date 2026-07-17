@@ -24,7 +24,7 @@
             employee_dep_name,
             is_resign
         from employee
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId} limit #{start},#{need}
+        where merchant_id=#{merchantId} and is_delete=false limit #{start},#{need}
     </select>
 
     <select id="getSimpleByResign" resultMap="EmployeeResultMap">
@@ -83,7 +83,7 @@
             create_time,
             is_resign
         from employee
-        where merchant_id=#{merchantId} and is_delete=false
+        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
     </select>
 
     <select id="getPersonImageAddr" resultType="java.lang.String">
@@ -125,7 +125,7 @@
         <if test="oldAddr==null"> is null</if>
     </update>
 
-    <update id="updateResign">
+    <update id="updateEmployeeResign">
         update employee set is_resign=1-is_resign where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
     </update>
 

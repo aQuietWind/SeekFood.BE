@@ -8,6 +8,7 @@ public class MQNameKeyEnum {
     public static final String Merchant_Exchange_Delete_File_Queue ="${mq.name.bind.merchant-exchange.delete-file-merchant-queue.name}";
     public static final String Merchant_Exchange_Delete_Merchant_Queue ="${mq.name.bind.merchant-exchange.delete-merchant-queue.name}";
     public static final String Merchant_Exchange_Es_Sync_Merchant_Queue ="${mq.name.bind.merchant-exchange.es-sync-merchant-queue.name}";
+    public static final String Merchant_Exchange_Delete_All_Employee_Queue ="${mq.name.bind.merchant-exchange.delete-all-employee-queue.name}";
 
     public static final String Employee_Exchange_Delete_File_Queue ="${mq.name.bind.employee-exchange.delete-file-employee-queue.name}";
     public static final String Employee_Exchange_Change_Amount_Employee_Queue ="${mq.name.bind.employee-exchange.change-employee-amount-queue.name}";

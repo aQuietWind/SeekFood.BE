@@ -15,6 +15,7 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.FileUtil.FileSave;
+import com.seek.food.util.Function.RunWithParam;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @RefreshScope
@@ -52,7 +54,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRedisKeyConfig = employeeRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.rabbitTemplate = rabbitTemplate;
-        stringRedisTemplate.opsForValue().setIfAbsent(employeeRedisKeyConfig.getEmployeeIdCount().getName(),"");
+        stringRedisTemplate.opsForValue().setIfAbsent(employeeRedisKeyConfig.getEmployeeIdCount().getName(),"0");
         FileSave.createDestDir(employeeParamsRulesConfig.getPersonImageDest());
     }
 
@@ -139,17 +141,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void updateEmployeeMessage(EmployeeDTO employee){
         //检查格式
+        log.error("1");
         commonParamRulesConfig.commonIdCheck(employee.getEmployeeId());
+        log.error("2");
         if (employee.getEmployeeName()!=null) commonParamRulesConfig.personNameCheck(employee.getEmployeeName());
+        log.error("3");
         if (employee.getEmployeeCode()!=null) commonParamRulesConfig.codeCheck(employee.getEmployeeCode());
+        log.error("4");
         if (employee.getEmployeePhoneNumber()!=null) commonParamRulesConfig.phoneNumberCheck(employee.getEmployeePhoneNumber());
+        log.error("5");
         employeeParamsRulesConfig.employeeCheck(employee);
+        log.error("6");
         //获取商家id
         long merchantId=quickGetMerchantId();
+        //放入其中
+        employee.setMerchantId(merchantId);
         //检查冷却
         quickCheckCooldown(employeeRedisKeyConfig.getEmployeeUpdateMessageCooldown(),merchantId);
         //写入MySQL
-        if (!employeeMapper.updateEmployee(employee)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        quickUpdateAndRemoveCaffeine(employee.getEmployeeId(),k->employeeMapper.updateEmployeeMessage(employee));
     }
 
     //更改职员照片
@@ -167,11 +177,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         //先获取旧文件地址
         String oldAddr=employeeMapper.getPersonImageAddr(employeeId,merchantId);
         //写入DB
-        if (!employeeMapper.updatePersonImage(addr,oldAddr,employeeId,merchantId)) {
-            //删除刚刚保存的文件
-            quickDeletePersonImage(addr);
-            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        }
+        quickUpdateAndRemoveCaffeine(employeeId,k->{
+            if (!employeeMapper.updatePersonImage(addr,oldAddr,employeeId,merchantId)) {
+                //删除刚刚保存的文件
+                quickDeletePersonImage(addr);
+                return false;
+            }
+            return true;
+        });
         //将旧文件放入MQ后台销毁
         quickDeletePersonImage(oldAddr);
     }
@@ -186,7 +199,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //检查冷却
         quickCheckCooldown(employeeRedisKeyConfig.getEmployeeUpdateResignCooldown(),merchantId);
         //更改雇佣状态
-        if (!employeeMapper.resignEmployee(employeeId,merchantId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        quickUpdateAndRemoveCaffeine(employeeId,k->employeeMapper.updateEmployeeResign(employeeId,merchantId));
     }
 
     //删除职员
@@ -199,7 +212,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //检查冷却
         quickCheckCooldown(employeeRedisKeyConfig.getEmployeeDeleteCooldown(),merchantId);
         //删除职员
-        if (!employeeMapper.deleteEmployee(employeeId,merchantId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        quickUpdateAndRemoveCaffeine(employeeId,k->employeeMapper.deleteEmployee(employeeId,merchantId));
         //发送MQ同步
         quickAmountSync(merchantId,-1);
     }
@@ -223,6 +236,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                 , new ChangeAmountDTO(merchantId,changeNumber),rabbitTemplate);
     }
 
+    private void quickUpdateAndRemoveCaffeine(long id, Function<Long,Boolean> fn){
+        employeeCaffeine.updateAndRemoveCaffeine(id,stringRedisTemplate,employeeRedisKeyConfig.getEmployeeMessageCaffeine().getRedisKey(id)
+        ,fn);
+    }
 
 
 

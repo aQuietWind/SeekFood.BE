@@ -15,9 +15,9 @@ public interface EmployeeMapper {
     public EmployeeDTO getDetailEmployee(long employeeId,long merchantId);
     public String getPersonImageAddr(long employeeId,long merchantId);
     public List<String> getAllPersonImageAddr(long merchantId);
-    public boolean updateEmployee(EmployeeDTO employeeDTO);
+    public boolean updateEmployeeMessage(EmployeeDTO employeeDTO);
     public boolean updatePersonImage(String addr, String oldAddr, long employeeId, long merchantId);
-    public boolean resignEmployee(long employeeId,long merchantId);
+    public boolean updateEmployeeResign(long employeeId,long merchantId);
     public boolean deleteEmployee(long employeeId,long merchantId);
     public void deleteAllEmployee(long merchantId);
 }

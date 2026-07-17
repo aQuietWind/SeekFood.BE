@@ -11,6 +11,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 // 仅普通Servlet微服务生效，WebFlux网关不会实例化这个类
@@ -27,7 +28,7 @@ public class GlobalRequestExceptionHandler {
     }
 
     // 参数校验异常
-    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
     public Result<?> handleParamError(Exception e, HttpServletResponse response) {
         return Result.error(ErrorCodeEnum.PARAM_ERROR,response);
     }
