@@ -1,24 +1,31 @@
 package com.seek.food.merchant.Consumer;
 
+import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.Enum.MQNameKeyEnum;
+import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
+import com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig;
 import com.seek.food.dto.Common.ChangeAmountDTO;
 import com.seek.food.merchant.Mapper.MerchantMapper;
+import com.seek.food.merchant.Util.MerchantUtil;
+import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 
 @Component
 @Slf4j
 public class ChangeEmployeeAmountConsumer {
-    private final StringRedisTemplate stringRedisTemplate;
     private final MerchantMapper merchantMapper;
+    private final MerchantUtil merchantUtil;
     @Autowired
-    public ChangeEmployeeAmountConsumer(StringRedisTemplate stringRedisTemplate,MerchantMapper merchantMapper) {
-        this.stringRedisTemplate = stringRedisTemplate;
+    public ChangeEmployeeAmountConsumer(MerchantMapper merchantMapper, MerchantUtil merchantUtil) {
         this.merchantMapper = merchantMapper;
+        this.merchantUtil = merchantUtil;
     }
 
 
@@ -26,6 +33,11 @@ public class ChangeEmployeeAmountConsumer {
     public void changeEmployeeAmountQueue(ChangeAmountDTO changeAmountDTO) {
         if (!merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
             log.warn("merchantId:{} ,在增减职员数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
+            merchantUtil.esSync(changeAmountDTO.getId());
         }
     }
+
+
+
+
 }

@@ -10,6 +10,7 @@ import com.seek.food.merchant.Caffeine.MerchantCaffeine;
 import com.seek.food.merchant.Caffeine.PhoneCaffeine;
 import com.seek.food.merchant.Mapper.MerchantMapper;
 import com.seek.food.merchant.Service.MerchantService;
+import com.seek.food.merchant.Util.MerchantUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -45,12 +46,13 @@ public class MerchantServiceImpl implements MerchantService {
     private final RabbitTemplate rabbitTemplate;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
     private final RedisStreamData esSyncStream;
+    private final MerchantUtil merchantUtil;
 
     @Autowired
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig, MerchantRedisStreamConfig merchantRedisStreamConfig
     , CommonParamRulesConfig commonParamRulesConfig, MerchantCaffeine merchantCaffeine, StringRedisTemplate stringRedisTemplate
     , MerchantParamsRulesConfig merchantParamsRulesConfig, MerchantExchangeConfig merchantExchangeConfig
-    , RabbitTemplate rabbitTemplate, PhoneCaffeine phoneCaffeine, CommonRedisKeyConfig commonRedisKeyConfig) {
+    , RabbitTemplate rabbitTemplate, PhoneCaffeine phoneCaffeine, CommonRedisKeyConfig commonRedisKeyConfig, MerchantUtil merchantUtil) {
         this.merchantMapper = merchantMapper;
         this.merchantRedisKeyConfig = merchantRedisKeyConfig;
         this.merchantParamsRulesConfig = merchantParamsRulesConfig;
@@ -60,6 +62,7 @@ public class MerchantServiceImpl implements MerchantService {
         this.rabbitTemplate = rabbitTemplate;
         this.phoneCaffeine = phoneCaffeine;
         this.esSyncStream = merchantRedisStreamConfig.getEsSyncStream();
+        this.merchantUtil = merchantUtil;
         //提前创建目录
         FileSave.createDestDir(merchantParamsRulesConfig.getMasterImageDest());
         FileSave.createDestDir(merchantParamsRulesConfig.getProofImageDest());
@@ -396,12 +399,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     //通知进行同步
     public void esSync(long merchantId){
-        RedisUtil.oftenSetBitAndAct(stringRedisTemplate,merchantRedisKeyConfig.getMerchantEsSyncRecord().getName(),merchantId
-        ,true,commonParamRulesConfig.getIdCapacity(),commonParamRulesConfig.getIdBitmapAreaNumber(),()->{
-            Map<String,String> map = new HashMap<>();
-            map.put(esSyncStream.getKeyName(),""+merchantId);
-            stringRedisTemplate.opsForStream().add(esSyncStream.getName(),map);
-        });
+        merchantUtil.esSync(merchantId);
     }
 
 
