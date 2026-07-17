@@ -61,7 +61,7 @@ public class CommonParamRulesConfig {
         if(birthday!=null&&LocalDate.now().isBefore(birthday)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void personNameCheck(String personName) {
-        if(personName==null||personName.length()>personNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if(personName==null||personName.length()>personNameMax||personName.isBlank()) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public void lonAndLatCheck(Double lon, Double lat) {
         if (lon!=null&&lat==null) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
@@ -77,6 +77,9 @@ public class CommonParamRulesConfig {
     }
     public void shouldAmountCheck(int shouldAmount) {
         if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public void commonIdCheck(long id){
+        if (id>idCapacity||id<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
 }

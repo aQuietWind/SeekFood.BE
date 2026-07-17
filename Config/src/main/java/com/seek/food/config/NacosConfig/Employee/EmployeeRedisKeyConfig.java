@@ -11,6 +11,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Data
 public class EmployeeRedisKeyConfig {
     private RedisKeyData employeeInsertCooldown;
+    private RedisKeyData employeeGetSimpleCooldown;
     private RedisKeyData employeeUpdateMessageCooldown;
     private RedisKeyData employeeDeleteCooldown;
     private RedisKeyData employeeUpdateResignCooldown;

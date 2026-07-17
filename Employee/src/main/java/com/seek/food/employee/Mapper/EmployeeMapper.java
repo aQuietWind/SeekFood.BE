@@ -9,8 +9,9 @@ import java.util.List;
 public interface EmployeeMapper {
     public void insertEmployee(String employeeName,long employeeId,long merchantId);
     public List<EmployeeDTO> getSimpleEmployee(int start, int need,long merchantId);
-    public List<EmployeeDTO> searchSimpleByName(String employeeName,int start,int need,long merchantId);
-    public List<EmployeeDTO> searchSimpleByDep(String depName,int start,int need,long merchantId);
+    public List<EmployeeDTO> getSimpleByResign(boolean resign,int start, int need,long merchantId);
+    public List<EmployeeDTO> getSimpleByName(String employeeName,int start,int need,long merchantId);
+    public List<EmployeeDTO> getSimpleByDep(String depName,int start,int need,long merchantId);
     public EmployeeDTO getDetailEmployee(long employeeId,long merchantId);
     public void updateEmployee(EmployeeDTO employeeDTO);
     public void resignEmployee(long employeeId,long merchantId);

@@ -103,7 +103,7 @@
     </update>
 
     <update id="updateResign">
-        update employee set is_resign=#{resign} where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        update employee set is_resign=1-is_resign where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
     </update>
 
     <update id="deleteEmployee">
