@@ -1,7 +1,7 @@
 package com.seek.food.meal.Scheduled;
 
 import com.seek.food.config.Data.RedisStreamData;
-import com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig;
+import com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig;
 import com.seek.food.util.FileUtil.FileRemove;
 import com.seek.food.util.Redis.RedisUtil;
 import jakarta.annotation.PostConstruct;
@@ -18,9 +18,9 @@ public class OldFileClearScheduled {
     private StringRedisTemplate stringRedisTemplate;
     private RedisStreamData oldFileStream;
     @Autowired
-    public OldFileClearScheduled(StringRedisTemplate stringRedisTemplate, MerchantRedisStreamConfig merchantRedisStreamConfig) {
+    public OldFileClearScheduled(StringRedisTemplate stringRedisTemplate, MealRedisStreamConfig mealRedisStreamConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
-        this.oldFileStream = merchantRedisStreamConfig.getOldFileStream();
+        this.oldFileStream = mealRedisStreamConfig.getOldFileStream();
     }
     @Scheduled(fixedDelay = 5000)
     public void clearOldFiles() {

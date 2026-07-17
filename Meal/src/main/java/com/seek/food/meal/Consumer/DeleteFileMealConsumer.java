@@ -1,10 +1,9 @@
-package com.seek.food.merchant.Consumer;
+package com.seek.food.meal.Consumer;
 
 import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.Enum.MQNameKeyEnum;
+import com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig;
 import com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig;
-import com.seek.food.config.NacosConfig.User.UserParamsRulesConfig;
-import com.seek.food.config.NacosConfig.User.UserRedisStreamConfig;
 import com.seek.food.util.FileUtil.FileRemove;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,13 +16,13 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class DeleteFileMerchantConsumer {
+public class DeleteFileMealConsumer {
     private final StringRedisTemplate stringRedisTemplate;
     private final RedisStreamData oldFileStream;
     @Autowired
-    public DeleteFileMerchantConsumer(StringRedisTemplate stringRedisTemplate, MerchantRedisStreamConfig merchantRedisStreamConfig) {
+    public DeleteFileMealConsumer(StringRedisTemplate stringRedisTemplate, MealRedisStreamConfig mealRedisStreamConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
-        this.oldFileStream = merchantRedisStreamConfig.getOldFileStream();
+        this.oldFileStream = mealRedisStreamConfig.getOldFileStream();
     }
 
 

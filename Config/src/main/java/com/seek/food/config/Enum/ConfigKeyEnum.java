@@ -26,6 +26,12 @@ public class ConfigKeyEnum {
     public static final String Employee_Redis_Stream_Config="employee.self.redis.stream";
 
 
+    public static final String Meal_Params_Rules_Config="meal.self.params.rules";
+    public static final String Meal_Redis_Key_Config="meal.self.redis.key";
+    public static final String Meal_Caffeine_Config="meal.self.jvm-caffeine";
+    public static final String Meal_Redis_Stream_Config="meal.self.redis.stream";
+
+
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";

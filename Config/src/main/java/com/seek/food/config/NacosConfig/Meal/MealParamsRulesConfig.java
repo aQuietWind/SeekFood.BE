@@ -9,28 +9,32 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @Data
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.Merchant_Params_Rules_Config)
+@ConfigurationProperties(ConfigKeyEnum.Meal_Params_Rules_Config)
 public class MealParamsRulesConfig {
-    private int merchantNameMax;
-    private int proofImageNumberMax;
-    private int showImageNumberMax;
-    private int showDescriptionMax;
-    private int merchantAddrMax;
-    private String masterImageDest;
-    private String proofImageDest;
-    private String showImageDest;
-    private String homeImageDest;
+    private int mealNameMax;
+    private int mealDescriptionMax;
+    private int mealContextMax;
+    private int mealTypeMax;
+    private int mealLockDay;
+    private String mealShowImageDest;
 
-    public void merchantNameCheck(String merchantName) {
-        if (merchantName == null) return;
-        if (merchantName.isBlank()||merchantName.length()>merchantNameMax)throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void mealNameCheck(String mealName) {
+        if (mealName == null || mealName.isBlank() || mealName.length()>mealNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
-    public void showDescriptionCheck(String showDescription) {
-        if (showDescription != null&&showDescription.length()>merchantNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void mealDescriptionCheck(String mealDescription) {
+        if (mealDescription!=null&&(mealDescription.isBlank()||mealDescription.length()>mealDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
-    public void merchantAddrCheck(String merchantAddr) {
-        if (merchantAddr != null&&merchantAddr.length()>merchantAddrMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void mealContextCheck(String mealContext) {
+        if (mealContext!=null&&(mealContext.isBlank()||mealContext.length()>mealContextMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public void mealTypeCheck(int mealType) {
+        if (mealType<0||mealType>mealTypeMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public void mealPriceCheck(Double price) {
+        if (price==null||price.isNaN()||price<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

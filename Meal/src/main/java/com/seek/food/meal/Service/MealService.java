@@ -1,4 +1,4 @@
 package com.seek.food.meal.Service;
 
-public class ServiceTest {
+public interface MealService {
 }

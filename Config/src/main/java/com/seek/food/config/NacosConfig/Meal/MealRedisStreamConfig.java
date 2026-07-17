@@ -8,8 +8,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @Data
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.Merchant_Redis_Stream_Config)
+@ConfigurationProperties(ConfigKeyEnum.Meal_Redis_Stream_Config)
 public class MealRedisStreamConfig {
     private RedisStreamData oldFileStream;
-    private RedisStreamData esSyncStream;
 }

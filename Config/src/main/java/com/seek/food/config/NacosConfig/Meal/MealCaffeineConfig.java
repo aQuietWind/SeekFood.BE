@@ -8,8 +8,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @Data
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.Merchant_Caffeine_Config)
+@ConfigurationProperties(ConfigKeyEnum.Meal_Caffeine_Config)
 public class MealCaffeineConfig {
-    private CaffeineData merchant;
-    private CaffeineData phoneNumber;
+    private CaffeineData meal;
 }
