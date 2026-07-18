@@ -15,9 +15,11 @@ CREATE TABLE `meal` (
                         `next_discount_time` datetime COMMENT '下次打折时间',
                         `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                         `delete_time` datetime COMMENT '目标删除时间，配合锁定一同进行延时删除',
+                        `delete_letter_id` varchar(50) COMMENT '目标删除MQ消息id',
                         `is_sell` boolean NOT NULL DEFAULT false COMMENT '是否在售',
                         `is_lock` boolean NOT NULL DEFAULT false COMMENT '是否锁定中,处于等待删除的状态',
                         `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否删除',
-                        INDEX phone_index(merchant_id,is_sell,is_delete)
+                        INDEX merchant_index(merchant_id,is_sell,is_delete),
+                        INDEX merchant_type_index(merchant_id,meal_type,is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='餐品表';
 

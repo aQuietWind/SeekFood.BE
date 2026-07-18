@@ -17,5 +17,8 @@ CREATE TABLE `employee` (
                             `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                             `is_resign` boolean NOT NULL DEFAULT false COMMENT '是否解雇',
                             `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否删除',
-                            INDEX phone_index(merchant_id,is_delete)
+                            INDEX merchant_index(merchant_id,is_delete),
+                            INDEX merchant_name_index(merchant_id,employee_name,is_delete),
+                            INDEX merchant_dep_index(merchant_id,employee_dep_name,is_delete),
+                            INDEX merchant_resign_index(merchant_id,is_resign,is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='职员表';

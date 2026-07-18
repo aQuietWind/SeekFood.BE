@@ -83,14 +83,14 @@
             create_time,
             is_resign
         from employee
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
     </select>
 
     <select id="getPersonImageAddr" resultType="java.lang.String">
         select
             employee_person_image_addr
         from employee
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
     </select>
 
     <select id="getAllPersonImageAddr" resultType="java.lang.String">
@@ -114,23 +114,23 @@
             <if test="employeePositionName!=null">employee_position_name=#{employeePositionName},</if>
             <if test="employeeDepName!=null">employee_dep_name=#{employeeDepName},</if>
         </set>
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="updatePersonImage">
         update employee set employee_person_image_addr=#{addr}
-        where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
         and employee_person_image_addr
         <if test="oldAddr!=null">=#{oldAddr}</if>
         <if test="oldAddr==null"> is null</if>
     </update>
 
     <update id="updateEmployeeResign">
-        update employee set is_resign=1-is_resign where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        update employee set is_resign=1-is_resign where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="deleteEmployee">
-        update employee set is_delete=true where merchant_id=#{merchantId} and is_delete=false and employee_id=#{employeeId}
+        update employee set is_delete=true where employee_id=#{employeeId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="deleteAllEmployee">

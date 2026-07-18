@@ -13,6 +13,7 @@ public class MealRedisKeyConfig {
     private RedisKeyData mealInsertCooldown;
     private RedisKeyData mealGetSimpleCooldown;
     private RedisKeyData mealUpdateMessageCooldown;
+    private RedisKeyData mealUpdatePriceCooldown;
     private RedisKeyData mealUpdateShowImageCooldown;
     private RedisKeyData mealUpdateSellCooldown;
     private RedisKeyData meralDeleteCooldown;

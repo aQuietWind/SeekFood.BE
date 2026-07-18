@@ -23,6 +23,7 @@ public class MealDTO {
     private LocalDateTime nextDiscountTime;
     private LocalDateTime createTime;
     private LocalDateTime deleteTime;
+    private String deleteLetterId;
     private Boolean sell;
     private Boolean lock;
     private Boolean delete;
