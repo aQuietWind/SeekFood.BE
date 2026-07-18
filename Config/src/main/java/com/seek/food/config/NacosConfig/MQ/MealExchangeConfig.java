@@ -12,6 +12,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class MealExchangeConfig {
     private String exchangeName;
     private String type;
-    private QueueData deleteMealDeadLetterQueue;
     private QueueData deleteFileMealQueue;
+    private QueueData deleteFileMealDeadLetterQueue;
+    private QueueData deleteAllFileMealDeadLetterQueue;
 }

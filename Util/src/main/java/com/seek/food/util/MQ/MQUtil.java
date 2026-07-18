@@ -42,7 +42,7 @@ public class MQUtil {
         rabbitTemplate.convertAndSend(exchangeName,routingKey,message,getCorrelation(exchangeName,routingKey));
     }
 
-    //发送消息并且返回letterId使用
+    //发送带过期时间的消息并且返回letterId使用
     public static String sendWithTLLAndGetId(String exchangeName, String routingKey, Object message, RabbitTemplate rabbitTemplate
     ,String tllMilliSeconds){
         String letterId=UUID.randomUUID().toString();
@@ -57,6 +57,18 @@ public class MQUtil {
         return letterId;
     }
 
+    //发送带过期时间的消息
+    public static void sendWithTLL(String exchangeName, String routingKey, Object message, RabbitTemplate rabbitTemplate
+    ,String tllMilliSeconds){
+        rabbitTemplate.convertAndSend(exchangeName,routingKey
+                ,message
+                , msg->{
+            //设置ttl
+            msg.getMessageProperties().setExpiration(tllMilliSeconds);
+            return msg;}
+                ,getCorrelation(exchangeName,routingKey));
+    }
+
     //生成一个仲裁队列
     public static Queue generateQuorumQueue(String queueName){
         Map<String, Object> args = new HashMap<>();
@@ -66,12 +78,14 @@ public class MQUtil {
     }
 
     //生成一个死信仲裁队列
-    public static Queue getDeadQuorumQueue(String queueName,String deadLetterExchangeName){
+    public static Queue getDeadQuorumQueue(String queueName,String deadLetterExchangeName,String deadLetterRoutingKey){
         Map<String, Object> args = new HashMap<>();
         //设置队列模式为quorum仲裁模式
         args.put("x-queue-type", "quorum");
         //绑定死信交换机
         args.put("x-dead-letter-exchange", deadLetterExchangeName);
+        //死信转发时使用的routingKey
+        args.put("x-dead-letter-routing-key", deadLetterRoutingKey);
         return new Queue(queueName, true, false, false, args);
     }
 

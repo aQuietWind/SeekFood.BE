@@ -42,24 +42,6 @@ public class MealController {
         return Result.success(mealService.getDetail(mealId));
     }
 
-    //商家获取预览的餐品信息
-    @GetMapping(RequestPathEnum.Meal_Merchant_Get_Simple)
-    public Result<List<MealDTO>> merchantGetSimple(int start,int need) {
-        return Result.success(mealService.merchantGetSimple(start,need));
-    }
-
-    //商家根据类型获取预览信息
-    @GetMapping(RequestPathEnum.Meal_Merchant_Get_Simple_By_Type)
-    public Result<List<MealDTO>> merchantGetSimpleByType(int type,int start,int need) {
-        return Result.success(mealService.merchantGetSimpleByType(type,start,need));
-    }
-
-    //商家获取餐品详细信息
-    @GetMapping(RequestPathEnum.Meal_Merchant_Get_Detail)
-    public Result<MealDTO> merchantGetDetail(long mealId) {
-        return Result.success(mealService.merchantGetDetail(mealId));
-    }
-
     //更改餐品常规的信息
     @PutMapping(RequestPathEnum.Meal_Update_Message)
     public Result<Void> updateMessage(@RequestBody MealDTO meal) {
@@ -88,19 +70,13 @@ public class MealController {
         return Result.success();
     }
 
-    //删除餐品(进入锁定状态)
+    //删除餐品
     @DeleteMapping(RequestPathEnum.Meal_Delete)
     public Result<Void> deleteMeal(long mealId) {
         mealService.deleteMeal(mealId);
         return Result.success();
     }
 
-    //取消锁定状态
-    @PutMapping(RequestPathEnum.Meal_Stop_Lock)
-    public Result<Void> stopLock(long mealId) {
-        mealService.stopLock(mealId);
-        return Result.success();
-    }
 
 
 

@@ -17,7 +17,7 @@ public class MealParamsRulesConfig {
     private int mealDescriptionMax;
     private int mealContentMax;
     private int mealTypeMax;
-    private int mealLockDay;
+    private int mealFileDeleteDay;
     private String mealShowImageDest;
 
     public void mealNameCheck(String mealName) {
@@ -42,5 +42,9 @@ public class MealParamsRulesConfig {
 
     public void mealNextDiscountTimeCheck(LocalDateTime nextDiscountTime) {
         if (nextDiscountTime!=null&&nextDiscountTime.isBefore(LocalDateTime.now())) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public String getMillsByFileDeleteDay() {
+        return String.valueOf(mealFileDeleteDay*24*60*60*1000);
     }
 }

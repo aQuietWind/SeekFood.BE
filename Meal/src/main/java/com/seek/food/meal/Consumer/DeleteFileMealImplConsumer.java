@@ -3,7 +3,6 @@ package com.seek.food.meal.Consumer;
 import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig;
-import com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig;
 import com.seek.food.util.FileUtil.FileRemove;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -15,17 +14,17 @@ import java.util.Map;
 
 @Component
 @Slf4j
-public class DeleteFileMealConsumer {
+public class DeleteFileMealImplConsumer {
     private final StringRedisTemplate stringRedisTemplate;
     private final RedisStreamData oldFileStream;
     @Autowired
-    public DeleteFileMealConsumer(StringRedisTemplate stringRedisTemplate, MealRedisStreamConfig mealRedisStreamConfig) {
+    public DeleteFileMealImplConsumer(StringRedisTemplate stringRedisTemplate, MealRedisStreamConfig mealRedisStreamConfig) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.oldFileStream = mealRedisStreamConfig.getOldFileStream();
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Meal_Exchange_Delete_File_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Dead_Letter_Exchange_Delete_File_Meal_Queue)
     public void deleteFileMealImplQueue(String path){
         try {
             FileRemove.removeFileByPath(path);

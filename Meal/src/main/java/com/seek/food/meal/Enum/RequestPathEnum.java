@@ -13,7 +13,6 @@ public class RequestPathEnum {
     public static final String Meal_Update_Show_Image = "/image";
     public static final String Meal_Update_Price = "/price";
     public static final String Meal_Update_Sell = "/sell";
-    public static final String Meal_Stop_Lock = "/lock";
     public static final String Meal_Delete = "/delete";
 
 

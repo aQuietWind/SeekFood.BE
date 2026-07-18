@@ -55,64 +55,12 @@
             meal_show_image_addr,
             meal_content,
             meal_type,
+            meal_sales_volume,
             next_discount_time,
             create_time,
             is_sell
         from meal
         where meal_id=#{mealId} and is_delete=false
-    </select>
-
-<!--    商家根据类型获取预览-->
-    <select id="merchantGetSimpleByType" resultMap="EmployeeResultMap">
-        select
-            meal_id,
-            merchant_id,
-            meal_name,
-            meal_price,
-            meal_show_image_addr,
-            meal_type,
-            meal_sales_volume,
-            is_sell,
-            is_lock
-        from employee
-        where merchant_id=#{merchantId} and meal_type=#{type} and is_delete=false  limit #{start},#{need}
-    </select>
-
-    <!--    商家获取预览信息-->
-    <select id="merchantGetSimple" resultMap="MealResultMap">
-        select
-            meal_id,
-            merchant_id,
-            meal_name,
-            meal_price,
-            meal_show_image_addr,
-            meal_type,
-            meal_sales_volume,
-            is_sell,
-            is_lock
-        from meal
-        where merchant_id=#{merchantId} and is_delete=false limit #{start},#{need}
-    </select>
-
-    <select id="merchantGetDetail" resultType="MealResultMap">
-        select
-            meal_id,
-            merchant_id,
-            meal_name,
-            meal_price,
-            meal_last_price,
-            meal_description,
-            meal_show_image_addr,
-            meal_content,
-            meal_type,
-            meal_sales_volume,
-            next_discount_time,
-            create_time,
-            delete_time,
-            is_sell,
-            is_lock
-        from meal
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
     </select>
 
 <!--    更新餐品信息-->
@@ -125,12 +73,12 @@
             <if test="mealType!=null">meal_type=#{mealType},</if>
             <if test="nextDiscountTime!=null">next_discount_time=#{nextDiscountTime},</if>
         </set>
-        where meal_id=#{meal_id} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
+        where meal_id=#{meal_id} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="updateShowImage">
         update meal set meal_show_image_addr=#{addr}
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
         and meal_show_image_addr
         <if test="oldAddr!=null">=#{oldAddr}</if>
         <if test="oldAddr==null"> is null</if>
@@ -138,32 +86,27 @@
 
     <select id="getShowImageAddr" resultType="java.lang.String">
         select meal_show_image_addr from meal
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
+        where meal_id=#{mealId} and is_delete=false
+    </select>
+
+    <select id="getShowImageAddrAfterDelete" resultType="java.lang.String">
+        select meal_show_image_addr from meal
+        where meal_id=#{mealId} and is_delete=true
     </select>
 
     <update id="updatePrice">
         update meal set meal_last_price=meal_price,meal_price=#{price}
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="updateSell">
         update meal set is_sell=1-is_sell
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
-    </update>
-
-    <update id="lockMeal">
-        update meal set is_lock=true,delete_time=#{deleteTime},delete_letter_id=#{deleteLetterId}
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
-    </update>
-
-    <update id="stopLock">
-        update meal set is_lock=false,delete_time=null,delete_letter_id=null
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=true
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="deleteMeal">
         update meal set is_delete=true
-        where meal_id=#{mealId} and is_lock=true and delete_letter_id=#{deleteLetterId} and is_delete=false
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
 

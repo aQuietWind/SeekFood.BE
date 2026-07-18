@@ -21,21 +21,14 @@ public class MealExchangeBind {
         this.mealExchangeConfig= mealExchangeConfig;
         this.deadLetterExchangeConfig = deadLetterExchangeConfig;
     }
-    //创建一个用于商家消息投递的交换机
+    //创建一个用于餐品消息投递的交换机
     @Bean
     public DirectExchange mealExchange() {
         return new DirectExchange(mealExchangeConfig.getExchangeName());
     }
-    //餐品死信队列,绑定死信交换机，同时监听MealExchange
-    @Bean
-    public Queue deleteMealDeadLetterQueue(){
-        return MQUtil.getDeadQuorumQueue(mealExchangeConfig.getDeleteMealDeadLetterQueue().getName(),deadLetterExchangeConfig.getExchangeName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding deleteMealDeadLetterBinding(Queue deleteMealDeadLetterQueue, DirectExchange mealExchange){
-        return BindingBuilder.bind(deleteMealDeadLetterQueue).to(mealExchange).with(mealExchangeConfig.getDeleteMealDeadLetterQueue().getRoutingKey());
-    }
+
+
+
     //文件删除队列
     @Bean
     public Queue deleteFileMealQueue(){
@@ -45,5 +38,31 @@ public class MealExchangeBind {
     @Bean
     public Binding deleteFileMealBinding(Queue deleteFileMealQueue, DirectExchange mealExchange){
         return BindingBuilder.bind(deleteFileMealQueue).to(mealExchange).with(mealExchangeConfig.getDeleteFileMealQueue().getRoutingKey());
+    }
+
+
+    //文件死信队列,绑定死信交换机，同时监听MealExchange
+    @Bean
+    public Queue deleteFileMealDeadLetterQueue(){
+        return MQUtil.getDeadQuorumQueue(mealExchangeConfig.getDeleteFileMealDeadLetterQueue().getName()
+                ,deadLetterExchangeConfig.getExchangeName(),deadLetterExchangeConfig.getDeleteFileMealImplQueue().getRoutingKey());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteMealDeadLetterBinding(Queue deleteFileMealDeadLetterQueue, DirectExchange mealExchange){
+        return BindingBuilder.bind(deleteFileMealDeadLetterQueue).to(mealExchange).with(mealExchangeConfig.getDeleteFileMealDeadLetterQueue().getRoutingKey());
+    }
+
+
+    //批量文件删除死信队列
+    @Bean
+    public Queue deleteAllFileMealDeadLetterQueue(){
+        return MQUtil.getDeadQuorumQueue(mealExchangeConfig.getDeleteAllFileMealDeadLetterQueue().getName()
+        ,deadLetterExchangeConfig.getExchangeName(),deadLetterExchangeConfig.getDeleteAllFileMealImplQueue().getRoutingKey());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteAllFileMealDeadLetterBinding(Queue deleteAllFileMealDeadLetterQueue, DirectExchange mealExchange){
+        return BindingBuilder.bind(deleteAllFileMealDeadLetterQueue).to(mealExchange).with(mealExchangeConfig.getDeleteAllFileMealDeadLetterQueue().getRoutingKey());
     }
 }
