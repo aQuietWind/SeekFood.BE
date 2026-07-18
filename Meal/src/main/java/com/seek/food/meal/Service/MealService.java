@@ -17,6 +17,6 @@ public interface MealService {
     public void updateShowImage(long mealId,MultipartFile file);
     public void updatePrice(long mealId,double price);
     public void updateSell(long mealId);
-    public void stopLock(long mealId);
     public void deleteMeal(long mealId);
+    public void stopLock(long mealId);
 }
