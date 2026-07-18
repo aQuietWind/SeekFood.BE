@@ -195,20 +195,28 @@ public class MealServiceImpl implements MealService {
     @Override
     public void deleteMeal(long mealId){
         long merchantId=quickGetMerchantId();
-        //检查冷却
-        quickCooldown(mealRedisKeyConfig.getMeralDeleteCooldown(),merchantId+""+mealId);
+        commonParamRulesConfig.commonIdCheck(mealId);
+        //检查冷却,并且使不同餐品拥有不同冷却
+        quickCooldown(mealRedisKeyConfig.getMealDeleteCooldown(),merchantId+""+mealId);
         //发消息到MQ
         String letterId=MQUtil.sendWithTLLAndGetId(mealExchangeConfig.getExchangeName(),mealExchangeConfig.getDeleteMealDeadLetterQueue().getRoutingKey()
         ,mealId,rabbitTemplate,""+mealParamsRulesConfig.getMealLockDay()*24*60*60*1000);
-        //写入于DB
-        if(!mealMapper.lockMeal(mealId,merchantId, LocalDateTime.now().plusDays(mealParamsRulesConfig.getMealLockDay()),letterId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //写入于DB,并且清除商家端信息缓存即可
+        quickUpdateAndClearMerchantCaffeine(mealId,k->mealMapper.lockMeal(mealId,merchantId, LocalDateTime.now().plusDays(mealParamsRulesConfig.getMealLockDay()),letterId));
     }
 
     //取消锁定状态
     @Override
     public void stopLock(long mealId){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.commonIdCheck(mealId);
+        //检查冷却
+        quickCooldown(mealRedisKeyConfig.getMealStopLockCooldown(),merchantId);
+        //更新并且清除缓存
+        quickUpdateAndClearMerchantCaffeine(mealId,k->mealMapper.stopLock(mealId,merchantId));
     }
+
+
 
     private long quickGetMerchantId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
@@ -223,6 +231,12 @@ public class MealServiceImpl implements MealService {
         mealCaffeine.updateAndRemoveCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMessageCaffeine().getRedisKey(id),updateFunction);
         //删除商家独有可视的餐品缓存
         mealMerchantCaffeine.deleteAllCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getRedisKey(id));
+    }
+
+    private void quickUpdateAndClearMerchantCaffeine(long id,Function<Long,Boolean> updateFunction){
+        //删除商家独有可视的餐品缓存
+        mealMerchantCaffeine.updateAndRemoveCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getRedisKey(id)
+        ,updateFunction);
     }
 
     private void quickDeleteFile(String dest,String addr){
