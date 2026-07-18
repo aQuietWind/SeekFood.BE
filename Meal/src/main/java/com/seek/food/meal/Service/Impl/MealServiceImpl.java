@@ -64,7 +64,7 @@ public class MealServiceImpl implements MealService {
         //检查冷却期
         quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),merchantId);
         //写入DB
-        mealMapper;
+        mealMapper.insertMeal(mealName,mealPrice,mealContent,merchantId);
     }
 
     //获取预览的餐品信息

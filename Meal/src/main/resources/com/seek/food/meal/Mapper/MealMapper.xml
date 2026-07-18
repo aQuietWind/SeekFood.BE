@@ -156,7 +156,7 @@
         where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
     </update>
 
-    <update id="stopLockMeal">
+    <update id="stopLock">
         update meal set is_lock=false,delete_time=null,delete_letter_id=null
         where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=true
     </update>
