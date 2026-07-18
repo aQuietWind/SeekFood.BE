@@ -2,7 +2,6 @@ package com.seek.food.meal.Mapper;
 
 import com.seek.food.dto.Meal.MealDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +16,7 @@ public interface MealMapper {
     public List<MealDTO> merchantGetSimpleByType(int type,int start,int need,long merchantId);
     public MealDTO merchantGetDetail(long mealId,long merchantId);
     public boolean updateMessage(MealDTO meal);
-    public boolean updateShowImage(long mealId, MultipartFile file,long merchantId);
+    public boolean updateShowImage(long mealId, String addr,String oldAddr,long merchantId);
     public boolean updatePrice(long mealId,double price,long merchantId);
     public boolean updateSell(long mealId,long merchantId);
     public boolean deleteMeal(long mealId,long merchantId);

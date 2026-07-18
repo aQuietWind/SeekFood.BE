@@ -11,6 +11,10 @@ import com.seek.food.meal.Caffeine.MealMerchantCaffeine;
 import com.seek.food.meal.Mapper.MealMapper;
 import com.seek.food.meal.Service.MealService;
 import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.FileUtil.FileSave;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,6 +23,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Function;
 
@@ -145,7 +150,21 @@ public class MealServiceImpl implements MealService {
     //更改展示图片
     @Override
     public void updateShowImage(long mealId, MultipartFile file){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.commonIdCheck(mealId);
+        quickCooldown(mealRedisKeyConfig.getMealUpdateShowImageCooldown(),merchantId);
+        //先保存新文件
+        String addr= FileSave.quickCheckAndSaveFile(file,mealParamsRulesConfig.getMealShowImageDest()
+                ,commonParamRulesConfig.getImageSize(),commonParamRulesConfig.getImageType());
+        //获取老地址
+        String oldAddr=mealMapper.getShowImageAddr(mealId,merchantId);
+        //更新地址，如果失败就删除新文件
+        if (!mealMapper.updateShowImage(mealId,addr,oldAddr,merchantId)){
+            quickDeleteFile(mealParamsRulesConfig.getMealShowImageDest(),addr);
+            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        }
+        //删除老文件
+        quickDeleteFile(mealParamsRulesConfig.getMealShowImageDest(),oldAddr);
     }
 
     //更改价格
@@ -185,5 +204,10 @@ public class MealServiceImpl implements MealService {
         mealCaffeine.updateAndRemoveCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMessageCaffeine().getRedisKey(id),updateFunction);
         //删除商家独有可视的餐品缓存
         mealMerchantCaffeine.deleteAllCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getRedisKey(id));
+    }
+
+    private void quickDeleteFile(String dest,String addr){
+        MQUtil.send(mealExchangeConfig.getExchangeName(),mealExchangeConfig.getDeleteFileMealQueue().getRoutingKey()
+        , Paths.get(dest,addr).toString(),rabbitTemplate);
     }
 }
