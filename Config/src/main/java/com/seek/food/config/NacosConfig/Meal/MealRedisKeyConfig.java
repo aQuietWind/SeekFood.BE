@@ -11,6 +11,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Meal_Redis_Key_Config)
 public class MealRedisKeyConfig {
     private RedisKeyData mealInsertCooldown;
+    private RedisKeyData mealGetSimpleCooldown;
     private RedisKeyData mealUpdateMessageCooldown;
     private RedisKeyData mealUpdateShowImageCooldown;
     private RedisKeyData mealUpdateSellCooldown;

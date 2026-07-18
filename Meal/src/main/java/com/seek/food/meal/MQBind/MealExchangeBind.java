@@ -26,12 +26,7 @@ public class MealExchangeBind {
     public DirectExchange mealExchange() {
         return new DirectExchange(mealExchangeConfig.getExchangeName());
     }
-    //创建死信交换机
-    @Bean
-    public DirectExchange deadLetterExchange() {
-        return new DirectExchange(deadLetterExchangeConfig.getExchangeName());
-    }
-    //餐品死信队列
+    //餐品死信队列,绑定死信交换机，同时监听MealExchange
     @Bean
     public Queue deleteMealDeadLetterQueue(){
         return MQUtil.getDeadQuorumQueue(mealExchangeConfig.getDeleteMealDeadLetterQueue().getName(),deadLetterExchangeConfig.getExchangeName());
@@ -40,16 +35,6 @@ public class MealExchangeBind {
     @Bean
     public Binding deleteMealDeadLetterBinding(Queue deleteMealDeadLetterQueue, DirectExchange mealExchange){
         return BindingBuilder.bind(deleteMealDeadLetterQueue).to(mealExchange).with(mealExchangeConfig.getDeleteMealDeadLetterQueue().getRoutingKey());
-    }
-    //餐品删除队列
-    @Bean
-    public Queue deleteMealQueue(){
-        return MQUtil.generateQuorumQueue(deadLetterExchangeConfig.getDeleteMealQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding deleteMealBinding(Queue deleteMealQueue, DirectExchange deadLetterExchange){
-        return BindingBuilder.bind(deleteMealQueue).to(deadLetterExchange).with(deadLetterExchangeConfig.getDeleteMealQueue().getRoutingKey());
     }
     //文件删除队列
     @Bean
