@@ -7,6 +7,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
+import java.time.LocalDateTime;
+
 @Data
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Meal_Params_Rules_Config)
@@ -36,5 +38,9 @@ public class MealParamsRulesConfig {
 
     public void mealPriceCheck(Double price) {
         if (price==null||price.isNaN()||price<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public void mealNextDiscountTimeCheck(LocalDateTime nextDiscountTime) {
+        if (nextDiscountTime!=null&&nextDiscountTime.isBefore(LocalDateTime.now())) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

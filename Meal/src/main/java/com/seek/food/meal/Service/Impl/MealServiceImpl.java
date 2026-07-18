@@ -141,6 +141,7 @@ public class MealServiceImpl implements MealService {
         if (meal.getMealName()!=null) mealParamsRulesConfig.mealNameCheck(meal.getMealName());
         mealParamsRulesConfig.mealContentCheck(meal.getMealContent());
         mealParamsRulesConfig.mealDescriptionCheck(meal.getMealDescription());
+        mealParamsRulesConfig.mealNextDiscountTimeCheck(meal.getNextDiscountTime());
         //检查冷却期
         quickCooldown(mealRedisKeyConfig.getMealUpdateMessageCooldown(),merchantId);
         //更新并且删除缓存
@@ -170,7 +171,13 @@ public class MealServiceImpl implements MealService {
     //更改价格
     @Override
     public void updatePrice(long mealId,double price){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.commonIdCheck(mealId);
+        mealParamsRulesConfig.mealPriceCheck(price);
+        //为了业务需求，直接进行商家id与餐品id的绑定，使不同的餐品拥有不同的冷却期时长
+        quickCooldown(mealRedisKeyConfig.getMealUpdatePriceCooldown(),merchantId+""+mealId);
+        //更新价格
+        if (!mealMapper.updatePrice(mealId,price,merchantId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
     //更改出售状态
