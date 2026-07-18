@@ -1,5 +1,6 @@
 package com.seek.food.meal.Service.Impl;
 
+import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.MealExchangeConfig;
 import com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig;
@@ -9,6 +10,8 @@ import com.seek.food.meal.Caffeine.MealCaffeine;
 import com.seek.food.meal.Caffeine.MealMerchantCaffeine;
 import com.seek.food.meal.Mapper.MealMapper;
 import com.seek.food.meal.Service.MealService;
+import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -44,13 +47,24 @@ public class MealServiceImpl implements MealService {
         this.mealExchangeConfig = mealExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.stringRedisTemplate = stringRedisTemplate;
+        //初始化mealId计数器
+        stringRedisTemplate.opsForValue().setIfAbsent(mealRedisKeyConfig.getMealIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
 
     //新增餐品
     @Override
     public void insertMeal(String mealName,double mealPrice,String mealContent){
-
+        //进行格式校验
+        mealParamsRulesConfig.mealNameCheck(mealName);
+        mealParamsRulesConfig.mealPriceCheck(mealPrice);
+        mealParamsRulesConfig.mealContextCheck(mealContent);
+        //获取商家id
+        long merchantId=quickGetMerchantId();
+        //检查冷却期
+        quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),merchantId);
+        //写入DB
+        mealMapper;
     }
 
     //获取预览的餐品信息
@@ -122,6 +136,14 @@ public class MealServiceImpl implements MealService {
     //取消锁定状态
     @Override
     public void stopLock(long mealId){
-        
+
+    }
+
+    private long quickGetMerchantId(){
+        return TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
+    }
+
+    private void quickCooldown(RedisKeyData key,long id){
+        RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
     }
 }

@@ -35,6 +35,6 @@ public class MealParamsRulesConfig {
     }
 
     public void mealPriceCheck(Double price) {
-        if (price==null||price.isNaN()||price<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (price==null||price.isNaN()||price<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }
