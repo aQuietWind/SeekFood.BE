@@ -32,9 +32,7 @@ public class FileRemove {
 
     public static void quickRemoveFile(Path path) {
         //检查路径是否存在
-        if (!Files.exists(path)){
-            throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        }
+        if (!Files.exists(path))return;
         //删除文件
         if(!path.toFile().delete()){
             throw new BizException(ErrorCodeEnum.FILE_DELETE_ERROR);

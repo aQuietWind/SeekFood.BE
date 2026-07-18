@@ -12,7 +12,6 @@ employee:
   self:
     params: 
       rules:
-        employee-name-max: 15
         employee-position-max: 15
         employee-dep-name-max: 15
         employee-addr-max: 60
@@ -23,8 +22,14 @@ employee:
         employee-insert-cooldown:
           name: "employee:insert:cooldown:"
           duration: 5
+        employee-get-simple-cooldown:
+          name: "employee:get:simple:cooldown:"
+          duration: 1
         employee-update-message-cooldown:
           name: "employee:update:message:cooldown:"
+          duration: 3
+        employee-update-person-image-cooldown:
+          name: "employee:update:person:image:cooldown:"
           duration: 3
         employee-delete-cooldown:
           name: "employee:delete:cooldown:"
@@ -40,7 +45,7 @@ employee:
           duration: 600
       stream:
         oldFileStream:
-          name: merchant:stream:old:file
+          name: employee:stream:old:file
           key-name: fileName
           consumer:
             group-name: DeleteGroup

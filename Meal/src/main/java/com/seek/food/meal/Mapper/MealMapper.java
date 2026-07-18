@@ -14,11 +14,11 @@ public interface MealMapper {
     public MealDTO getDetail(long mealId);
     public boolean updateMessage(MealDTO meal);
     public boolean updateShowImage(long mealId, String addr,String oldAddr,long merchantId);
-    public boolean updatePrice(long mealId,double price,long merchantId);
-    public boolean updateSell(long mealId,long merchantId);
-    public boolean deleteMeal(long mealId,long merchantId);
     public boolean deleteAllMeal(long merchantId);
     public String getShowImageAddr(long mealId);
     public String getShowImageAddrAfterDelete(long mealId);
     public List<String> getAllShowImageAddrAfterDelete(long merchantId);
+    public boolean updatePrice(long mealId,double price,long merchantId);
+    public boolean updateSell(long mealId,long merchantId);
+    public boolean deleteMeal(long mealId,long merchantId);
 }

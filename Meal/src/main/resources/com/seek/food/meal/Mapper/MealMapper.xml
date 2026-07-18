@@ -16,7 +16,7 @@
         values(#{mealId},#{merchantId},#{mealName},#{mealPrice},#{mealContext});
     </insert>
 
-<!--    用户等顾客角色获取餐品预览-->
+<!--    获取餐品预览-->
     <select id="getSimple" resultMap="MealResultMap">
         select
             meal_id,
@@ -30,7 +30,7 @@
         where merchant_id=#{merchantId} and is_delete=false limit #{start},#{need}
     </select>
 
-    <!--    用户等顾客角色根据类型获取餐品预览-->
+    <!--    根据类型获取餐品预览-->
     <select id="getSimpleByType" resultMap="MealResultMap">
         select
             meal_id,
@@ -92,6 +92,11 @@
     <select id="getShowImageAddrAfterDelete" resultType="java.lang.String">
         select meal_show_image_addr from meal
         where meal_id=#{mealId} and is_delete=true
+    </select>
+
+    <select id="getAllShowImageAddrAfterDelete" resultType="java.lang.String">
+        select meal_show_image_addr from meal
+        where merchant_id=#{merchantId} and is_delete=true
     </select>
 
     <update id="updatePrice">

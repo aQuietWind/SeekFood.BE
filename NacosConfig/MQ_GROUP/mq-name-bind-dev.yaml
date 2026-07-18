@@ -37,6 +37,9 @@ mq:
         delete-all-employee-queue:
           name: deleteAllEmployeeQueue
           routing-key: delete
+        delete-all-meal-queue:
+          name: deleteAllMealQueue
+          routing-key: delete
         es-sync-merchant-queue:
           name: esSyncMerchantQueue
           routing-key: esSync
@@ -49,4 +52,25 @@ mq:
         delete-file-employee-queue:
           name: deleteFileEmployeeQueue
           routing-key: deleteFile
+      meal-exchange:
+        exchange-name: mealExchange
+        type: direct
+        delete-file-mealr-queue:
+          name: deleteFileMealQueue
+          routing-key: deleteFile
+        delete-file-meal-dead-letter-queue:
+          name: deleteFileMealDeadLetterQueue
+          routing-key: deleteFileDeadLetter
+        delete-all-file-meal-dead-letter-queue:
+          name: deleteAllFileMealDeadLetterQueue
+          routing-key: deleteAllFileDeadLetter
+      dead-letter-exchange:
+        exchange-name: deadLetterExchange
+        type: direct
+        delete-file-meal-impl-queue:
+          name: deleteFileMealImplQueue
+          routing-key: deleteMealFile
+        delete-all-file-meal-impl-queue:
+          name: deleteAllFileMealImplQueue
+  1        routing-key: deleteAllMealFile
 

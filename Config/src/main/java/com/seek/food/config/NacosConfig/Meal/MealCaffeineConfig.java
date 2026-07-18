@@ -11,5 +11,4 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Meal_Caffeine_Config)
 public class MealCaffeineConfig {
     private CaffeineData meal;
-    private CaffeineData mealMerchant;
 }

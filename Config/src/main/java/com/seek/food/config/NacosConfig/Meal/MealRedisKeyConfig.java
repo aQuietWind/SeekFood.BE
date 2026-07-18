@@ -18,8 +18,6 @@ public class MealRedisKeyConfig {
     private RedisKeyData mealUpdateShowImageCooldown;
     private RedisKeyData mealUpdateSellCooldown;
     private RedisKeyData mealDeleteCooldown;
-    private RedisKeyData mealStopLockCooldown;
     private RedisKeyData mealIdCount;
     private RedisKeyData mealMessageCaffeine;
-    private RedisKeyData mealMerchantMessageCaffeine;
 }
