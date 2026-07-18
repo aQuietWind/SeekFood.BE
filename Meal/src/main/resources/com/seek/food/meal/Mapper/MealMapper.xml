@@ -163,7 +163,7 @@
 
     <update id="deleteMeal">
         update meal set is_delete=true
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_lock=true and delete_letter_id=#{deleteLetterId} and is_delete=false
+        where meal_id=#{mealId} and is_lock=true and delete_letter_id=#{deleteLetterId} and is_delete=false
     </update>
 
 

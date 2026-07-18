@@ -210,12 +210,11 @@ public class MealServiceImpl implements MealService {
     public void stopLock(long mealId){
         long merchantId=quickGetMerchantId();
         commonParamRulesConfig.commonIdCheck(mealId);
-        //检查冷却
+        //检查冷却,不需要加上餐品id，因为锁定时已经进行了冷却隔离，此处正常2~3s冷却即可
         quickCooldown(mealRedisKeyConfig.getMealStopLockCooldown(),merchantId);
         //更新并且清除缓存
         quickUpdateAndClearMerchantCaffeine(mealId,k->mealMapper.stopLock(mealId,merchantId));
     }
-
 
 
     private long quickGetMerchantId(){

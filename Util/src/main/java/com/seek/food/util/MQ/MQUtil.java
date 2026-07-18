@@ -11,14 +11,22 @@ import java.util.UUID;
 
 @Slf4j
 public class MQUtil {
+
     //产生CorrelationData
     public static CorrelationData getCorrelation(String exChangeName,String routingKey){
-        return getCorrelationWithId(exChangeName,routingKey, UUID.randomUUID().toString());
+        //生成一个带有随机id的correlationData
+        CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+        //设置回调函数
+        correlationData.getFuture().whenComplete((r,e)->{
+            if (e!=null)log.error("Exchange:{}发送消息到RoutingKey:{},发生异常",exChangeName,routingKey,e);
+            if (!r.isAck())log.error("Exchange:{}发送消息到RoutingKey:{},未能成功到达交换机",exChangeName,routingKey);
+        });
+        return correlationData;
     }
 
     //产生CorrelationData
     public static CorrelationData getCorrelationWithId(String exChangeName,String routingKey,String id){
-        //生成一个带有随机id的correlationData
+        //生成一个带有指定id的correlationData
         CorrelationData correlationData = new CorrelationData(id);
         //设置回调函数
         correlationData.getFuture().whenComplete((r,e)->{
@@ -38,10 +46,12 @@ public class MQUtil {
     public static String sendWithTLLAndGetId(String exchangeName, String routingKey, Object message, RabbitTemplate rabbitTemplate
     ,String tllMilliSeconds){
         String letterId=UUID.randomUUID().toString();
-        rabbitTemplate.convertAndSend(exchangeName,routingKey,message
+        rabbitTemplate.convertAndSend(exchangeName,routingKey
+                ,message
                 , msg->{
             //设置ttl
             msg.getMessageProperties().setExpiration(tllMilliSeconds);
+            msg.getMessageProperties().setMessageId(letterId);
             return msg;}
                 ,getCorrelationWithId(exchangeName,routingKey,letterId));
         return letterId;
