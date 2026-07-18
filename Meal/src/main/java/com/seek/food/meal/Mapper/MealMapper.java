@@ -12,7 +12,7 @@ public interface MealMapper {
     public void insertMeal(String mealName,double mealPrice,String mealContent,long merchantId);
     public List<MealDTO> getSimple(long merchantId, int start, int need);
     public List<MealDTO> getSimpleByType(long merchantId,int type,int start,int need);
-    public MealDTO getDetail(long mealId,long merchantId);
+    public MealDTO getDetail(long mealId);
     public List<MealDTO> merchantGetSimple(int start,int need,long merchantId);
     public List<MealDTO> merchantGetSimpleByType(int type,int start,int need,long merchantId);
     public MealDTO merchantGetDetail(long mealId,long merchantId);

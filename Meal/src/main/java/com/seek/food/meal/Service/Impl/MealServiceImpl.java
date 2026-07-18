@@ -70,25 +70,33 @@ public class MealServiceImpl implements MealService {
     //获取预览的餐品信息
     @Override
     public List<MealDTO> getSimple(long merchantId, int start, int need){
-
+        commonParamRulesConfig.merchantIdCheck(merchantId);
+        commonParamRulesConfig.needNumberCheck(need);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),merchantId);
+        return mealMapper.getSimple(merchantId,start,need);
     }
 
     //根据类型获取预览信息
     @Override
     public List<MealDTO> getSimpleByType(long merchantId,int type,int start,int need){
-
+        commonParamRulesConfig.merchantIdCheck(merchantId);
+        commonParamRulesConfig.needNumberCheck(need);
+        mealParamsRulesConfig.mealTypeCheck(type);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),merchantId);
+        return mealMapper.getSimpleByType(merchantId,type,start,need);
     }
 
     //获取餐品详细信息
     @Override
     public MealDTO getDetail(long mealId){
-
+        commonParamRulesConfig.commonIdCheck(mealId);
+        return mealCaffeine.getAndAutoLoad(mealId,stringRedisTemplate,mealRedisKeyConfig.getMealMessageCaffeine().getRedisKey(mealId)
+        ,mealRedisKeyConfig.getMealMessageCaffeine().getDuration(),MealDTO.class,k->mealMapper.getDetail(mealId));
     }
 
     //商家获取预览的餐品信息
     @Override
     public List<MealDTO> merchantGetSimple(int start,int need){
-
     }
 
     //商家根据类型获取预览信息
