@@ -27,7 +27,7 @@
             meal_type,
             is_sell
         from meal
-        where merchant_id=#{merchantId} and is_sell=true and is_delete=false limit #{start},#{need}
+        where merchant_id=#{merchantId} and is_delete=false limit #{start},#{need}
     </select>
 
     <!--    用户等顾客角色根据类型获取餐品预览-->
@@ -59,7 +59,7 @@
             create_time,
             is_sell
         from meal
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
+        where meal_id=#{mealId} and is_delete=false
     </select>
 
 <!--    商家根据类型获取预览-->
@@ -138,16 +138,16 @@
 
     <select id="getShowImageAddr" resultType="java.lang.String">
         select meal_show_image_addr from meal
-        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
     </select>
 
     <update id="updatePrice">
-        update meal set mmeal_last_price=meal_price,meal_price=#{price}
+        update meal set meal_last_price=meal_price,meal_price=#{price}
         where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
     </update>
 
     <update id="updateSell">
-        update meal set mmeal_last_price=meal_price,meal_price=#{price}
+        update meal set is_sell=1-is_sell
         where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false and is_lock=false
     </update>
 
