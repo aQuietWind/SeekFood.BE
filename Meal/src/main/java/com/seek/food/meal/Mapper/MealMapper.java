@@ -16,12 +16,12 @@ public interface MealMapper {
     public List<MealDTO> merchantGetSimple(int start,int need,long merchantId);
     public List<MealDTO> merchantGetSimpleByType(int type,int start,int need,long merchantId);
     public MealDTO merchantGetDetail(long mealId,long merchantId);
-    public void updateMessage(MealDTO meal);
-    public void updateShowImage(long mealId, MultipartFile file,long merchantId);
-    public void updatePrice(long mealId,double price,long merchantId);
-    public void updateSell(long mealId,long merchantId);
-    public void deleteMeal(long mealId,long merchantId);
-    public void stopLock(long mealId,long merchantId);
-    public void lockMeal(long mealId, long merchantId, LocalDateTime deleteTime,String deleteLetterId);
+    public boolean updateMessage(MealDTO meal);
+    public boolean updateShowImage(long mealId, MultipartFile file,long merchantId);
+    public boolean updatePrice(long mealId,double price,long merchantId);
+    public boolean updateSell(long mealId,long merchantId);
+    public boolean deleteMeal(long mealId,long merchantId);
+    public boolean stopLock(long mealId,long merchantId);
+    public boolean lockMeal(long mealId, long merchantId, LocalDateTime deleteTime,String deleteLetterId);
     public String getShowImageAddr(long mealId,long merchantId);
 }

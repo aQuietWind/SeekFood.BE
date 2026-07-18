@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -59,7 +60,7 @@ public class MealServiceImpl implements MealService {
         //进行格式校验
         mealParamsRulesConfig.mealNameCheck(mealName);
         mealParamsRulesConfig.mealPriceCheck(mealPrice);
-        mealParamsRulesConfig.mealContextCheck(mealContent);
+        mealParamsRulesConfig.mealContentCheck(mealContent);
         //获取商家id
         long merchantId=quickGetMerchantId();
         //检查冷却期
@@ -119,13 +120,26 @@ public class MealServiceImpl implements MealService {
     //商家获取餐品详细信息
     @Override
     public MealDTO merchantGetDetail(long mealId){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.commonIdCheck(mealId);
+        return mealMerchantCaffeine.getAndAutoLoad(mealId,stringRedisTemplate,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getRedisKey(mealId)
+                ,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getDuration(),MealDTO.class,k->mealMapper.merchantGetDetail(mealId,merchantId));
     }
 
     //更改餐品常规的信息
     @Override
     public void updateMessage(MealDTO meal){
-
+        long merchantId=quickGetMerchantId();
+        //检查参数
+        commonParamRulesConfig.commonIdCheck(meal.getMealId());
+        mealParamsRulesConfig.mealTypeCheck(meal.getMealType());
+        if (meal.getMealName()!=null) mealParamsRulesConfig.mealNameCheck(meal.getMealName());
+        mealParamsRulesConfig.mealContentCheck(meal.getMealContent());
+        mealParamsRulesConfig.mealDescriptionCheck(meal.getMealDescription());
+        //检查冷却期
+        quickCooldown(mealRedisKeyConfig.getMealUpdateMessageCooldown(),merchantId);
+        //更新并且删除缓存
+        quickUpdateAndClearAllCaffeine(meal.getMealId(),k->mealMapper.updateMessage(meal));
     }
 
     //更改展示图片
@@ -164,5 +178,12 @@ public class MealServiceImpl implements MealService {
 
     private void quickCooldown(RedisKeyData key,Object id){
         RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
+    }
+
+    private void quickUpdateAndClearAllCaffeine(long id,Function<Long,Boolean> updateFunction){
+        //更新并且删除普通缓存，如果更新失败会抛异常
+        mealCaffeine.updateAndRemoveCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMessageCaffeine().getRedisKey(id),updateFunction);
+        //删除商家独有可视的餐品缓存
+        mealMerchantCaffeine.deleteAllCaffeine(id,stringRedisTemplate,mealRedisKeyConfig.getMealMerchantMessageCaffeine().getRedisKey(id));
     }
 }

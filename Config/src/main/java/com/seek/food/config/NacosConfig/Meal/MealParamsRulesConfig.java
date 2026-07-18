@@ -13,7 +13,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class MealParamsRulesConfig {
     private int mealNameMax;
     private int mealDescriptionMax;
-    private int mealContextMax;
+    private int mealContentMax;
     private int mealTypeMax;
     private int mealLockDay;
     private String mealShowImageDest;
@@ -26,8 +26,8 @@ public class MealParamsRulesConfig {
         if (mealDescription!=null&&(mealDescription.isBlank()||mealDescription.length()>mealDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
-    public void mealContextCheck(String mealContext) {
-        if (mealContext!=null&&(mealContext.isBlank()||mealContext.length()>mealContextMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void mealContentCheck(String mealContent) {
+        if (mealContent!=null&&(mealContent.isBlank()||mealContent.length()>mealContentMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
     public void mealTypeCheck(int mealType) {

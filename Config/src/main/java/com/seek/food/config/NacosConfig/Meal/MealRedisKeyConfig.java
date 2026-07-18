@@ -20,4 +20,5 @@ public class MealRedisKeyConfig {
     private RedisKeyData meralDeleteCooldown;
     private RedisKeyData mealIdCount;
     private RedisKeyData mealMessageCaffeine;
+    private RedisKeyData mealMerchantMessageCaffeine;
 }
