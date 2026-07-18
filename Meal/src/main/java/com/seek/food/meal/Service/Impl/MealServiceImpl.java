@@ -55,6 +55,7 @@ public class MealServiceImpl implements MealService {
     //新增餐品
     @Override
     public void insertMeal(String mealName,double mealPrice,String mealContent){
+        String tokenId=TokenIdContext.get();
         //进行格式校验
         mealParamsRulesConfig.mealNameCheck(mealName);
         mealParamsRulesConfig.mealPriceCheck(mealPrice);
@@ -62,7 +63,7 @@ public class MealServiceImpl implements MealService {
         //获取商家id
         long merchantId=quickGetMerchantId();
         //检查冷却期
-        quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),merchantId);
+        quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),tokenId);
         //写入DB
         mealMapper.insertMeal(mealName,mealPrice,mealContent,merchantId);
     }
@@ -70,19 +71,21 @@ public class MealServiceImpl implements MealService {
     //获取预览的餐品信息
     @Override
     public List<MealDTO> getSimple(long merchantId, int start, int need){
+        String tokenId=TokenIdContext.get();
         commonParamRulesConfig.merchantIdCheck(merchantId);
         commonParamRulesConfig.needNumberCheck(need);
-        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),merchantId);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),tokenId);
         return mealMapper.getSimple(merchantId,start,need);
     }
 
     //根据类型获取预览信息
     @Override
     public List<MealDTO> getSimpleByType(long merchantId,int type,int start,int need){
+        String tokenId=TokenIdContext.get();
         commonParamRulesConfig.merchantIdCheck(merchantId);
         commonParamRulesConfig.needNumberCheck(need);
         mealParamsRulesConfig.mealTypeCheck(type);
-        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),merchantId);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleTypeCooldown(),tokenId);
         return mealMapper.getSimpleByType(merchantId,type,start,need);
     }
 
@@ -97,12 +100,20 @@ public class MealServiceImpl implements MealService {
     //商家获取预览的餐品信息
     @Override
     public List<MealDTO> merchantGetSimple(int start,int need){
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.needNumberCheck(need);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleCooldown(),merchantId);
+        return mealMapper.merchantGetSimple(start,need,merchantId);
     }
 
     //商家根据类型获取预览信息
     @Override
     public List<MealDTO> merchantGetSimpleByType(int type,int start,int need){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.needNumberCheck(need);
+        mealParamsRulesConfig.mealTypeCheck(type);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleTypeCooldown(),merchantId);
+        return mealMapper.merchantGetSimpleByType(type,start,need,merchantId);
     }
 
     //商家获取餐品详细信息
@@ -151,7 +162,7 @@ public class MealServiceImpl implements MealService {
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
     }
 
-    private void quickCooldown(RedisKeyData key,long id){
+    private void quickCooldown(RedisKeyData key,Object id){
         RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
     }
 }
