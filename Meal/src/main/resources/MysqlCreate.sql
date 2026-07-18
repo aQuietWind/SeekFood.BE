@@ -14,6 +14,7 @@ CREATE TABLE `meal` (
                         `meal_sales_volume` int not null default 0 COMMENT '餐品销售总数',
                         `next_discount_time` datetime COMMENT '下次打折时间',
                         `create_time` datetime NOT NULL default now() COMMENT '创建时间',
+                        `delete_time` datetime COMMENT '目标删除时间，配合锁定一同进行延时删除',
                         `is_sell` boolean NOT NULL DEFAULT false COMMENT '是否在售',
                         `is_lock` boolean NOT NULL DEFAULT false COMMENT '是否锁定中,处于等待删除的状态',
                         `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否删除',

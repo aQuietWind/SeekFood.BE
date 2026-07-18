@@ -73,6 +73,16 @@ public class MerchantExchangeBind {
     public Binding deleteAllEmployeeBinding(Queue deleteAllEmployeeQueue, DirectExchange merchantExchange){
         return BindingBuilder.bind(deleteAllEmployeeQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteAllEmployeeQueue().getRoutingKey());
     }
+    //餐品删除销毁队列
+    @Bean
+    public Queue deleteAllMealQueue(){
+        return MQUtil.generateQuorumQueue(merchantExchangeConfig.getDeleteAllMealQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteAllMealBinding(Queue deleteAllMealQueue, DirectExchange merchantExchange){
+        return BindingBuilder.bind(deleteAllMealQueue).to(merchantExchange).with(merchantExchangeConfig.getDeleteAllMealQueue().getRoutingKey());
+    }
     //es同步队列
     @Bean
     public Queue esSyncMerchantQueue(){

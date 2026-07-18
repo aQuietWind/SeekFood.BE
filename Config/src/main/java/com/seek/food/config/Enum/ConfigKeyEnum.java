@@ -35,6 +35,8 @@ public class ConfigKeyEnum {
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";
+    public static final String Meal_Exchange_Config="mq.name.bind.meal-exchange";
+    public static final String Dead_Letter_Exchange_Config="mq.name.bind.dead-letter-exchange";
 
     public static final String Fund_Params_Rules_Config="fund.self.params.rules";
     public static final String Fund_Redis_Key_Config="fund.self.redis.key";
