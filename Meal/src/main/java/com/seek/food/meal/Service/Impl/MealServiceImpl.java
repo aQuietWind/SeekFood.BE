@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Function;
 
@@ -142,8 +143,8 @@ public class MealServiceImpl implements MealService {
         mealParamsRulesConfig.mealContentCheck(meal.getMealContent());
         mealParamsRulesConfig.mealDescriptionCheck(meal.getMealDescription());
         mealParamsRulesConfig.mealNextDiscountTimeCheck(meal.getNextDiscountTime());
-        //检查冷却期
-        quickCooldown(mealRedisKeyConfig.getMealUpdateMessageCooldown(),merchantId);
+        //检查冷却期,并且通过双id机制使不同餐品享有不同的冷却期
+        quickCooldown(mealRedisKeyConfig.getMealUpdateMessageCooldown(),merchantId+""+meal.getMealId());
         //更新并且删除缓存
         quickUpdateAndClearAllCaffeine(meal.getMealId(),k->mealMapper.updateMessage(meal));
     }
@@ -183,13 +184,24 @@ public class MealServiceImpl implements MealService {
     //更改出售状态
     @Override
     public void updateSell(long mealId){
-
+        long merchantId=quickGetMerchantId();
+        commonParamRulesConfig.commonIdCheck(mealId);
+        //同样为了不同餐品间不同的冷却
+        quickCooldown(mealRedisKeyConfig.getMealUpdateSellCooldown(),merchantId+""+mealId);
+        if (!mealMapper.updateSell(mealId,merchantId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
     //删除餐品(进入锁定状态)
     @Override
     public void deleteMeal(long mealId){
-
+        long merchantId=quickGetMerchantId();
+        //检查冷却
+        quickCooldown(mealRedisKeyConfig.getMeralDeleteCooldown(),merchantId+""+mealId);
+        //发消息到MQ
+        String letterId=MQUtil.sendWithTLLAndGetId(mealExchangeConfig.getExchangeName(),mealExchangeConfig.getDeleteMealDeadLetterQueue().getRoutingKey()
+        ,mealId,rabbitTemplate,""+mealParamsRulesConfig.getMealLockDay()*24*60*60*1000);
+        //写入于DB
+        if(!mealMapper.lockMeal(mealId,merchantId, LocalDateTime.now().plusDays(mealParamsRulesConfig.getMealLockDay()),letterId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
     }
 
     //取消锁定状态
