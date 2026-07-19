@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface MealMapper {
-    public void insertMeal(String mealName,double mealPrice,String mealContent,long merchantId);
+    public void insertMeal(long mealId,String mealName,double mealPrice,String mealContent,long merchantId);
     public List<MealDTO> getSimple(long merchantId, int start, int need);
     public List<MealDTO> getSimpleByType(long merchantId,int type,int start,int need);
     public MealDTO getDetail(long mealId);

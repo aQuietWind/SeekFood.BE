@@ -9,6 +9,7 @@ import com.seek.food.dto.Meal.MealDTO;
 import com.seek.food.meal.Caffeine.MealCaffeine;
 import com.seek.food.meal.Mapper.MealMapper;
 import com.seek.food.meal.Service.MealService;
+import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
@@ -60,7 +61,6 @@ public class MealServiceImpl implements MealService {
     //新增餐品
     @Override
     public void insertMeal(String mealName,double mealPrice,String mealContent){
-        String tokenId=TokenIdContext.get();
         //进行格式校验
         mealParamsRulesConfig.mealNameCheck(mealName);
         mealParamsRulesConfig.mealPriceCheck(mealPrice);
@@ -68,9 +68,9 @@ public class MealServiceImpl implements MealService {
         //获取商家id
         long merchantId=quickGetMerchantId();
         //检查冷却期
-        quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),tokenId);
+        quickCooldown(mealRedisKeyConfig.getMealInsertCooldown(),merchantId);
         //写入DB
-        mealMapper.insertMeal(mealName,mealPrice,mealContent,merchantId);
+        mealMapper.insertMeal(IdUtil.IdGenerateByIncrease(mealRedisKeyConfig.getMealIdCount().getName(),stringRedisTemplate),mealName,mealPrice,mealContent,merchantId);
     }
 
     //获取预览的餐品信息

@@ -28,3 +28,4 @@ CREATE TABLE `merchant` (
                             `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否删除',
                             INDEX phone_index(merchant_master_phone_number,is_delete)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家表';
+

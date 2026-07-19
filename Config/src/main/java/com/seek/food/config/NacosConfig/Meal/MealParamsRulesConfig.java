@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -37,7 +38,7 @@ public class MealParamsRulesConfig {
     }
 
     public void mealPriceCheck(Double price) {
-        if (price==null||price.isNaN()||price<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (price==null||price.isNaN()||price<0||String.valueOf(price).split("\\.")[1].length()!=2) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
     public void mealNextDiscountTimeCheck(LocalDateTime nextDiscountTime) {

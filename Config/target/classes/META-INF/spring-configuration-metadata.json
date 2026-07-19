@@ -61,6 +61,26 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "meal.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Meal.MealCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealCaffeineConfig"
+    },
+    {
+      "name": "meal.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.stream",
+      "type": "com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig"
+    },
+    {
       "name": "merchant.self.es.merchant",
       "type": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
@@ -86,9 +106,19 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
+      "name": "mq.name.bind.dead-letter-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.employee-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.meal-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
     },
     {
       "name": "mq.name.bind.merchant-exchange",
@@ -383,6 +413,96 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
+      "name": "meal.self.jvm-caffeine.meal",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealCaffeineConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-content-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-description-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-file-delete-day",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-show-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.params.rules.meal-type-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-delete-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-get-simple-type-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-update-message-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-update-price-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-update-sell-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.key.meal-update-show-image-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
+    },
+    {
+      "name": "meal.self.redis.stream.old-file-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig"
+    },
+    {
       "name": "merchant.self.es.merchant.index-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig"
@@ -608,6 +728,26 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
+      "name": "mq.name.bind.dead-letter-exchange.delete-all-file-meal-impl-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.dead-letter-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.dead-letter-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.employee-exchange.change-employee-amount-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
@@ -628,7 +768,37 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.EmployeeExchangeConfig"
     },
     {
+      "name": "mq.name.bind.meal-exchange.delete-all-file-meal-dead-letter-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.meal-exchange.delete-file-meal-dead-letter-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.meal-exchange.delete-file-meal-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.meal-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.meal-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MealExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.merchant-exchange.delete-all-employee-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.merchant-exchange.delete-all-meal-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
