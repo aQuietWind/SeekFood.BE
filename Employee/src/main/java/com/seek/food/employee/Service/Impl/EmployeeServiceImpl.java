@@ -170,7 +170,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         ,commonParamRulesConfig.getImageSize(),commonParamRulesConfig.getImageType());
         //先获取旧文件地址
         String oldAddr=employeeMapper.getPersonImageAddr(employeeId,merchantId);
-        //写入DB
+        //写入DB,并且清除缓存
         quickUpdateAndRemoveCaffeine(employeeId,k->{
             if (!employeeMapper.updatePersonImage(addr,oldAddr,employeeId,merchantId)) {
                 //删除刚刚保存的文件

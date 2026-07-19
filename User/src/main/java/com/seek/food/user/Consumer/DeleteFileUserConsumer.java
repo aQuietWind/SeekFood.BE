@@ -34,9 +34,7 @@ public class DeleteFileUserConsumer {
         }catch (Exception e){
             //不再进行重试，而是留给spring后台线程进行定时处理
             log.error("path:{},在删除时发生错误",path,e);
-            Map<String,Object> map = new HashMap<>();
-            map.put(oldFileStream.getKeyName(),path);
-            stringRedisTemplate.opsForStream().add(oldFileStream.getName(),map);
+            stringRedisTemplate.opsForStream().add(oldFileStream.getName(),Map.of(oldFileStream.getKeyName(),path));
         }
     }
 

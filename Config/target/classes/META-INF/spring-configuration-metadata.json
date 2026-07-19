@@ -453,12 +453,12 @@
       "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
     },
     {
-      "name": "meal.self.redis.key.meal-get-simple-cooldown",
+      "name": "meal.self.redis.key.meal-get-simple-by-type-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
     },
     {
-      "name": "meal.self.redis.key.meal-get-simple-type-cooldown",
+      "name": "meal.self.redis.key.meal-get-simple-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig"
     },

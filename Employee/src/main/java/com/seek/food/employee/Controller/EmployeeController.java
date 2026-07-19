@@ -20,7 +20,7 @@ public class EmployeeController {
     }
 
     //新增职员
-    @PostMapping
+    @PostMapping(RequestPathEnum.Employee_Insert)
     public Result<Void> insertEmployee(String employeeName) {
         employeeService.insertEmployee(employeeName);
         return Result.success();

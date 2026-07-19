@@ -28,7 +28,7 @@ public class GlobalRequestExceptionHandler {
     }
 
     // 参数校验异常
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({IllegalArgumentException.class,IllegalStateException.class, MethodArgumentTypeMismatchException.class})
     public Result<?> handleParamError(Exception e, HttpServletResponse response) {
         return Result.error(ErrorCodeEnum.PARAM_ERROR,response);
     }

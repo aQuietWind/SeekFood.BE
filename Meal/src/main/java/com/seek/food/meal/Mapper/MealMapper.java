@@ -12,7 +12,7 @@ public interface MealMapper {
     public List<MealDTO> getSimple(long merchantId, int start, int need);
     public List<MealDTO> getSimpleByType(long merchantId,int type,int start,int need);
     public MealDTO getDetail(long mealId);
-    public boolean updateMessage(MealDTO meal);
+    public boolean updateMealMessage(MealDTO meal);
     public boolean updateShowImage(long mealId, String addr,String oldAddr,long merchantId);
     public boolean deleteAllMeal(long merchantId);
     public String getShowImageAddr(long mealId);

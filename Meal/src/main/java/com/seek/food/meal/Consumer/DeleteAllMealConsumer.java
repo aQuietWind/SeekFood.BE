@@ -18,16 +18,14 @@ import java.util.List;
 @Component
 @Slf4j
 public class DeleteAllMealConsumer {
-    private final StringRedisTemplate stringRedisTemplate;
     private final MealMapper mealMapper;
     private final MealParamsRulesConfig mealParamsRulesConfig;
     private final MealExchangeConfig mealExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public DeleteAllMealConsumer(StringRedisTemplate stringRedisTemplate, MealMapper mealMapper
+    public DeleteAllMealConsumer( MealMapper mealMapper
     , MealParamsRulesConfig mealParamsRulesConfig, MealExchangeConfig mealExchangeConfig, RabbitTemplate rabbitTemplate) {
-        this.stringRedisTemplate = stringRedisTemplate;
         this.mealMapper = mealMapper;
         this.mealParamsRulesConfig = mealParamsRulesConfig;
         this.mealExchangeConfig = mealExchangeConfig;

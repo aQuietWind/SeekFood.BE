@@ -90,7 +90,7 @@ public class MealServiceImpl implements MealService {
         commonParamRulesConfig.merchantIdCheck(merchantId);
         commonParamRulesConfig.needNumberCheck(need);
         mealParamsRulesConfig.mealTypeCheck(type);
-        quickCooldown(mealRedisKeyConfig.getMealGetSimpleTypeCooldown(),tokenId);
+        quickCooldown(mealRedisKeyConfig.getMealGetSimpleByTypeCooldown(),tokenId);
         return mealMapper.getSimpleByType(merchantId,type,start,need);
     }
 
@@ -115,8 +115,9 @@ public class MealServiceImpl implements MealService {
         mealParamsRulesConfig.mealNextDiscountTimeCheck(meal.getNextDiscountTime());
         //检查冷却期
         quickCooldown(mealRedisKeyConfig.getMealUpdateMessageCooldown(),merchantId);
+        meal.setMerchantId(merchantId);
         //更新并且删除缓存
-        quickUpdateAndClearAllCaffeine(meal.getMealId(),k->mealMapper.updateMessage(meal));
+        quickUpdateAndClearAllCaffeine(meal.getMealId(),k->mealMapper.updateMealMessage(meal));
     }
 
     //更改展示图片
@@ -192,6 +193,7 @@ public class MealServiceImpl implements MealService {
     }
 
     private void quickDeleteFile(String dest,String addr){
+        if (addr==null)return;
         MQUtil.sendWithTLL(mealExchangeConfig.getExchangeName(),mealExchangeConfig.getDeleteFileMealDeadLetterQueue().getRoutingKey()
         , Paths.get(dest,addr).toString(),rabbitTemplate,mealParamsRulesConfig.getMillsByFileDeleteDay());
     }

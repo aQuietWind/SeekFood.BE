@@ -73,7 +73,7 @@
             <if test="mealType!=null">meal_type=#{mealType},</if>
             <if test="nextDiscountTime!=null">next_discount_time=#{nextDiscountTime},</if>
         </set>
-        where meal_id=#{meal_id} and merchant_id=#{merchantId} and is_delete=false
+        where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
     </update>
 
     <update id="updateShowImage">
@@ -112,6 +112,11 @@
     <update id="deleteMeal">
         update meal set is_delete=true
         where meal_id=#{mealId} and merchant_id=#{merchantId} and is_delete=false
+    </update>
+
+    <update id="deleteAllMeal">
+        update meal set is_delete=true
+        where merchant_id=#{merchantId} and is_delete=false
     </update>
 
 

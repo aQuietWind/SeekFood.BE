@@ -33,8 +33,8 @@ public class MealParamsRulesConfig {
         if (mealContent!=null&&(mealContent.isBlank()||mealContent.length()>mealContentMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
-    public void mealTypeCheck(int mealType) {
-        if (mealType<0||mealType>mealTypeMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void mealTypeCheck(Integer mealType) {
+        if (mealType!=null&&(mealType<0||mealType>mealTypeMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
     public void mealPriceCheck(Double price) {

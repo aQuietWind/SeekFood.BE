@@ -2,6 +2,7 @@ package com.seek.food.employee.Enum;
 
 public class RequestPathEnum {
     public static final String Employee = "/employee";
+    public static final String Employee_Insert = "/insert";
     public static final String Employee_All_Simple_Message = "/simple";
     public static final String Employee_Simple_Message_By_Dep = "/simple/dep";
     public static final String Employee_Simple_Message_By_Resign = "/simple/resign";
