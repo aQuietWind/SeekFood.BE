@@ -41,6 +41,7 @@
         <skywalking.version>9.3.0</skywalking.version>
         <jwt.version>0.13.0</jwt.version>
         <jakarta.version>6.1.0</jakarta.version>
+        <redisson.version>3.13.6</redisson.version>
     </properties>
     <!--    依赖版本管理-->
     <dependencyManagement>
@@ -102,6 +103,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt-jackson</artifactId>
                 <version>${jwt.version}</version>
+            </dependency>
+            <!--        redisson依赖-->
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
             <!--该项目的DTO模块        -->
             <dependency>

@@ -13,6 +13,15 @@
         insert into fund (account_id) values(#{accountId});
     </insert>
 
+    <select id="getFund" resultMap="FundResultMap">
+        select
+            account_id,
+            create_time,
+            fund_amount,
+            is_delete
+        from fund where account_id=#{accountId} and is_delete=false
+    </select>
+
     <update id="deleteFund">
         update fund set is_delete=true where account_id=#{accountId} and is_delete=false
     </update>

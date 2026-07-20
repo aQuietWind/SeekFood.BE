@@ -10,6 +10,9 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Fund_Redis_Key_Config)
 @Data
 public class FundRedisKeyConfig {
+    private RedisKeyData fundInsertCooldown;
     private RedisKeyData fundRechargeCooldown;
     private RedisKeyData fundWithdrawCooldown;
+    private RedisKeyData fundDecreaseLock;
+    private RedisKeyData fundCaffeineMessage;
 }

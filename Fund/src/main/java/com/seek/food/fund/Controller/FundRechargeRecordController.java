@@ -9,29 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(RequestPathEnum.Fund)
+@RequestMapping
 public class FundRechargeRecordController {
-    private final FundService fundService;
-    public FundRechargeRecordController(FundService fundService) {
-        this.fundService = fundService;
-    }
-
-    //充值余额
-    @PutMapping(RequestPathEnum.Fund_Recharge)
-    public Result<Void> recharge(int rechargeAmount,String description) {
-        fundService.recharge(rechargeAmount,description);
-        return Result.success();
-    }
-
-    //提现余额
-    @PutMapping(RequestPathEnum.Fund_Withdraw)
-    public Result<Void> withdraw(int withdrawAmount,String description) {
-        fundService.withdraw(withdrawAmount,description);
-        return Result.success();
-    }
-
-
-
 
 
 }

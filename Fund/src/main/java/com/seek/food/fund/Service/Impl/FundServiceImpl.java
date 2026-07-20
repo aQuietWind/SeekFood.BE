@@ -1,85 +1,67 @@
 package com.seek.food.fund.Service.Impl;
 
-import com.seek.food.config.Data.RedisKeyData;
-import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
-import com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
+import com.seek.food.dto.Fund.FundDTO;
+import com.seek.food.fund.Caffeine.FundCaffeine;
 import com.seek.food.fund.Mapper.FundMapper;
-import com.seek.food.fund.Mapper.FundRechargeRecordMapper;
-import com.seek.food.fund.Mapper.FundWithdrawRecordMapper;
 import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.Context.TokenIdContext;
-import com.seek.food.util.Exception.BizException;
-import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.Redis.RedisUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.function.Function;
+
 @Service
 public class FundServiceImpl implements FundService {
-
     private final FundMapper fundMapper;
-    private final FundRechargeRecordMapper fundRechargeRecordMapper;
-    private final FundWithdrawRecordMapper fundWithdrawRecordMapper;
-    private final CommonParamRulesConfig commonParamRulesConfig;
-    private final FundParamsRulesConfig fundParamsRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
     private final FundRedisKeyConfig fundRedisKeyConfig;
+    private final FundCaffeine fundCaffeine;
 
-    public FundServiceImpl(FundMapper fundMapper,FundRechargeRecordMapper fundRechargeRecordMapper,FundWithdrawRecordMapper fundWithdrawRecordMapper
-            , CommonParamRulesConfig commonParamRulesConfig, FundParamsRulesConfig fundParamsRulesConfig, StringRedisTemplate stringRedisTemplate
-            , FundRedisKeyConfig fundRedisKeyConfig) {
+    public FundServiceImpl(FundMapper fundMapper, StringRedisTemplate stringRedisTemplate
+            , FundRedisKeyConfig fundRedisKeyConfig, FundCaffeine fundCaffeine) {
         this.fundMapper = fundMapper;
-        this.fundRechargeRecordMapper = fundRechargeRecordMapper;
-        this.fundWithdrawRecordMapper = fundWithdrawRecordMapper;
-        this.commonParamRulesConfig = commonParamRulesConfig;
-        this.fundParamsRulesConfig = fundParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;
+        this.fundCaffeine = fundCaffeine;
     }
 
-    //充值
     @Override
-    public void recharge(int rechargeAmount,String description){
-        //检查金额大小与描述文本
-        fundParamsRulesConfig.rechargeAmountCheck(rechargeAmount);
-        fundParamsRulesConfig.descriptionCheck(description);
-        //只允许用户充值
-        long userId=quickGetUserId();
-        //检查冷却
-        quickCooldown(fundRedisKeyConfig.getFundRechargeCooldown(),userId);
-        //写入MQ
-        fundMapper.increaseFund(userId,rechargeAmount);
+    public FundDTO getFund(){
+        long tokenId= TokenIdContext.getAndToLong();
+        //自动缓存
+        return fundCaffeine.getAndAutoLoad(tokenId,stringRedisTemplate,fundRedisKeyConfig.getFundCaffeineMessage().getRedisKey(tokenId)
+        ,fundRedisKeyConfig.getFundCaffeineMessage().getDuration(),FundDTO.class,k->fundMapper.getFund(tokenId));
     }
 
-    //提现
     @Override
-    public void withdraw(int withdrawAmount,String description){
-        //检查金额大小与描述文本
-        fundParamsRulesConfig.withdrawAmountCheck(withdrawAmount);
-        fundParamsRulesConfig.descriptionCheck(description);
-        //只允许商家和骑手提现
-        long tokenId=quickGetRiderAndMerchantId();
-        //检查冷却
-        quickCooldown(fundRedisKeyConfig.getFundWithdrawCooldown(),tokenId);
-        //写入MQ
-        fundMapper.decreaseFund(tokenId,withdrawAmount);
-
+    public void insertFund(){
+        long tokenId= TokenIdContext.getAndToLong();
+        RedisUtil.checkCooldown(stringRedisTemplate,fundRedisKeyConfig.getFundInsertCooldown().getRedisKey(tokenId)
+                ,fundRedisKeyConfig.getFundInsertCooldown().getDuration());
+        //尝试插入，如果失败则会被全局异常捕获器捕获
+        fundMapper.insertFund(tokenId);
     }
 
-    private long quickGetUserId(){
-        return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
-    }
-    private long quickGetRiderAndMerchantId(){
-        long tokenId=TokenIdContext.getAndToLong();
-        int idStart= Math.toIntExact(tokenId / commonParamRulesConfig.getIdCapacity());
-        if (idStart!=commonParamRulesConfig.getMerchantIdStart()&&idStart!=commonParamRulesConfig.getRiderIdStart()){
-            throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-        }
-        return tokenId;
+    //减少资金
+    @Override
+    public void decreaseFund(double amount,long accountId){
+        quickUpdateAndClearCaffeine(accountId,k->fundMapper.decreaseFund(accountId,amount));
     }
 
-    private void quickCooldown(RedisKeyData keyData,long id) {
-        RedisUtil.checkCooldown(stringRedisTemplate,keyData.getRedisKey(id), keyData.getDuration());
+    //增加资金
+    @Override
+    public void increaseFund(double amount,long accountId){
+        quickUpdateAndClearCaffeine(accountId,k->fundMapper.increaseFund(accountId,amount));
     }
+
+    private void quickUpdateAndClearCaffeine(long accountId, Function<Long,Boolean> function){
+        fundCaffeine.updateAndRemoveCaffeine(accountId,stringRedisTemplate,fundRedisKeyConfig.getFundCaffeineMessage().getRedisKey(accountId)
+        ,function);
+    }
+
+
+
+
 }

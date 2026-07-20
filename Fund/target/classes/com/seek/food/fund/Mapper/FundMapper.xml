@@ -6,19 +6,32 @@
 
     <!-- 全局统一字段映射 -->
     <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundDTO">
-        <id property="fundId" column="fund_id"/>
-        <result property="accountId" column="account_id"/>
-        <result property="createTime" column="create_time"/>
-        <result property="fundAmount" column="fund_amount"/>
-        <result property="isDelete" column="delete" />
+        <result property="delete" column="is_delete" />
     </resultMap>
 
     <insert id="insertFund">
-        insert into fund (fund_id,account_id) values(#{fundId},#{accountId});
+        insert into fund (account_id) values(#{accountId});
     </insert>
+
+    <select id="getFund" resultMap="FundResultMap">
+        select
+            account_id,
+            create_time,
+            fund_amount,
+            is_delete
+        from fund where account_id=#{accountId} and is_delete=false
+    </select>
 
     <update id="deleteFund">
         update fund set is_delete=true where account_id=#{accountId} and is_delete=false
+    </update>
+
+    <update id="decreaseFund">
+        update fund set fund=fund-#{cost} where account_id=#{accountId} and fund>cost and is_delete=false
+    </update>
+
+    <update id="increaseFund">
+        update fund set fund=fund+#{rechargeAmount} where account_id=#{accountId} and is_delete=false
     </update>
 
 </mapper>
