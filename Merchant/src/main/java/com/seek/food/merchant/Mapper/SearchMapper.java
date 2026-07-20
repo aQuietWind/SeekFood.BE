@@ -43,7 +43,6 @@ public class SearchMapper {
         SearchHits<MerchantEsDTO> result;
         if (docId == null||docScore==null) result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,null);
         else result=getFeedRequest(lon,lat,distance,seed,need,shouldAmount,List.of(docScore,docId));
-        System.out.println(result.getSearchHits());
         //返回结果
         return EsSearchResult.success(result.getSearchHits());
     }
@@ -55,7 +54,6 @@ public class SearchMapper {
         SearchHits<MerchantEsDTO> result;
         if (docId == null||docScore==null) result=getSearchRequest(merchantName,lon,lat,distance,need,null);
         else result=getSearchRequest(merchantName,lon,lat,distance,need,List.of(docScore,docId));
-        System.out.println(result.getSearchHits());
         //返回结果
         return EsSearchResult.success(result.getSearchHits());
     }

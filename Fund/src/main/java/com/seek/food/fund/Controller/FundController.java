@@ -1,0 +1,35 @@
+package com.seek.food.fund.Controller;
+
+import com.seek.food.dto.Common.Result;
+import com.seek.food.fund.Enum.RequestPathEnum;
+import com.seek.food.fund.Service.FundService;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping(RequestPathEnum.Fund)
+public class FundController {
+    private final FundService fundService;
+    public FundController(FundService fundService) {
+        this.fundService = fundService;
+    }
+
+    //新增餐品
+    @PostMapping(RequestPathEnum.Fund_Recharge)
+    public Result<Void> recharge() {
+        fundService.recharge();
+        return Result.success();
+    }
+
+    //获取预览的餐品信息
+    @PutMapping(RequestPathEnum.Fund_Withdraw)
+    public Result<Void> withdraw() {
+        fundService.withdraw();
+        return Result.success();
+    }
+
+
+
+
+
+}

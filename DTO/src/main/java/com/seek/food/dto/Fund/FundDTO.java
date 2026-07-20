@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FundDTO {
-    private Long fundId;
     private Long accountId;
     private LocalDateTime createTime;
     private Long fundAmount;
