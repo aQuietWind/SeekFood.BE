@@ -27,11 +27,11 @@
     </update>
 
     <update id="decreaseFund">
-        update fund set fund=fund-#{cost} where account_id=#{accountId} and fund>cost and is_delete=false
+        update fund set fund_amount=fund_amount-#{cost} where account_id=#{accountId} and fund>cost and is_delete=false
     </update>
 
     <update id="increaseFund">
-        update fund set fund=fund+#{rechargeAmount} where account_id=#{accountId} and is_delete=false
+        update fund set fund_amount=fund_amount+#{rechargeAmount} where account_id=#{accountId} and is_delete=false
     </update>
 
 </mapper>

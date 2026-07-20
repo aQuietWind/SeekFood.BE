@@ -19,9 +19,22 @@ public class FundRechargeRecordController {
         this.fundRechargeRecordService = fundRechargeRecordService;
     }
 
-    @GetMapping
-    public Result<List<FundRechargeRecordDTO>> getRechargeRecord(int start, int need){
+    @GetMapping(RequestPathEnum.Fund_Recharge_Get_Simple)
+    public Result<List<FundRechargeRecordDTO>> getSimpleRechargeRecord(int start, int need){
         return Result.success(fundRechargeRecordService.getSimpleRechargeRecord(start,need));
+    }
+
+
+    @GetMapping(RequestPathEnum.Fund_Recharge_Get_Detail)
+    public Result<FundRechargeRecordDTO> getDetailRechargeRecord(long recordId){
+        return Result.success(fundRechargeRecordService.getDetailRechargeRecord(recordId));
+    }
+
+
+    @PutMapping
+    public Result<Void> recharge(int rechargeAmount,String description){
+        fundRechargeRecordService.recharge(rechargeAmount,description);
+        return Result.success();
     }
 
 

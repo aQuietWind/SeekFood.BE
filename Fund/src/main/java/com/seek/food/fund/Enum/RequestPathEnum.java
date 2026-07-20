@@ -4,7 +4,8 @@ public class RequestPathEnum {
     public static final String Fund = "/fund";
 
     public static final String Fund_Recharge_Record = "/recharge";
-    public static final String Fund_Recharge_Get_list = "/list";
+    public static final String Fund_Recharge_Get_Simple = "/simple";
+    public static final String Fund_Recharge_Get_Detail = "/detail";
 
     public static final String Fund_Withdraw_Record = "/withdraw";
 

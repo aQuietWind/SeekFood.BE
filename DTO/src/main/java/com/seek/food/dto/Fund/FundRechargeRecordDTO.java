@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class FundRechargeRecordDTO {
     private Long recordId;
     private Long accountId;
-    private Long orderId;
     private String rechargeDescription;
     private Double rechargeAmount;
     private LocalDateTime createTime;

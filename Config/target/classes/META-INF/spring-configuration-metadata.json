@@ -378,6 +378,26 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
     },
     {
+      "name": "fund.self.jvm-caffeine.fund-order-record",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
+    },
+    {
+      "name": "fund.self.jvm-caffeine.fund-order-refund-record",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
+    },
+    {
+      "name": "fund.self.jvm-caffeine.fund-recharge-record",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
+    },
+    {
+      "name": "fund.self.jvm-caffeine.fund-withdraw-record",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
+    },
+    {
       "name": "fund.self.params.rules.description-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
@@ -403,7 +423,47 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
     {
+      "name": "fund.self.redis.key.fund-get-simple-order-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-get-simple-order-refund-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-get-simple-recharge-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-get-simple-withdraw-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
       "name": "fund.self.redis.key.fund-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-order-record-caffeine-message",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-order-record-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-order-refund-record-caffeine-message",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-order-refund-record-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
@@ -413,7 +473,27 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
     {
+      "name": "fund.self.redis.key.fund-recharge-record-caffeine-message",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-recharge-record-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
       "name": "fund.self.redis.key.fund-withdraw-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-withdraw-record-caffeine-message",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-withdraw-record-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },

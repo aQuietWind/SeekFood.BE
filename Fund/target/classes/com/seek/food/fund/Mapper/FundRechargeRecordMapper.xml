@@ -5,7 +5,32 @@
 <mapper namespace="com.seek.food.fund.Mapper.FundRechargeRecordMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundRechargeRecordDTO">
+    <resultMap id="FundRechargeRecordResultMap" type="com.seek.food.dto.Fund.FundRechargeRecordDTO">
     </resultMap>
+
+
+    <insert id="insertRechargeRecord">
+        insert into fund_recharge_record (record_id,account_id,recharge_description,recharge_amount)
+        values(#{recordId},#{accountId},#{rechargeDescription},#{rechargeAmount})
+    </insert>
+
+    <select id="getSimple" resultMap="FundRechargeRecordResultMap">
+        select
+            record_id,
+            account_id,
+            recharge_amount,
+            create_time
+        from fund_recharge_record where account_id=#{accountId} limit #{start},#{need}
+    </select>
+
+    <select id="getDetail" resultMap="FundRechargeRecordResultMap">
+        select
+            record_id,
+            account_id,
+            recharge_description,
+            recharge_amount,
+            create_time
+        from fund_recharge_record where record_id=#{recordId} and account_id=#{accountId}
+    </select>
 
 </mapper>

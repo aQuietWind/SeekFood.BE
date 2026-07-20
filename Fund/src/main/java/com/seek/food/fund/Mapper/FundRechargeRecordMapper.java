@@ -9,5 +9,5 @@ import java.util.List;
 public interface FundRechargeRecordMapper {
     public boolean insertRechargeRecord(FundRechargeRecordDTO fundRechargeRecordDTO);
     public List<FundRechargeRecordDTO> getSimple(long accountId,int start,int need);
-    public List<FundRechargeRecordDTO> getDetail(long accountId,long recordId);
+    public FundRechargeRecordDTO getDetail(long accountId,long recordId);
 }
