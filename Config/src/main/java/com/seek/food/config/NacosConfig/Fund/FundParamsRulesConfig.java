@@ -12,14 +12,18 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Fund_Params_Rules_Config)
 @Data
 public class FundParamsRulesConfig {
-    private int fundRechargeAmountMax;
-    private int fundWithdrawAmountMax;
+    private int rechargeAmountMax;
+    private int withdrawAmountMax;
+    private int descriptionMax;
 
 
-    public void fundRechargeAmountCheck(int fundRechargeAmount) {
-        if (fundRechargeAmount > fundRechargeAmountMax||fundRechargeAmount <= 0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void rechargeAmountCheck(int rechargeAmount) {
+        if (rechargeAmount > rechargeAmountMax||rechargeAmount <= 0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
-    public void fundWithdrawAmountCheck(int fundWithdrawAmount) {
-        if (fundWithdrawAmount > fundWithdrawAmountMax||fundWithdrawAmount <= 0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void withdrawAmountCheck(int withdrawAmount) {
+        if (withdrawAmount > withdrawAmountMax||withdrawAmount <= 0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public void descriptionCheck(String description) {
+        if (description!=null &&  description.length()>descriptionMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

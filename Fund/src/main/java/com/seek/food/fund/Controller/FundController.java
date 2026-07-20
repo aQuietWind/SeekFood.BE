@@ -14,19 +14,20 @@ public class FundController {
         this.fundService = fundService;
     }
 
-    //充值余额
-    @PutMapping(RequestPathEnum.Fund_Recharge)
-    public Result<Void> recharge(int rechargeAmount) {
-        fundService.recharge(rechargeAmount);
+    //查看余额
+    @GetMapping
+    public Result<Void> recharge(int rechargeAmount,String description) {
+        fundService.recharge(rechargeAmount,description);
         return Result.success();
     }
 
-    //提现余额
-    @PutMapping(RequestPathEnum.Fund_Withdraw)
-    public Result<Void> withdraw(int withdrawAmount) {
-        fundService.withdraw(withdrawAmount);
+    //如果资金用户不存在，则可以手动创建，应对消息丢失的情况
+    @PostMapping
+    public Result<Void> recharge(int rechargeAmount,String description) {
+        fundService.recharge(rechargeAmount,description);
         return Result.success();
     }
+
 
 
 

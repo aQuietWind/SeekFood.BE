@@ -5,6 +5,8 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
 import com.seek.food.fund.Mapper.FundMapper;
+import com.seek.food.fund.Mapper.FundRechargeRecordMapper;
+import com.seek.food.fund.Mapper.FundWithdrawRecordMapper;
 import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
@@ -17,13 +19,19 @@ import org.springframework.stereotype.Service;
 public class FundServiceImpl implements FundService {
 
     private final FundMapper fundMapper;
+    private final FundRechargeRecordMapper fundRechargeRecordMapper;
+    private final FundWithdrawRecordMapper fundWithdrawRecordMapper;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final FundParamsRulesConfig fundParamsRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
     private final FundRedisKeyConfig fundRedisKeyConfig;
 
-    public FundServiceImpl(FundMapper fundMapper, CommonParamRulesConfig commonParamRulesConfig, FundParamsRulesConfig fundParamsRulesConfig, StringRedisTemplate stringRedisTemplate, FundRedisKeyConfig fundRedisKeyConfig) {
+    public FundServiceImpl(FundMapper fundMapper,FundRechargeRecordMapper fundRechargeRecordMapper,FundWithdrawRecordMapper fundWithdrawRecordMapper
+            , CommonParamRulesConfig commonParamRulesConfig, FundParamsRulesConfig fundParamsRulesConfig, StringRedisTemplate stringRedisTemplate
+            , FundRedisKeyConfig fundRedisKeyConfig) {
         this.fundMapper = fundMapper;
+        this.fundRechargeRecordMapper = fundRechargeRecordMapper;
+        this.fundWithdrawRecordMapper = fundWithdrawRecordMapper;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.fundParamsRulesConfig = fundParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -32,9 +40,10 @@ public class FundServiceImpl implements FundService {
 
     //充值
     @Override
-    public void recharge(int rechargeAmount){
-        //检查金额大小
-        fundParamsRulesConfig.fundRechargeAmountCheck(rechargeAmount);
+    public void recharge(int rechargeAmount,String description){
+        //检查金额大小与描述文本
+        fundParamsRulesConfig.rechargeAmountCheck(rechargeAmount);
+        fundParamsRulesConfig.descriptionCheck(description);
         //只允许用户充值
         long userId=quickGetUserId();
         //检查冷却
@@ -45,15 +54,17 @@ public class FundServiceImpl implements FundService {
 
     //提现
     @Override
-    public void withdraw(int withdrawAmount){
-        //检查金额大小
-        fundParamsRulesConfig.fundWithdrawAmountCheck(withdrawAmount);
+    public void withdraw(int withdrawAmount,String description){
+        //检查金额大小与描述文本
+        fundParamsRulesConfig.withdrawAmountCheck(withdrawAmount);
+        fundParamsRulesConfig.descriptionCheck(description);
         //只允许商家和骑手提现
         long tokenId=quickGetRiderAndMerchantId();
         //检查冷却
         quickCooldown(fundRedisKeyConfig.getFundWithdrawCooldown(),tokenId);
         //写入MQ
         fundMapper.decreaseFund(tokenId,withdrawAmount);
+
     }
 
     private long quickGetUserId(){
