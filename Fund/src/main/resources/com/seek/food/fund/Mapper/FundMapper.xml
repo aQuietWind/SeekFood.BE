@@ -6,7 +6,7 @@
 
     <!-- 全局统一字段映射 -->
     <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundDTO">
-        <result property="isDelete" column="delete" />
+        <result property="delete" column="is_delete" />
     </resultMap>
 
     <insert id="insertFund">

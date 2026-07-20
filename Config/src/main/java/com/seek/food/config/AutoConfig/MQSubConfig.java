@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Lazy;
 @Configuration
 // 绑定当前组件对应的属性类
 @EnableConfigurationProperties({UserExchangeConfig.class, MerchantExchangeConfig.class, EmployeeExchangeConfig.class
-, MealExchangeConfig.class, DeadLetterExchangeConfig.class})
+, MealExchangeConfig.class,FundExchangeConfig.class, DeadLetterExchangeConfig.class,VoucherExchangeConfig.class})
 public class MQSubConfig {
 
     @Bean
@@ -32,6 +32,16 @@ public class MQSubConfig {
     @Lazy // 用到才实例化，启动不创建对象
     public MealExchangeConfig mealExchangeConfig(MealExchangeConfig mealExchangeConfig) {
         return mealExchangeConfig;
+    }
+    @Bean
+    @Lazy // 用到才实例化，启动不创建对象
+    public FundExchangeConfig fundExchangeConfig(FundExchangeConfig fundExchangeConfig) {
+        return fundExchangeConfig;
+    }
+    @Bean
+    @Lazy // 用到才实例化，启动不创建对象
+    public VoucherExchangeConfig voucherExchangeConfig(VoucherExchangeConfig voucherExchangeConfig) {
+        return voucherExchangeConfig;
     }
     @Bean
     @Lazy // 用到才实例化，启动不创建对象

@@ -1,5 +1,6 @@
 package com.seek.food.config.NacosConfig.MQ;
 
+
 import com.seek.food.config.Data.QueueData;
 import com.seek.food.config.Enum.ConfigKeyEnum;
 import lombok.Data;
@@ -7,12 +8,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.Dead_Letter_Exchange_Config)
+@ConfigurationProperties(ConfigKeyEnum.Fund_Exchange_Config)
 @Data
-public class DeadLetterExchangeConfig {
+public class FundExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData deleteFileMealImplQueue;
-    private QueueData deleteAllFileMealImplQueue;
-    private QueueData rollbackAllFundImplQueue;
+    private QueueData voucherUseQueue;
+    private QueueData rollbackAllFundDeadLetterQueue;
+    private QueueData rollbackVoucherQueue;
+    private QueueData rollbackFundQueue;
 }

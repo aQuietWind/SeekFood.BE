@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class FundOrderRecordConsumer {
+public class RegisterFundOrderRecordConsumer {
     private FundMapper fundMapper;
     @Autowired
-    public FundOrderRecordConsumer(FundMapper fundMapper) {
+    public RegisterFundOrderRecordConsumer(FundMapper fundMapper) {
         this.fundMapper = fundMapper;
     }
 
     @RabbitListener(queues = MQNameKeyEnum.User_Exchange_Delete_Fund_Queue)
-    public void deleteFundQueue(long accountId){
+    public void registerFundOrderRecordQueue(long accountId){
         if (!fundMapper.deleteFund(accountId)) log.error("accountId:{} ,资金删除失败",accountId);
     }
 

@@ -14,17 +14,17 @@ public class FundController {
         this.fundService = fundService;
     }
 
-    //新增餐品
-    @PostMapping(RequestPathEnum.Fund_Recharge)
-    public Result<Void> recharge() {
-        fundService.recharge();
+    //充值余额
+    @PutMapping(RequestPathEnum.Fund_Recharge)
+    public Result<Void> recharge(int rechargeAmount) {
+        fundService.recharge(rechargeAmount);
         return Result.success();
     }
 
-    //获取预览的餐品信息
+    //提现余额
     @PutMapping(RequestPathEnum.Fund_Withdraw)
-    public Result<Void> withdraw() {
-        fundService.withdraw();
+    public Result<Void> withdraw(int withdrawAmount) {
+        fundService.withdraw(withdrawAmount);
         return Result.success();
     }
 
