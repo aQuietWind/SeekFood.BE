@@ -13,6 +13,10 @@ public class FundRedisKeyConfig {
     private RedisKeyData fundInsertCooldown;
     private RedisKeyData fundRechargeCooldown;
     private RedisKeyData fundWithdrawCooldown;
+    private RedisKeyData fundGetSimpleRechargeCooldown;
+    private RedisKeyData fundGetSimpleWithdrawCooldown;
+    private RedisKeyData fundGetSimpleOrderCooldown;
+    private RedisKeyData fundGetSimpleOrderRefundCooldown;
     private RedisKeyData fundDecreaseLock;
     private RedisKeyData fundCaffeineMessage;
 }

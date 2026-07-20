@@ -4,6 +4,7 @@ import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
+import com.seek.food.dto.Fund.FundRechargeRecordDTO;
 import com.seek.food.fund.Mapper.FundMapper;
 import com.seek.food.fund.Mapper.FundRechargeRecordMapper;
 import com.seek.food.fund.Mapper.FundWithdrawRecordMapper;
@@ -13,7 +14,11 @@ import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.Redis.RedisUtil;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class FundRechargeRecordServiceImpl implements FundRechargeRecordService {
     private final FundMapper fundMapper;
     private final FundRechargeRecordMapper fundRechargeRecordMapper;
@@ -35,8 +40,23 @@ public class FundRechargeRecordServiceImpl implements FundRechargeRecordService 
         this.fundRedisKeyConfig = fundRedisKeyConfig;
     }
 
+    //查看简单的充值记录
+    @Override
+    public List<FundRechargeRecordDTO> getSimpleRechargeRecord(int start, int need){
+        long tokenId=TokenIdContext.getAndToLong();
+        quickCooldown(fundRedisKeyConfig.getFundGetSimpleRechargeCooldown(),tokenId);
+        fundRechargeRecordMapper.getSimple(tokenId,start,need);
+    }
+
+    //查看详细的充值记录
+    @Override
+    public FundRechargeRecordDTO getDetailRechargeRecord(long recordId){
+        long tokenId=TokenIdContext.getAndToLong();
+        fundRechargeRecordMapper.getDetail(tokenId,recordId);
+    }
+
     //充值
-//    @Override
+    @Override
     public void recharge(int rechargeAmount,String description){
         //检查金额大小与描述文本
         fundParamsRulesConfig.rechargeAmountCheck(rechargeAmount);
@@ -49,20 +69,6 @@ public class FundRechargeRecordServiceImpl implements FundRechargeRecordService 
         fundMapper.increaseFund(userId,rechargeAmount);
     }
 
-    //提现
-//    @Override
-    public void withdraw(int withdrawAmount,String description){
-        //检查金额大小与描述文本
-        fundParamsRulesConfig.withdrawAmountCheck(withdrawAmount);
-        fundParamsRulesConfig.descriptionCheck(description);
-        //只允许商家和骑手提现
-        long tokenId=quickGetRiderAndMerchantId();
-        //检查冷却
-        quickCooldown(fundRedisKeyConfig.getFundWithdrawCooldown(),tokenId);
-        //写入MQ
-        fundMapper.decreaseFund(tokenId,withdrawAmount);
-
-    }
 
     private long quickGetUserId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());

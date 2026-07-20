@@ -11,4 +11,8 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Fund_Caffeine_Config)
 public class FundCaffeineConfig {
     private CaffeineData fund;
+    private CaffeineData fundRechargeRecord;
+    private CaffeineData fundWithdrawRecord;
+    private CaffeineData fundOrderRefundRecord;
+    private CaffeineData fundOrderRecord;
 }
