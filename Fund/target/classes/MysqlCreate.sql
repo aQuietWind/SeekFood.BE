@@ -21,7 +21,7 @@ CREATE TABLE `fund_order_record` (
                                      `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                                      `is_pay` boolean NOT NULL default false COMMENT '是否支付',
                                      `is_rollback` boolean NOT NULL default false COMMENT '是否回滚',
-                                     `is_withdraw` boolean NOT NULL default false COMMENT '是否退款',
+                                     `is_refund` boolean NOT NULL default false COMMENT '是否退款',
                                      PRIMARY KEY (`record_id`),
                                      UNIQUE KEY (`order_id`),
                                      INDEX `account_index`(`account_id`)

@@ -5,6 +5,7 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.FundExchangeConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
+import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
 import com.seek.food.fund.Caffeine.FundOrderRecordCaffeine;
 import com.seek.food.fund.Mapper.FundOrderRecordMapper;
 import com.seek.food.fund.Service.FundOrderRecordService;
@@ -88,6 +89,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     }
 
     //回滚订单
+    @Override
     public void rollback(long recordId){
         //获取userId
         long userId= quickGetUserId();
@@ -95,11 +97,13 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         quickCooldown(fundRedisKeyConfig.getFundRollbackOrderRecordCooldown(),userId);
         //直接进行回滚尝试
         if (!fundOrderRecordMapper.rollback(recordId,userId))throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
+        //清除缓存
+        fundOrderRecordCaffeine.deleteAllCaffeine(recordId,stringRedisTemplate,fundRedisKeyConfig.getFundOrderRecordCaffeineMessage().getRedisKey(recordId));
         //获取详细记录信息
         FundOrderRecordDTO record=quickGetRecord(recordId,userId);
         //发送消息进行立即全局回滚
         MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()
-        ,record.getOrderId(),rabbitTemplate,"0");
+        ,new FundOrderRecordMQDTO(recordId,record.getOrderId(),record.getAccountId(),record.getCost()) ,rabbitTemplate,"0");
     }
 
     private long quickGetUserId(){

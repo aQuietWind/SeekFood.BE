@@ -62,6 +62,16 @@ public class FundExchangeBind {
     public Binding rollbakcVoucherBinding(Queue rollbakcVoucherQueue, DirectExchange fundExchange){
         return BindingBuilder.bind(rollbakcVoucherQueue).to(fundExchange).with(fundExchangeConfig.getRollbackVoucherQueue().getRoutingKey());
     }
+    //折扣券回滚队列
+    @Bean
+    public Queue refundQueue(){
+        return MQUtil.generateQuorumQueue(fundExchangeConfig.getRefundQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding refundBinding(Queue refundQueue, DirectExchange fundExchange){
+        return BindingBuilder.bind(refundQueue).to(fundExchange).with(fundExchangeConfig.getRefundQueue().getRoutingKey());
+    }
 
 
     //延时回滚一切的死信队列,绑定死信交换机，同时监听FundExchange,但是消费者会出现在Order模块

@@ -20,5 +20,5 @@ public class FundOrderRecordDTO {
     private LocalDateTime createTime;
     private Boolean pay;
     private Boolean rollback;
-    private Boolean withdraw;
+    private Boolean refund;
 }

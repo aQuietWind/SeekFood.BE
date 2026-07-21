@@ -17,4 +17,5 @@ public class FundExchangeConfig {
     private QueueData rollbackAllFundDeadLetterQueue;
     private QueueData rollbackVoucherQueue;
     private QueueData rollbackFundQueue;
+    private QueueData refundQueue;
 }

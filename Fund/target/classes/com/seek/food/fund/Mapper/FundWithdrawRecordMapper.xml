@@ -21,7 +21,7 @@
             account_id,
             withdraw_amount,
             create_time
-        from fund_withdraw_record where account_id=#{accountId} limit #{start},#{need}
+        from fund_withdraw_record where account_id=#{accountId} order by record_id limit #{start},#{need}
     </select>
 
     <select id="getDetail" resultMap="FundWithdrawRecordResultMap">

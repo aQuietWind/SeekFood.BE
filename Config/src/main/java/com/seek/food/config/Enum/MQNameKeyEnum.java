@@ -18,6 +18,8 @@ public class MQNameKeyEnum {
     public static final String Meal_Exchange_Delete_File_Dead_Letter_Queue ="${mq.name.bind.meal-exchange.delete-file-meal-dead-letter-queue.name}";
     public static final String Meal_Exchange_Delete_All_File_Dead_Letter_Queue ="${mq.name.bind.meal-exchange.delete-all-file-meal-dead-letter-queue.name}";
 
+    public static final String Fund_Exchange_Rollback_Fund_Queue ="${mq.name.bind.fund-exchange.rollback-fund-queue.name}";
+
     public static final String Order_Exchange_Register_Fund_Order_Record_Queue ="${mq.name.bind.order-exchange.register-fund-order-record-queue.name}";
 
 

@@ -5,7 +5,28 @@
 <mapper namespace="com.seek.food.fund.Mapper.FundOrderRefundRecordMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundOrderRefundRecordDTO">
+    <resultMap id="FundOrderRefundRecordResultMap" type="com.seek.food.dto.Fund.FundOrderRefundRecordDTO">
     </resultMap>
+
+    <select id="getSimple" resultMap="FundOrderRefundRecordResultMap">
+        select
+            record_id,
+            account_id,
+            refund_cost,
+            create_time
+        from fund_order_refund_record where account_id=#{accountId} order by record_id limit #{start},#{need}
+    </select>
+
+    <select id="getDetail" resultMap="FundOrderRefundRecordResultMap">
+        select
+            record_id,
+            account_id,
+            order_id,
+            order_refund_description,
+            refund_cost,
+            refund_type,
+            create_time
+        from fund_order_refund_record where record_id=#{recordId} and account_id=#{accountId}
+    </select>
 
 </mapper>

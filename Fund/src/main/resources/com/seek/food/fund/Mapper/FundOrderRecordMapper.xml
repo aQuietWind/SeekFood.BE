@@ -8,7 +8,7 @@
     <resultMap id="FundOrderRecordResultMap" type="com.seek.food.dto.Fund.FundOrderRecordDTO">
         <result property="pay" column="is_pay" />
         <result property="rollback" column="is_rollback" />
-        <result property="withdraw" column="is_withdraw" />
+        <result property="refund" column="is_refund" />
     </resultMap>
 
 
@@ -50,8 +50,15 @@
     <update id="rollback">
         update fund_order_record set is_rollback=true
         where record_id=#{recordId} and account_id=#{accountId}
-        and now() &gt; able_rollback_time and is_pay=true and is_rollback=false and is_withdraw=false
+        and now() &gt; able_rollback_time and is_pay=true and is_rollback=false and is_refund=false
     </update>
+
+    <update id="ackRefund">
+        update fund_order_record set is_refund=true
+        where order_id=#{orderId} and account_id=#{accountId}
+        and now() &gt; able_rollback_time and is_pay=true and is_rollback=true and is_refund=false
+    </update>
+
 
 
 

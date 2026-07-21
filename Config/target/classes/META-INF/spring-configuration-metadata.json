@@ -398,12 +398,22 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig"
     },
     {
+      "name": "fund.self.params.rules.deadline-minute-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
+    },
+    {
       "name": "fund.self.params.rules.description-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
     },
     {
       "name": "fund.self.params.rules.recharge-amount-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
+    },
+    {
+      "name": "fund.self.params.rules.rollback-minute-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig"
     },
@@ -468,6 +478,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
     {
+      "name": "fund.self.redis.key.fund-pay-order-record-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
       "name": "fund.self.redis.key.fund-recharge-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
@@ -479,6 +494,11 @@
     },
     {
       "name": "fund.self.redis.key.fund-recharge-record-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
+    },
+    {
+      "name": "fund.self.redis.key.fund-rollback-order-record-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig"
     },
@@ -900,6 +920,11 @@
     {
       "name": "mq.name.bind.fund-exchange.exchange-name",
       "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.fund-exchange.refund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
     },
     {
