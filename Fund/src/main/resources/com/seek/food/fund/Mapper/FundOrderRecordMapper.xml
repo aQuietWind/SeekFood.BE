@@ -47,6 +47,13 @@
     </insert>
 
 
+    <update id="rollback">
+        update fund_order_record set is_rollback=true
+        where record_id=#{recordId} and account_id=#{accountId}
+        and now() &gt; able_rollback_time and is_pay=true and is_rollback=false and is_withdraw=false
+    </update>
+
+
 
 
 
