@@ -17,6 +17,7 @@ public class FundRedisKeyConfig {
     private RedisKeyData fundGetSimpleWithdrawCooldown;
     private RedisKeyData fundGetSimpleOrderCooldown;
     private RedisKeyData fundGetSimpleOrderRefundCooldown;
+    private RedisKeyData fundPayOrderRecordCooldown;
     private RedisKeyData fundDecreaseLock;
     private RedisKeyData fundCaffeineMessage;
     private RedisKeyData fundRechargeRecordCaffeineMessage;

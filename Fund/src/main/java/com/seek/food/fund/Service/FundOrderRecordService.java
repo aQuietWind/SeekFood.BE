@@ -7,4 +7,6 @@ import java.util.List;
 public interface FundOrderRecordService {
     public List<FundOrderRecordDTO> getSimple(int start, int need);
     public FundOrderRecordDTO getDetail(long recordId);
+    public void pay(long recordId);
+    public void rollback(long recordId);
 }

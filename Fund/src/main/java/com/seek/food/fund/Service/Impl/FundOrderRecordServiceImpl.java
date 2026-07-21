@@ -3,13 +3,18 @@ package com.seek.food.fund.Service.Impl;
 import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
+import com.seek.food.config.NacosConfig.MQ.FundExchangeConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
-import com.seek.food.dto.Fund.FundWithdrawRecordDTO;
 import com.seek.food.fund.Caffeine.FundOrderRecordCaffeine;
 import com.seek.food.fund.Mapper.FundOrderRecordMapper;
 import com.seek.food.fund.Service.FundOrderRecordService;
+import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -26,14 +31,20 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     private final FundRedisKeyConfig fundRedisKeyConfig;
     private final FundOrderRecordMapper fundOrderRecordMapper;
     private final FundOrderRecordCaffeine fundOrderRecordCaffeine;
+    private final FundService fundService;
+    private final FundExchangeConfig fundExchangeConfig;
+    private final RabbitTemplate rabbitTemplate;
 
     public FundOrderRecordServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
-            , FundRedisKeyConfig fundRedisKeyConfig, FundOrderRecordMapper fundOrderRecordMapper, FundOrderRecordCaffeine fundOrderRecordCaffeine) {
+            , FundRedisKeyConfig fundRedisKeyConfig, FundOrderRecordMapper fundOrderRecordMapper, FundOrderRecordCaffeine fundOrderRecordCaffeine, FundService fundService, FundExchangeConfig fundExchangeConfig, RabbitTemplate rabbitTemplate) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;
         this.fundOrderRecordMapper = fundOrderRecordMapper;
         this.fundOrderRecordCaffeine = fundOrderRecordCaffeine;
+        this.fundService = fundService;
+        this.fundExchangeConfig = fundExchangeConfig;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     //批量获取预览信息
@@ -44,7 +55,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         //获取tokenId
         long userId= quickGetUserId();
         //检查冷却期
-        quickCooldown(fundRedisKeyConfig.getFundGetSimpleWithdrawCooldown(),userId);
+        quickCooldown(fundRedisKeyConfig.getFundGetSimpleOrderCooldown(),userId);
         //返回查询结果
         return fundOrderRecordMapper.getSimple(start,need,userId);
     }
@@ -52,12 +63,33 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     //获取详细信息
     @Override
     public FundOrderRecordDTO getDetail(long recordId){
+        //检查目标id规范
         commonParamRulesConfig.commonIdCheck(recordId);
-        long tokenId=TokenIdContext.getAndToLong();
-        return fundOrderRecordCaffeine.getAndAutoLoad(recordId,stringRedisTemplate
-                ,fundRedisKeyConfig.getFundOrderRecordCaffeineMessage().getRedisKey(recordId)
-                ,fundRedisKeyConfig.getFundOrderRecordCaffeineMessage().getDuration()
-                , FundOrderRecordDTO.class, k->fundOrderRecordMapper.getDetail(tokenId,recordId));
+        //获取userId,因为只有userId可以下单
+        long userId=quickGetUserId();
+        return quickGetRecord(userId,recordId);
+    }
+
+    //支付订单
+    @Override
+    public void pay(long recordId){
+        //获取userId
+        long userId= quickGetUserId();
+        //检查冷却期
+        quickCooldown(fundRedisKeyConfig.getFundPayOrderRecordCooldown(),userId);
+        //获取记录
+        FundOrderRecordDTO record=quickGetRecord(userId,recordId);
+        if(record==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //如果失败会报错的，所以不用检验结果
+        fundService.decreaseFund(record.getCost(),userId);
+        //发送消息
+        MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getVoucherUseQueue().getRoutingKey()
+        ,record.getOrderId(),rabbitTemplate);
+    }
+
+    //回滚订单
+    public void rollback(long recordId){
+
     }
 
 
@@ -67,5 +99,12 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
 
     private void quickCooldown(RedisKeyData keyData, long id) {
         RedisUtil.checkCooldown(stringRedisTemplate,keyData.getRedisKey(id), keyData.getDuration());
+    }
+
+    private FundOrderRecordDTO quickGetRecord(long userId,long recordId){
+        return fundOrderRecordCaffeine.getAndAutoLoad(recordId,stringRedisTemplate
+                ,fundRedisKeyConfig.getFundOrderRecordCaffeineMessage().getRedisKey(recordId)
+                ,fundRedisKeyConfig.getFundOrderRecordCaffeineMessage().getDuration()
+                , FundOrderRecordDTO.class, k->fundOrderRecordMapper.getDetail(recordId,userId));
     }
 }

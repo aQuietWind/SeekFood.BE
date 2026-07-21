@@ -47,7 +47,7 @@ public class FundOrderRefundRecordServiceImpl implements FundOrderRefundRecordSe
         //获取tokenId
         long userId= quickGetUserId();
         //检查冷却期
-        quickCooldown(fundRedisKeyConfig.getFundGetSimpleWithdrawCooldown(),userId);
+        quickCooldown(fundRedisKeyConfig.getFundGetSimpleOrderRefundCooldown(),userId);
         //返回查询结果
         return fundOrderRefundRecordMapper.getSimple(start,need,userId);
     }
