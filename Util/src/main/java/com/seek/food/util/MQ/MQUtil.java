@@ -89,5 +89,9 @@ public class MQUtil {
         return new Queue(queueName, true, false, false, args);
     }
 
+    //分钟转毫秒
+    public static String minuteToMillis(int minute){
+        return ""+minute*60*1000;
+    }
 
 }

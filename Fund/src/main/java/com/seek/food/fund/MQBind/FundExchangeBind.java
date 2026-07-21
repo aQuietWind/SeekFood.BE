@@ -41,7 +41,7 @@ public class FundExchangeBind {
         return BindingBuilder.bind(voucherUseQueue).to(fundExchange).with(fundExchangeConfig.getVoucherUseQueue().getRoutingKey());
     }
 
-    //资金回滚队列
+    //资金回滚队列，消费者在Fund模块，但是要监听Fund和Order模块
     @Bean
     public Queue rollbackFundQueue(){
         return MQUtil.generateQuorumQueue(fundExchangeConfig.getRollbackFundQueue().getName());
@@ -64,7 +64,7 @@ public class FundExchangeBind {
     }
 
 
-    //延时回滚一切的死信队列,绑定死信交换机，同时监听FundExchange
+    //延时回滚一切的死信队列,绑定死信交换机，同时监听FundExchange,但是消费者会出现在Order模块
     @Bean
     public Queue rollbackAllFundDeadLetterQueue(){
         return MQUtil.getDeadQuorumQueue(fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getName()

@@ -7,6 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface FundOrderRecordMapper {
+    public void insertRecord(FundOrderRecordDTO fundOrderRecord);
     public List<FundOrderRecordDTO> getSimple(int start,int need,long accountId);
     public FundOrderRecordDTO getDetail(long recordId,long accountId);
 }

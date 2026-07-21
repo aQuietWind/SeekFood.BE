@@ -7,6 +7,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
+import java.time.LocalDateTime;
+
 
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Fund_Params_Rules_Config)
@@ -15,6 +17,8 @@ public class FundParamsRulesConfig {
     private int rechargeAmountMax;
     private int withdrawAmountMax;
     private int descriptionMax;
+    private int deadlineMinuteMax;
+    private int rollbackMinuteMax;
 
 
     public void rechargeAmountCheck(int rechargeAmount) {
@@ -25,5 +29,11 @@ public class FundParamsRulesConfig {
     }
     public void descriptionCheck(String description) {
         if (description!=null &&  description.length()>descriptionMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+    public LocalDateTime getDeadline() {
+        return LocalDateTime.now().plusMinutes(deadlineMinuteMax);
+    }
+    public LocalDateTime getRollbackTime() {
+        return LocalDateTime.now().plusMinutes(rollbackMinuteMax);
     }
 }

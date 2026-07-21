@@ -41,5 +41,23 @@
         from fund_order_record where record_id=#{recordId} and account_id=#{accountId}
     </select>
 
+    <insert id="insertRecord">
+        insert into fund_order_record (record_id,account_id,order_id,order_description,cost,deadline,able_rollback_time)
+        values(#{record_id},#{accountId},#{order_id},#{order_description},#{cost},#{deadline},#{ableRollbackTime});
+    </insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </mapper>
