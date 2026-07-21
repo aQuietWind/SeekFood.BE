@@ -10,12 +10,14 @@ import com.seek.food.fund.Mapper.FundOrderRecordMapper;
 import com.seek.food.fund.Service.FundOrderRecordService;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Redis.RedisUtil;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RefreshScope
 public class FundOrderRecordServiceImpl implements FundOrderRecordService {
 
 
@@ -25,7 +27,8 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     private final FundOrderRecordMapper fundOrderRecordMapper;
     private final FundOrderRecordCaffeine fundOrderRecordCaffeine;
 
-    public FundOrderRecordServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate, FundRedisKeyConfig fundRedisKeyConfig, FundOrderRecordMapper fundOrderRecordMapper, FundOrderRecordCaffeine fundOrderRecordCaffeine) {
+    public FundOrderRecordServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
+            , FundRedisKeyConfig fundRedisKeyConfig, FundOrderRecordMapper fundOrderRecordMapper, FundOrderRecordCaffeine fundOrderRecordCaffeine) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;

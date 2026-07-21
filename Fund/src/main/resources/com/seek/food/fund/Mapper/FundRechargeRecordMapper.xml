@@ -30,7 +30,7 @@
             recharge_description,
             recharge_amount,
             create_time
-        from fund_recharge_record where record_id=#{recordId} and account_id=#{accountId} order by record_id
+        from fund_recharge_record where record_id=#{recordId} and account_id=#{accountId}
     </select>
 
 </mapper>

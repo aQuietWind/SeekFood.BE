@@ -14,12 +14,14 @@ import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.Redis.RedisUtil;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RefreshScope
 public class FundWithdrawRecordServiceImpl implements FundWithdrawRecordService {
     private final FundWithdrawRecordMapper fundWithdrawRecordMapper;
     private final CommonParamRulesConfig commonParamRulesConfig;

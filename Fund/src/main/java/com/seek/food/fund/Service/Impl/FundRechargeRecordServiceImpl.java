@@ -13,6 +13,7 @@ import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Redis.RedisUtil;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RefreshScope
 public class FundRechargeRecordServiceImpl implements FundRechargeRecordService {
     private final FundMapper fundMapper;
     private final FundRechargeRecordMapper fundRechargeRecordMapper;

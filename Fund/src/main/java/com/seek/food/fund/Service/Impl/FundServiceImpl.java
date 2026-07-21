@@ -7,12 +7,14 @@ import com.seek.food.fund.Mapper.FundMapper;
 import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Redis.RedisUtil;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Function;
 
 @Service
+@RefreshScope
 public class FundServiceImpl implements FundService {
     private final FundMapper fundMapper;
     private final StringRedisTemplate stringRedisTemplate;
