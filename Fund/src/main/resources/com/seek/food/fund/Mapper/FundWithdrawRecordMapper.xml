@@ -5,7 +5,32 @@
 <mapper namespace="com.seek.food.fund.Mapper.FundWithdrawRecordMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundWithdrawRecordDTO">
+    <resultMap id="FundWithdrawRecordResultMap" type="com.seek.food.dto.Fund.FundWithdrawRecordDTO">
     </resultMap>
 
+
+
+    <insert id="insertWithdrawRecord">
+        insert into fund_withdraw_record (record_id,account_id,withdraw_description,withdraw_amount)
+        values(#{recordId},#{accountId},#{withdrawDescription},#{withdrawAmount})
+    </insert>
+
+    <select id="getSimple" resultMap="FundWithdrawRecordResultMap">
+        select
+            record_id,
+            account_id,
+            withdraw_amount,
+            create_time
+        from fund_withdraw_record where account_id=#{accountId} limit #{start},#{need}
+    </select>
+
+    <select id="getDetail" resultMap="FundWithdrawRecordResultMap">
+        select
+            record_id,
+            account_id,
+            withdraw_description,
+            withdraw_amount,
+            create_time
+        from fund_withdraw_record where record_id=#{recordId} and account_id=#{accountId}
+    </select>
 </mapper>

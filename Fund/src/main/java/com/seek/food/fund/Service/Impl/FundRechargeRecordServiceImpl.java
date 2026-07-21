@@ -40,8 +40,8 @@ public class FundRechargeRecordServiceImpl implements FundRechargeRecordService 
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;
         this.fundRechargeRecordCaffeine = fundRechargeRecordCaffeine;
-        stringRedisTemplate.opsForValue().setIfAbsent(fundRedisKeyConfig.getFundRechargeRecordIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
         this.fundService = fundService;
+        stringRedisTemplate.opsForValue().setIfAbsent(fundRedisKeyConfig.getFundRechargeRecordIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
     //查看简单的充值记录
