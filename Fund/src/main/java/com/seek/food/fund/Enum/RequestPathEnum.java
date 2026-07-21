@@ -12,6 +12,8 @@ public class RequestPathEnum {
     public static final String Fund_Withdraw_Get_Detail = "/detail";
 
     public static final String Fund_Order_Record = "/order";
+    public static final String Fund_Order_Record_Get_Simple = "/simple";
+    public static final String Fund_Order_Record_Get_Detail = "/detail";
     public static final String Fund_Order_Record_Pay = "/pay";
     public static final String Fund_Order_Record_Rollback = "/rollback";
 

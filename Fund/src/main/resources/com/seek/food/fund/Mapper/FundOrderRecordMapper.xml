@@ -5,10 +5,41 @@
 <mapper namespace="com.seek.food.fund.Mapper.FundOrderRecordMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="FundResultMap" type="com.seek.food.dto.Fund.FundOrderRecordDTO">
+    <resultMap id="FundOrderRecordResultMap" type="com.seek.food.dto.Fund.FundOrderRecordDTO">
         <result property="pay" column="is_pay" />
         <result property="rollback" column="is_rollback" />
         <result property="withdraw" column="is_withdraw" />
     </resultMap>
+
+
+    <select id="getSimple" resultMap="FundOrderRecordResultMap">
+        select
+            record_id,
+            account_id,
+            order_id,
+            cost,
+            create_time,
+            is_pay,
+            is_rollback,
+            is_withdraw
+        from fund_order_record where account_id=#{accountId} order by record_id limit #{start},#{need}
+    </select>
+
+    <select id="getDetail" resultMap="FundOrderRecordResultMap">
+        select
+            record_id,
+            account_id,
+            order_id,
+            order_description,
+            cost,
+            deadline,
+            able_rollback_time,
+            create_time,
+            is_pay,
+            is_rollback,
+            is_withdraw
+        from fund_order_record where record_id=#{recordId} and account_id=#{accountId} order by record_id
+    </select>
+
 
 </mapper>
