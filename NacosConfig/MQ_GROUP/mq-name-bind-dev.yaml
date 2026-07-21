@@ -1,12 +1,14 @@
 mq:
   name:
     bind:
+      #异常交换机
       error-exchange:
         exchange-name: errorExchange
         type: fanout
         error-queue:
           name: errorQueue
           routing-key: null
+      #用户交换机
       user-exchange:
         exchange-name: userExchange
         type: direct
@@ -19,6 +21,7 @@ mq:
         delete-fund-queue:
           name: deleteFundQueue
           routing-key: delete
+      #商家交换机
       merchant-exchange:
         exchange-name: merchantExchange
         type: direct
@@ -43,6 +46,7 @@ mq:
         es-sync-merchant-queue:
           name: esSyncMerchantQueue
           routing-key: esSync
+      #职员交换机
       employee-exchange:
         exchange-name: employeeExchange
         type: direct
@@ -52,10 +56,11 @@ mq:
         delete-file-employee-queue:
           name: deleteFileEmployeeQueue
           routing-key: deleteFile
+      #餐品交换机
       meal-exchange:
         exchange-name: mealExchange
         type: direct
-        delete-file-mealr-queue:
+        delete-file-meal-queue:
           name: deleteFileMealQueue
           routing-key: deleteFile
         delete-file-meal-dead-letter-queue:
@@ -64,6 +69,45 @@ mq:
         delete-all-file-meal-dead-letter-queue:
           name: deleteAllFileMealDeadLetterQueue
           routing-key: deleteAllFileDeadLetter
+      #资金交换机
+      fund-exchange:
+        exchange-name: fundExchange
+        type: direct
+        #折扣券使用队列，在用户支付后先使用折扣卷再确认订单
+        voucher-use-queue:
+          name: voucherUseQueue
+          routing-key: ackOrder
+        #延时回滚优惠券和支付金额的死信队列
+        rollback-all-fund-dead-letter-queue:
+          name: rollbackAllFundDeadLetterQueue
+          routing-key: rollbackAllDeadLetter
+        #回滚优惠券队列
+        rollback-voucher-queue:
+          name: rollbackVoucherQueue
+          routing-key: rollback
+        #回滚支付金额队列
+        rollback-fund-queue:
+          name: rollbackFundQueue
+          routing-key: rollback
+        #退款队列
+        refund-queue:
+          name: refundQueue
+          routing-key: refund
+      #折扣券交换机
+      voucher-exchange:
+        exchange-name: voucherExchange
+        type: direct
+        #使订单模块确认订单
+        order-ack-queue:
+          name: orderAckQueue
+          routing-key: orderAck
+      order-exchange:
+        exchange-name: orderExchange
+        type: direct
+        #订单的资金收据初始化
+        register-fund-order-record-queue:
+          name: registerFundOrderRecordQueue
+          routing-key: registerFundOrder
       dead-letter-exchange:
         exchange-name: deadLetterExchange
         type: direct
@@ -72,5 +116,9 @@ mq:
           routing-key: deleteMealFile
         delete-all-file-meal-impl-queue:
           name: deleteAllFileMealImplQueue
-  1        routing-key: deleteAllMealFile
+          routing-key: deleteAllMealFile
+        #回滚所有的资金监听实现队列
+        rollback-all-fund-impl-queue:
+          name: rollbackAllFundImplQueue
+          routing-key: rollbackAllFund
 

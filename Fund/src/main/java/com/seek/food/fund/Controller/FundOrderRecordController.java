@@ -40,7 +40,7 @@ public class FundOrderRecordController {
     }
 
     //回滚订单，仅当延时回滚消息失效时发挥作用
-    @PutMapping(RequestPathEnum.Fund_Order_Record_Pay)
+    @PutMapping(RequestPathEnum.Fund_Order_Record_Rollback)
     public Result<Void> rollback(long recordId){
         fundOrderRecordService.rollback(recordId);
         return Result.success();
