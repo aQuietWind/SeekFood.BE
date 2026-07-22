@@ -136,6 +136,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
     },
     {
+      "name": "mq.name.bind.order-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -164,6 +169,21 @@
       "name": "user.self.redis.stream",
       "type": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig"
+    },
+    {
+      "name": "voucher.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig"
+    },
+    {
+      "name": "voucher.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig"
+    },
+    {
+      "name": "voucher.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
     }
   ],
   "properties": [
@@ -923,22 +943,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
     },
     {
-      "name": "mq.name.bind.fund-exchange.refund-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
-    },
-    {
       "name": "mq.name.bind.fund-exchange.rollback-all-fund-dead-letter-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
-    },
-    {
-      "name": "mq.name.bind.fund-exchange.rollback-fund-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
-    },
-    {
-      "name": "mq.name.bind.fund-exchange.rollback-voucher-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
     },
@@ -948,7 +953,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
     },
     {
-      "name": "mq.name.bind.fund-exchange.voucher-use-queue",
+      "name": "mq.name.bind.fund-exchange.use-voucher-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.FundExchangeConfig"
     },
@@ -1021,6 +1026,36 @@
       "name": "mq.name.bind.merchant-exchange.type",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.refund-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.register-fund-order-record-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.rollback-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.rollback-voucher-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
       "name": "mq.name.bind.user-exchange.delete-file-user-queue",
@@ -1151,6 +1186,76 @@
       "name": "user.self.redis.stream.old-file-stream",
       "type": "com.seek.food.config.Data.RedisStreamData",
       "sourceType": "com.seek.food.config.NacosConfig.User.UserRedisStreamConfig"
+    },
+    {
+      "name": "voucher.self.jvm-caffeine.merchant-voucher",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig"
+    },
+    {
+      "name": "voucher.self.jvm-caffeine.voucher-connection",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig"
+    },
+    {
+      "name": "voucher.self.params.rules.duration-day-min",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig"
+    },
+    {
+      "name": "voucher.self.params.rules.voucher-description-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig"
+    },
+    {
+      "name": "voucher.self.params.rules.voucher-name-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.merchant-voucher-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.merchant-voucher-get-simple-effective-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.merchant-voucher-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.merchant-voucher-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.merchant-voucher-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.voucher-connection-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.voucher-connection-get-simple-effective-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.voucher-connection-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
+    },
+    {
+      "name": "voucher.self.redis.key.voucher-connection-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig"
     }
   ],
   "hints": [],

@@ -10,4 +10,7 @@ public interface VoucherConnectionMapper {
     public List<VoucherConnectionDTO> getSimple(int start, int need,long userId);
     public List<VoucherConnectionDTO> getSimpleEffective(int start, int need,long userId);
     public VoucherConnectionDTO getDetail(long connectionId,long userId);
+    public void rollback(long orderId);
+    public void use(long orderId);
+    public void insertConnection(VoucherConnectionDTO connection);
 }

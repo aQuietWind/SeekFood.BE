@@ -13,9 +13,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class FundExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData voucherUseQueue;
+    private QueueData useVoucherQueue;
     private QueueData rollbackAllFundDeadLetterQueue;
-    private QueueData rollbackVoucherQueue;
-    private QueueData rollbackFundQueue;
-    private QueueData refundQueue;
 }

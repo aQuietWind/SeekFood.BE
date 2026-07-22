@@ -87,7 +87,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         //如果失败会报错的，所以不用检验结果
         fundService.decreaseFund(record.getCost(),userId);
         //发送消息
-        MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getVoucherUseQueue().getRoutingKey()
+        MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getUseVoucherQueue().getRoutingKey()
         ,record.getOrderId(),rabbitTemplate);
         //发送消息进行延时全局回滚
         MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()

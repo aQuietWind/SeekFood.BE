@@ -8,7 +8,6 @@ import com.seek.food.dto.Fund.FundOrderRefundRecordDTO;
 import com.seek.food.fund.Caffeine.FundOrderRecordCaffeine;
 import com.seek.food.fund.Mapper.FundOrderRecordMapper;
 import com.seek.food.fund.Mapper.FundOrderRefundRecordMapper;
-import com.seek.food.fund.Service.FundService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,8 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class RefundConsumer {
-    private final FundService fundService;
+public class RefundFundConsumer {
     private final FundOrderRefundRecordMapper fundOrderRefundRecordMapper;
     private final FundOrderRecordMapper fundOrderRecordMapper;
     private final StringRedisTemplate stringRedisTemplate;
@@ -28,10 +26,9 @@ public class RefundConsumer {
     private final FundOrderRecordCaffeine fundOrderRecordCaffeine;
 
     @Autowired
-    public RefundConsumer(FundService fundService, FundOrderRefundRecordMapper fundOrderRefundRecordMapper
+    public RefundFundConsumer(FundOrderRefundRecordMapper fundOrderRefundRecordMapper
             , FundOrderRecordMapper fundOrderRecordMapper, StringRedisTemplate stringRedisTemplate, FundRedisKeyConfig fundRedisKeyConfig
             , CommonParamRulesConfig commonParamRulesConfig, FundOrderRecordCaffeine fundOrderRecordCaffeine) {
-        this.fundService = fundService;
         this.fundOrderRefundRecordMapper = fundOrderRefundRecordMapper;
         this.fundOrderRecordMapper = fundOrderRecordMapper;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -41,8 +38,8 @@ public class RefundConsumer {
         stringRedisTemplate.opsForValue().setIfAbsent(fundRedisKeyConfig.getFundOrderRefundRecordIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
-    @RabbitListener(queues = MQNameKeyEnum.Fund_Exchange_Rollback_Fund_Queue)
-    public void refundQueue(FundOrderRecordMQDTO recordMQ) {
+    @RabbitListener(queues = MQNameKeyEnum.Order_Exchange_Refund_Fund_Queue)
+    public void refundFundQueue(FundOrderRecordMQDTO recordMQ) {
         //在订单记录中确认退款,然后让MySQL的触发器进行资金回滚,防止由于消费失败重试引起的重复消费的问题
         fundOrderRecordMapper.ackRefund(recordMQ.getOrderId(), recordMQ.getAccountId());
         //删除缓存

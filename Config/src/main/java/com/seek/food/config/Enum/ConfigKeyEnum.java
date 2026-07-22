@@ -48,6 +48,7 @@ public class ConfigKeyEnum {
     public static final String Meal_Exchange_Config="mq.name.bind.meal-exchange";
     public static final String Fund_Exchange_Config="mq.name.bind.fund-exchange";
     public static final String Voucher_Exchange_Config="mq.name.bind.voucher-exchange";
+    public static final String Order_Exchange_Config="mq.name.bind.order-exchange";
     public static final String Dead_Letter_Exchange_Config="mq.name.bind.dead-letter-exchange";
 //    public static final String =;
 //    public static final String =;

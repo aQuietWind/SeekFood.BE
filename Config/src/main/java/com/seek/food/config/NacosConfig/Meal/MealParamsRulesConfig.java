@@ -38,7 +38,7 @@ public class MealParamsRulesConfig {
     }
 
     public void mealPriceCheck(Double price) {
-        if (price==null||price.isNaN()||price<0||String.valueOf(price).split("\\.")[1].length()!=2) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (price==null||price.isNaN()||price<0||String.valueOf(price).split("\\.")[1].length()>2) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
     public void mealNextDiscountTimeCheck(LocalDateTime nextDiscountTime) {

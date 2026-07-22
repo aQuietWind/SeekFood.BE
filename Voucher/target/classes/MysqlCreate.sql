@@ -1,22 +1,35 @@
-CREATE DATABASE if not exists  seek_food_user;
-USE seek_food_user;
-drop table if exists  `user`;
-CREATE TABLE `user` (
-                        `user_id` bigint NOT NULL COMMENT '用户id',
-                        `username` varchar(15) NOT NULL COMMENT '用户名',
-                        `phone_number` varchar(30) NOT NULL UNIQUE COMMENT '手机号',
-                        `password` varchar(20) NOT NULL COMMENT '密码',
-                        `sex` tinyint COMMENT '性别',
-                        `header_image_addr` varchar(50) COMMENT '头像地址',
-                        `birthday` date COMMENT '生日',
-                        `create_time` datetime NOT NULL default now() COMMENT '创建时间',
-                        `is_delete` boolean NOT NULL DEFAULT false COMMENT '是否被删除',
-                        `order_amount` int NOT NULL DEFAULT 0 COMMENT '交易次数',
-                        PRIMARY KEY (`user_id`),
-                        UNIQUE KEY `uk_phone` (`phone_number`),
-                        UNIQUE KEY `uk_header_image_addr`(`header_image_addr`),
-                        INDEX phone_index(`phone_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+CREATE DATABASE if not exists seek_food_voucher;
+USE seek_food_voucher;
+drop table if exists `merchant_voucher`;
+CREATE TABLE `merchant_voucher` (
+                                    `voucher_id` bigint COMMENT '优惠券id',
+                                    `merchant_id` bigint NOT NULL COMMENT '发布该优惠券的商家id',
+                                    `voucher_name` varchar(15) COMMENT '该优惠券的展示名称',
+                                    `voucher_description` varchar(300) COMMENT '该优惠券的详细描述',
+                                    `discount_cost` double NOT NULL COMMENT '打折金额',
+                                    `min_cost` double NOT NULL COMMENT '优惠券可用的最小的消费金额',
+                                    `start_time` datetime NOT NULL COMMENT '开始可使用时间',
+                                    `end_time` datetime NOT NULL COMMENT '截止可使用时间',
+                                    `create_time` datetime NOT NULL default now() COMMENT '创建时间',
+                                    PRIMARY KEY (`voucher_id`),
+                                    INDEX `merchant_index`(`merchant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家优惠券表';
+drop table if exists `voucher_connection`;
+CREATE TABLE `voucher_connection` (
+                                      `connection_id` bigint COMMENT '该持有关系id',
+                                      `voucher_id` bigint COMMENT '优惠券id',
+                                      `user_id` bigint NOT NULL COMMENT '持有该优惠券的用户id',
+                                      `promotion_id` bigint NOT NULL COMMENT '获取该优惠券的活动id',
+                                      `order_id` bigint NOT NULL COMMENT '使用该优惠券的订单id',
+                                      `start_time` datetime NOT NULL COMMENT '开始可使用时间',
+                                      `end_time` datetime NOT NULL COMMENT '截止可使用时间',
+                                      `create_time` datetime NOT NULL default now() COMMENT '创建时间',
+                                      `is_lock` boolean default false COMMENT '是否处于冻结状态',
+                                      `is_use` boolean default false COMMENT '是否使用',
+                                      PRIMARY KEY (`voucher_id`),
+                                      INDEX `user_index`(`user_id`),
+                                      INDEX `order_index`(`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='优惠券持有表';
 
 
 

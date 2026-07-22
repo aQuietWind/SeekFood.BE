@@ -43,7 +43,7 @@ public class RollbackFundConsumer {
         stringRedisTemplate.opsForValue().setIfAbsent(fundRedisKeyConfig.getFundOrderRefundRecordIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
-    @RabbitListener(queues = MQNameKeyEnum.Fund_Exchange_Rollback_Fund_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Order_Exchange_Rollback_Fund_Queue)
     public void rollbackFundQueue(FundOrderRecordMQDTO recordMQ) {
         //在订单记录中确认退款,然后让MySQL的触发器进行资金回滚,防止由于消费失败重试引起的重复消费的问题
         fundOrderRecordMapper.ackRefund(recordMQ.getOrderId(), recordMQ.getAccountId());

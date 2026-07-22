@@ -5,6 +5,7 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig;
 import com.seek.food.dto.Voucher.MerchantVoucherDTO;
+import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Redis.RedisUtil;
 import com.seek.food.voucher.Caffeine.MerchantVoucherCaffeine;
@@ -54,6 +55,9 @@ public class MerchantVoucherServiceImpl implements MerchantVoucherService {
         long merchantId=quickGetMerchantId();
         //校验冷却期
         quickCooldown(voucherRedisKeyConfig.getMerchantVoucherInsertCooldown(),merchantId);
+        //将必要的数据放进实体类
+        voucher.setVoucherId(IdUtil.IdGenerateByIncrease(voucherRedisKeyConfig.getMerchantVoucherIdCount().getName(),stringRedisTemplate));
+        voucher.setMerchantId(merchantId);
         //写入MySQL
         merchantVoucherMapper.insertMerchantVoucher(voucher);
     }

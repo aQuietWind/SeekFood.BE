@@ -5,14 +5,11 @@ import com.seek.food.dto.Voucher.MerchantVoucherDTO;
 import com.seek.food.voucher.Enum.RequestPathEnum;
 import com.seek.food.voucher.Service.MerchantVoucherService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(RequestPathEnum.Merchant_Voucher)
 public class MerchantVoucherController {
 

@@ -27,16 +27,22 @@ public class VoucherParamsRulesConfig {
     }
 
     public void durationDayCheck(LocalDateTime startTime, LocalDateTime endTime) {
-        if (startTime==null|| endTime==null  || startTime.isBefore(LocalDateTime.now()) || endTime.isBefore(startTime.plusDays(durationDayMin)) ) {
+        if (startTime==null|| endTime==null  || startTime.isAfter(LocalDateTime.now()) || endTime.isBefore(startTime.plusDays(durationDayMin)) ) {
             throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         }
     }
 
     public void minCostCheck(Double minCost) {
         if (minCost==null||minCost<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        costCheck(minCost);
     }
 
     public void discountCostCheck(Double discountCost) {
         if (discountCost==null||discountCost<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        costCheck(discountCost);
+    }
+
+    public void costCheck(Double cost) {
+        if (cost==null||cost.isNaN()||cost<0||String.valueOf(cost).split("\\.")[1].length()>2) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

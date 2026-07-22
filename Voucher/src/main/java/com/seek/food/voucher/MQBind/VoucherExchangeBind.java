@@ -1,6 +1,6 @@
 package com.seek.food.voucher.MQBind;
 
-import com.seek.food.config.NacosConfig.MQ.UserExchangeConfig;
+import com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig;
 import com.seek.food.util.MQ.MQUtil;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,45 +14,25 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class VoucherExchangeBind {
 
-    private final UserExchangeConfig userExchangeConfig;
+    private final VoucherExchangeConfig voucherExchangeConfig;
     @Autowired
-    public VoucherExchangeBind(UserExchangeConfig userExchangeConfig) {
-        this.userExchangeConfig = userExchangeConfig;
+    public VoucherExchangeBind(VoucherExchangeConfig voucherExchangeConfig) {
+        this.voucherExchangeConfig = voucherExchangeConfig;
     }
-    //创建一个用于用户注册消息投递的交换机
+    //创建一个用于优惠券的交换机
     @Bean
-    public DirectExchange userExchange(){
-        return new DirectExchange(userExchangeConfig.getExchangeName());
+    public DirectExchange voucherExchange(){
+        return new DirectExchange(voucherExchangeConfig.getExchangeName());
     }
-    //用户注册队列
+    //订单确认队列
     @Bean
-    public Queue registerFundQueue(){
-        return MQUtil.generateQuorumQueue(userExchangeConfig.getRegisterFundQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding registerFundBinding(Queue registerFundQueue, DirectExchange userExchange){
-        return BindingBuilder.bind(registerFundQueue).to(userExchange).with(userExchangeConfig.getRegisterFundQueue().getRoutingKey());
-    }
-    //用户文件更新队列
-    @Bean
-    public Queue updateFileUserQueue(){
-        return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteFileUserQueue().getName());
+    public Queue orderAckQueue(){
+        return MQUtil.generateQuorumQueue(voucherExchangeConfig.getOrderAckQueue().getName());
     }
     //绑定交换机与队列
     @Bean
-    public Binding userFileUserBinding(Queue updateFileUserQueue, DirectExchange userExchange){
-        return BindingBuilder.bind(updateFileUserQueue).to(userExchange).with(userExchangeConfig.getDeleteFileUserQueue().getRoutingKey());
-    }
-    //用户删除时资金操作队列
-    @Bean
-    public Queue deleteFundQueue(){
-        return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteFundQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding deleteFundBinding(Queue deleteFundQueue, DirectExchange userExchange){
-        return BindingBuilder.bind(deleteFundQueue).to(userExchange).with(userExchangeConfig.getDeleteFundQueue().getRoutingKey());
+    public Binding orderAckBinding(Queue orderAckQueue, DirectExchange voucherExchange){
+        return BindingBuilder.bind(orderAckQueue).to(voucherExchange).with(voucherExchangeConfig.getOrderAckQueue().getRoutingKey());
     }
 
 

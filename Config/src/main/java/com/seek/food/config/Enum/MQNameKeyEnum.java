@@ -15,12 +15,15 @@ public class MQNameKeyEnum {
     public static final String Employee_Exchange_Change_Amount_Employee_Queue ="${mq.name.bind.employee-exchange.change-employee-amount-queue.name}";
 
     public static final String Meal_Exchange_Delete_File_Queue ="${mq.name.bind.meal-exchange.delete-file-meal-queue.name}";
-    public static final String Meal_Exchange_Delete_File_Dead_Letter_Queue ="${mq.name.bind.meal-exchange.delete-file-meal-dead-letter-queue.name}";
-    public static final String Meal_Exchange_Delete_All_File_Dead_Letter_Queue ="${mq.name.bind.meal-exchange.delete-all-file-meal-dead-letter-queue.name}";
 
-    public static final String Fund_Exchange_Rollback_Fund_Queue ="${mq.name.bind.fund-exchange.rollback-fund-queue.name}";
+    public static final String Fund_Exchange_Use_Voucher_Queue ="${mq.name.bind.fund-exchange.use-voucher-queue.name}";
+
+    public static final String Promotion_Exchange_Register_Voucher_Connection_Queue ="${mq.name.bind.promotion-exchange.register-voucher-connection-queue.name}";
 
     public static final String Order_Exchange_Register_Fund_Order_Record_Queue ="${mq.name.bind.order-exchange.register-fund-order-record-queue.name}";
+    public static final String Order_Exchange_Rollback_Fund_Queue ="${mq.name.bind.order-exchange.rollback-fund-queue.name}";
+    public static final String Order_Exchange_Rollback_Voucher_Queue ="${mq.name.bind.order-exchange.rollback-voucher-queue.name}";
+    public static final String Order_Exchange_Refund_Fund_Queue ="${mq.name.bind.order-exchange.refund-fund-queue.name}";
 
 
     public static final String Dead_Letter_Exchange_Delete_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";
