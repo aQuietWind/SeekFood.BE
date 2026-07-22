@@ -37,6 +37,11 @@ public class ConfigKeyEnum {
     public static final String Fund_Caffeine_Config="fund.self.jvm-caffeine";
 
 
+    public static final String Voucher_Params_Rules_Config="voucher.self.params.rules";
+    public static final String Voucher_Redis_Key_Config="voucher.self.redis.key";
+    public static final String Voucher_Caffeine_Config="voucher.self.jvm-caffeine";
+
+
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";

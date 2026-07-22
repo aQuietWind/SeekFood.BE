@@ -64,6 +64,7 @@ public class FundOrderRefundRecordServiceImpl implements FundOrderRefundRecordSe
     }
 
 
+
     private long quickGetUserId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
     }

@@ -146,6 +146,7 @@
         <module>Employee</module>
         <module>Meal</module>
         <module>Fund</module>
+        <module>Voucher</module>
         <module>Promotion</module>
         <module>Rider</module>
         <module>Order</module>

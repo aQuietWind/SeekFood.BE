@@ -10,4 +10,5 @@ public interface FundOrderRefundRecordMapper {
     public List<FundOrderRefundRecordDTO> getSimple(int start, int need, long accountId);
     public FundOrderRefundRecordDTO getDetail(long recordId,long accountId);
     public boolean insertRecord(FundOrderRefundRecordDTO record);
+    public boolean isExist(long recordId);
 }

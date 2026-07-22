@@ -27,6 +27,16 @@ CREATE TABLE `fund_order_record` (
                                      INDEX `account_index`(`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单消费记录表';
 
+#自动用于自动回滚资金的触发器
+create trigger auto_refund
+    after update
+    on fund_order_record for each row
+begin
+    if new.is_refund=true and old.is_refund=false then
+        update fund set fund_amount=fund_amount+new.cost where account_id=new.account_id;
+    end if;
+end;
+
 drop table if exists `fund_order_refund_record`;
 CREATE TABLE `fund_order_refund_record` (
                                             `record_id` bigint NOT NULL COMMENT '记录id',
