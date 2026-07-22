@@ -13,8 +13,8 @@ public class VoucherRedisKeyConfig {
     private RedisKeyData merchantVoucherInsertCooldown;
     private RedisKeyData merchantVoucherGetSimpleCooldown;
     private RedisKeyData merchantVoucherGetSimpleEffectiveCooldown;
-    private RedisKeyData userVoucherGetSimpleCooldown;
-    private RedisKeyData userVoucherGetSimpleEffectiveCooldown;
+    private RedisKeyData voucherConnectionGetSimpleCooldown;
+    private RedisKeyData voucherConnectionGetSimpleEffectiveCooldown;
     private RedisKeyData merchantVoucherIdCount;
     private RedisKeyData voucherConnectionIdCount;
     private RedisKeyData merchantVoucherMessageCaffeine;

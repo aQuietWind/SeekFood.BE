@@ -1,0 +1,62 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seek.food.meal.Mapper.MealMapper">
+
+    <!-- 全局统一字段映射 -->
+    <resultMap id="VoucherConnectionResultMap" type="com.seek.food.dto.Voucher.MerchantVoucherDTO">
+    </resultMap>
+
+<!--    新增餐品-->
+    <insert id="insertConnectionVoucher">
+        insert into meal (meal_id,merchant_id,meal_name,meal_price,meal_content)
+        values(#{mealId},#{merchantId},#{mealName},#{mealPrice},#{mealContent});
+    </insert>
+
+<!--    获取餐品预览-->
+    <select id="getSimple" resultMap="VoucherConnectionResultMap">
+        select
+            connection_id,
+            voucher_id,
+            start_time,
+            end_time,
+            is_use
+        from voucher_connection
+        where user_id=#{userId}
+        order by voucher_id limit #{start},#{need}
+    </select>
+
+    <!--    根据类型获取餐品预览-->
+    <select id="getSimpleEffective" resultMap="VoucherConnectionResultMap">
+        select
+            connection_id,
+            voucher_id,
+            start_time,
+            end_time,
+            is_use
+        from voucher_connection
+        where merchant_id=#{merchantId} and start_time &lt;= now() and end_time &gt;= now() and is_use=false
+        order by voucher_id limit #{start},#{need}
+    </select>
+
+    <select id="getDetail" resultMap="VoucherConnectionResultMap">
+        select
+            connection_id,
+            voucher_id,
+            user_id,
+            promotion_id,
+            order_id,
+            start_time,
+            end_time,
+            create_time,
+            is_lock,
+            is_use
+        from voucher_connection
+        where connection_id=#{connectionId} and user_id=#{userId}
+    </select>
+
+
+
+
+
+</mapper>

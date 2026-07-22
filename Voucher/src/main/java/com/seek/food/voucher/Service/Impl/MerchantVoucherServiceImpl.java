@@ -81,7 +81,7 @@ public class MerchantVoucherServiceImpl implements MerchantVoucherService {
         //冷却期
         quickCooldown(voucherRedisKeyConfig.getMerchantVoucherGetSimpleEffectiveCooldown(),merchantId);
         //查询
-        return merchantVoucherMapper.getSimple(start,need,merchantId);
+        return merchantVoucherMapper.getSimpleEffective(start,need,merchantId);
     }
 
     //获取详细的商家优惠券信息

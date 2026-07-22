@@ -1,0 +1,13 @@
+package com.seek.food.voucher.Mapper;
+
+import com.seek.food.dto.Voucher.VoucherConnectionDTO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface VoucherConnectionMapper {
+    public List<VoucherConnectionDTO> getSimple(int start, int need,long userId);
+    public List<VoucherConnectionDTO> getSimpleEffective(int start, int need,long userId);
+    public VoucherConnectionDTO getDetail(long connectionId,long userId);
+}
