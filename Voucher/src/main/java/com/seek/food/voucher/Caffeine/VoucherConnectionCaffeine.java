@@ -2,6 +2,7 @@ package com.seek.food.voucher.Caffeine;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig;
+import com.seek.food.dto.Voucher.VoucherConnectionDTO;
 import com.seek.food.util.Caffeine.JvmCaffeineParent;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class VoucherConnectionCaffeine extends JvmCaffeineParent<Long,String> {
+public class VoucherConnectionCaffeine extends JvmCaffeineParent<Long, VoucherConnectionDTO> {
     // 构造注入配置
     private final VoucherCaffeineConfig voucherCaffeineConfig;
     @Autowired

@@ -4,7 +4,6 @@ drop table if exists `merchant_voucher`;
 CREATE TABLE `merchant_voucher` (
                                     `voucher_id` bigint COMMENT '优惠券id',
                                     `merchant_id` bigint NOT NULL COMMENT '发布该优惠券的商家id',
-                                    `meal_id_list` varchar(500) NOT NULL COMMENT '可生效的餐品id列表',
                                     `voucher_name` varchar(15) COMMENT '该优惠券的展示名称',
                                     `voucher_description` varchar(300) COMMENT '该优惠券的详细描述',
                                     `discount_cost` double NOT NULL COMMENT '打折金额',

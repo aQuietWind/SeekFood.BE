@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class MerchantVoucherDTO {
     private Long voucherId;
     private Long merchantId;
-    private String mealIdList;
     private String voucherName;
     private String voucherDescription;
     private Double discountCost;

@@ -16,7 +16,6 @@ import java.util.List;
 public class VoucherParamsRulesConfig {
     private int voucherNameMax;
     private int voucherDescriptionMax;
-    private int idListNumberMax;
     private int durationDayMin;
 
     public void voucherNameCheck(String voucherName) {
@@ -27,13 +26,17 @@ public class VoucherParamsRulesConfig {
         if (voucherDescription!=null&&(voucherDescription.isBlank()||voucherDescription.length()>voucherDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
-    public void idListCheck(List<Long> ids) {
-        if (ids.size()>idListNumberMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
     public void durationDayCheck(LocalDateTime startTime, LocalDateTime endTime) {
         if (startTime==null|| endTime==null  || startTime.isBefore(LocalDateTime.now()) || endTime.isBefore(startTime.plusDays(durationDayMin)) ) {
             throw new BizException(ErrorCodeEnum.PARAM_ERROR);
         }
+    }
+
+    public void minCostCheck(Double minCost) {
+        if (minCost==null||minCost<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public void discountCostCheck(Double discountCost) {
+        if (discountCost==null||discountCost<0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

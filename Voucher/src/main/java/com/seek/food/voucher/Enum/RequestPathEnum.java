@@ -10,6 +10,5 @@ public class RequestPathEnum {
     public static final String User_Voucher = "/user";
     public static final String User_Voucher_Get_Simple = "/simple";
     public static final String User_Voucher_Get_Simple_Effective = "/simple/effective";
-    public static final String User_Voucher_Get_Detail = "/detail";
 
 }
