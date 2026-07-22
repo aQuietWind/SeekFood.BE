@@ -35,10 +35,10 @@ public class MerchantVoucherServiceImpl implements MerchantVoucherService {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.voucherRedisKeyConfig = voucherRedisKeyConfig;
-        //初始化id计数器
-        stringRedisTemplate.opsForValue().setIfAbsent(voucherRedisKeyConfig.getMerchantVoucherIdCount().getName(),""+commonParamRulesConfig.getIdCapacity())
         this.merchantVoucherMapper = merchantVoucherMapper;
         this.merchantVoucherCaffeine = merchantVoucherCaffeine;
+        //初始化id计数器
+        stringRedisTemplate.opsForValue().setIfAbsent(voucherRedisKeyConfig.getMerchantVoucherIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
 
     //新增商家优惠券
