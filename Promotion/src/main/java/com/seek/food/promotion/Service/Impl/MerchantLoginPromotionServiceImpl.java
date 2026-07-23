@@ -74,7 +74,7 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
         //检查冷却
         quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionInsertCooldown(),merchantId);
         //检查是否真的存在这个优惠券
-        voucherClient.merchantVoucherExist(promotion.getVoucherId());
+        if (!Boolean.TRUE.equals(voucherClient.merchantVoucherExist(promotion.getVoucherId()).getData())) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //放入必要数据
         promotion.setMerchantId(merchantId);
         promotion.setPromotionId(IdUtil.IdGenerateByIncrease(promotionRedisKeyConfig.getMerchantLoginPromotionIdCount().getName(),stringRedisTemplate));
@@ -121,6 +121,8 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
     //通过活动获取优惠券
     @Override
     public void getVoucher(long promotionId){
+        //检测id
+        commonParamRulesConfig.commonIdCheck(promotionId);
         //获取用户id
         long userId=quickGetUserId();
         //获取Redisson锁对象

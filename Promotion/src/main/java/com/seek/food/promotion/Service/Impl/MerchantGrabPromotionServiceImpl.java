@@ -78,12 +78,14 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
         //检查冷却
         quickCooldown(promotionRedisKeyConfig.getMerchantGrabPromotionInsertCooldown(),merchantId);
         //检查是否真的存在这个优惠券
-        voucherClient.merchantVoucherExist(promotion.getVoucherId());
+        if (!Boolean.TRUE.equals(voucherClient.merchantVoucherExist(promotion.getVoucherId()).getData())) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //放入必要数据
         promotion.setMerchantId(merchantId);
         promotion.setPromotionId(IdUtil.IdGenerateByIncrease(promotionRedisKeyConfig.getMerchantGrabPromotionIdCount().getName(),stringRedisTemplate));
         //插入数据
+        log.error("323213");
         merchantGrabPromotionMapper.insertPromotion(promotion);
+        log.info("Promotion inserted successfully");
     }
 
     //获取某商家的简易活动介绍
@@ -125,6 +127,8 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
     //通过活动获取优惠券
     @Override
     public void getVoucher(long promotionId){
+        //检测id
+        commonParamRulesConfig.commonIdCheck(promotionId);
         //获取用户id
         long userId=quickGetUserId();
         //获取Redisson锁对象
@@ -140,7 +144,7 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
             //发送至MQ，使Voucher写入该持有关系
             MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()
                     ,new VoucherConnectionMQDTO(getDetail(promotionId).getVoucherId(),userId,promotionId),rabbitTemplate);
-        }finally {
+        } finally {
             //解锁
             lock.unlock();
         }

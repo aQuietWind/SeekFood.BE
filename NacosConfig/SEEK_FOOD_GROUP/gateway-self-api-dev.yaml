@@ -4,6 +4,7 @@ gateway-self-route:
   employee-id: employee
   meal-id: meal
   fund-id: fund
+  voucher-id: voucher
   promotion-id: promotion
   rider-id: rider
   order-id: order
@@ -20,7 +21,7 @@ spring:
         webflux:
           default-filters:
             # 给所有响应添加统一请求头标识,用于sentinel鉴定
-            - AddRequestHeader=origin,gateway
+            - AddRequestHeader=x-origin,gateway
             #去除掉第一段路径
             - StripPrefix=1   
           routes:
@@ -49,6 +50,11 @@ spring:
               uri: lb://${gateway-self-route.fund-id}
               predicates:
                 - Path=/${gateway-self-route.fund-id}/**
+
+            - id: ${gateway-self-route.voucher-id}
+              uri: lb://${gateway-self-route.voucher-id}
+              predicates:
+                - Path=/${gateway-self-route.voucher-id}/**
 
             - id: ${gateway-self-route.promotion-id}
               uri: lb://${gateway-self-route.promotion-id}

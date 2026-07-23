@@ -78,8 +78,9 @@ public class CommonParamRulesConfig {
     public void shouldAmountCheck(int shouldAmount) {
         if (shouldAmount>shouldAmountMax||shouldAmount<=0) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
+    //使用100倍idCapacity是为了统一适配多种数字开头的id
     public void commonIdCheck(Long id){
-        if (id==null||(id-idCapacity)>idCapacity||id<idCapacity) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+        if (id==null||(id-idCapacity)>100*idCapacity||id<idCapacity) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
 }

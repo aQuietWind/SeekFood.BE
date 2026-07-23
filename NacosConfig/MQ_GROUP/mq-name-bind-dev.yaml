@@ -74,13 +74,35 @@ mq:
         exchange-name: fundExchange
         type: direct
         #折扣券使用队列，在用户支付后先使用折扣卷再确认订单
-        voucher-use-queue:
-          name: voucherUseQueue
+        use-voucher-queue:
+          name: useVoucherQueue
           routing-key: ackOrder
         #延时回滚优惠券和支付金额的死信队列
         rollback-all-fund-dead-letter-queue:
           name: rollbackAllFundDeadLetterQueue
           routing-key: rollbackAllDeadLetter
+      #折扣券交换机
+      voucher-exchange:
+        exchange-name: voucherExchange
+        type: direct
+        #使订单模块确认订单
+        order-ack-queue:
+          name: orderAckQueue
+          routing-key: orderAck
+      promotion-exchange:
+        exchange-name: promotionExchange
+        type: direct
+        #生成优惠券持有关系
+        register-voucher-connection-queue:
+          name: registerVoucherConnectionQueue
+          routing-key: registerVoucherConnection
+      order-exchange:
+        exchange-name: orderExchange
+        type: direct
+        #订单的资金收据初始化
+        register-fund-order-record-queue:
+          name: registerFundOrderRecordQueue
+          routing-key: registerFundOrder
         #回滚优惠券队列
         rollback-voucher-queue:
           name: rollbackVoucherQueue
@@ -90,24 +112,9 @@ mq:
           name: rollbackFundQueue
           routing-key: rollback
         #退款队列
-        refund-queue:
-          name: refundQueue
+        refund-fund-queue:
+          name: refundFundQueue
           routing-key: refund
-      #折扣券交换机
-      voucher-exchange:
-        exchange-name: voucherExchange
-        type: direct
-        #使订单模块确认订单
-        order-ack-queue:
-          name: orderAckQueue
-          routing-key: orderAck
-      order-exchange:
-        exchange-name: orderExchange
-        type: direct
-        #订单的资金收据初始化
-        register-fund-order-record-queue:
-          name: registerFundOrderRecordQueue
-          routing-key: registerFundOrder
       dead-letter-exchange:
         exchange-name: deadLetterExchange
         type: direct

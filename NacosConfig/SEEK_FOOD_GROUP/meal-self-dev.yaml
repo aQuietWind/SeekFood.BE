@@ -39,10 +39,10 @@ meal:
           name: "meal:update:price:cooldown:"
           duration: 3
         meal-update-sell-cooldown:
-          name: "merchant:update:sell:cooldown:"
+          name: "meal:update:sell:cooldown:"
           duration: 3
         meal-delete-cooldown:
-          name: "merchant:delete:cooldown:"
+          name: "meal:delete:cooldown:"
           duration: 3
         meal-id-count:
           name: "meal:id:count"
