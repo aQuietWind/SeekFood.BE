@@ -13,6 +13,6 @@ public interface VoucherConnectionMapper {
     public void rollback(long orderId);
     public void use(long orderId);
     public void insertConnection(VoucherConnectionDTO connection);
-    public boolean lock(VoucherConnectionDTO connection);
+    public boolean lock(long userId,long connectionId,long orderId);
     public boolean exist(long userId,long promotionId);
 }

@@ -53,6 +53,10 @@
         where voucher_id=#{voucherId}
     </select>
 
+    <select id="exist" resultMap="MerchantVoucherResultMap">
+        select count(*) from merchant_voucher where voucher_id=#{voucherId} and merchat_id=#{merchantId}
+    </select>
+
 
 
 

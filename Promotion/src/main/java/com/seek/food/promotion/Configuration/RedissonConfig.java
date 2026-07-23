@@ -1,0 +1,24 @@
+package com.seek.food.promotion.Configuration;
+
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RedissonConfig {
+
+    @Value("#{spring.data.redis}")
+
+    @Bean
+    public RedissonClient redissonClient() {
+        //获取配置对象
+        Config config = new Config();
+        //设置地址和密码
+        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword("439176");
+        //导入配置，并且返回工具对象给springboot
+        return Redisson.create(config);
+    }
+}

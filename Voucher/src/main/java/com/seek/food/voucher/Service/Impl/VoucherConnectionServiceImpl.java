@@ -78,8 +78,14 @@ public class VoucherConnectionServiceImpl implements VoucherConnectionService {
 
     //判断用户是否从活动中已经获取了优惠券
     @Override
-    public boolean exist(long userId,long promotionId){
-        return voucherConnectionMapper.exist(userId,promotionId);
+    public boolean exist(long promotionId){
+        return voucherConnectionMapper.exist(quickGetUserId(),promotionId);
+    }
+
+    //锁定某优惠券为某订单使用
+    @Override
+    public boolean lock(long connectionId,long orderId){
+        return voucherConnectionMapper.lock(quickGetUserId(),connectionId,orderId);
     }
 
 

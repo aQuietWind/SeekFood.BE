@@ -11,4 +11,5 @@ public interface MerchantVoucherMapper {
     public List<MerchantVoucherDTO> getSimple(int start,int need,long merchantId);
     public List<MerchantVoucherDTO> getSimpleEffective(int start, int need, long merchantId);
     public MerchantVoucherDTO getDetail(long voucherId);
+    public boolean exist(long merchantId,long voucherId);
 }

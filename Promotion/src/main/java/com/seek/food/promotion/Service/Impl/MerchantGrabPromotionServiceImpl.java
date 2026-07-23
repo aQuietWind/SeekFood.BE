@@ -8,6 +8,7 @@ import com.seek.food.dto.Promotion.MerchantGrabPromotionDTO;
 import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
 import com.seek.food.promotion.Caffeine.MerchantGrabPromotionCaffeine;
 import com.seek.food.promotion.Caffeine.MerchantLoginPromotionCaffeine;
+import com.seek.food.promotion.Feign.VoucherClient;
 import com.seek.food.promotion.Mapper.MerchantGrabPromotionMapper;
 import com.seek.food.promotion.Service.MerchantGrabPromotionService;
 import com.seek.food.promotion.Service.MerchantLoginPromotionService;
@@ -33,10 +34,11 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
     private final MerchantGrabPromotionMapper merchantGrabPromotionMapper;
     private final MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine;
     private final PromotionParamsRulesConfig promotionParamsRulesConfig;
+    private final VoucherClient voucherClient;
 
     public MerchantGrabPromotionServiceImpl(PromotionRedisKeyConfig promotionRedisKeyConfig, StringRedisTemplate stringRedisTemplate
             , CommonParamRulesConfig commonParamRulesConfig, MerchantGrabPromotionMapper merchantGrabPromotionMapper
-            , MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine, PromotionParamsRulesConfig promotionParamsRulesConfig) {
+            , MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine, PromotionParamsRulesConfig promotionParamsRulesConfig, VoucherClient voucherClient) {
         this.promotionRedisKeyConfig = promotionRedisKeyConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.commonParamRulesConfig = commonParamRulesConfig;
@@ -45,6 +47,7 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
         this.promotionParamsRulesConfig = promotionParamsRulesConfig;
         //初始化id计数器，如果觉得写这里不符合工业化方针，可以写到@Init里
         stringRedisTemplate.opsForValue().setIfAbsent(promotionRedisKeyConfig.getMerchantGrabPromotionIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
+        this.voucherClient = voucherClient;
     }
 
     //新增活动
@@ -60,6 +63,8 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
         long merchantId=quickGetMerchantId();
         //检查冷却
         quickCooldown(promotionRedisKeyConfig.getMerchantGrabPromotionInsertCooldown(),merchantId);
+        //检查是否真的存在这个优惠券
+        voucherClient.merchantVoucherExist(promotion.getVoucherId());
         //放入必要数据
         promotion.setMerchantId(merchantId);
         promotion.setPromotionId(IdUtil.IdGenerateByIncrease(promotionRedisKeyConfig.getMerchantGrabPromotionIdCount().getName(),stringRedisTemplate));

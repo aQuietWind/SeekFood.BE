@@ -9,5 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("voucher")
 public interface VoucherClient {
     @GetMapping("/connection/exist")
-    Result<Boolean> exist(@RequestParam("userId") long userId, @RequestParam("promotionId") long promotionId);
+    Result<Boolean> connectionExist( @RequestParam("promotionId") long promotionId);
+    @GetMapping("/merchant/exist")
+    Result<Boolean> merchantVoucherExist( @RequestParam("voucherId") long voucherId);
 }

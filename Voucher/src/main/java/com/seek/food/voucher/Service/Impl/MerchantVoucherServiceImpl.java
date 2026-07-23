@@ -100,6 +100,12 @@ public class MerchantVoucherServiceImpl implements MerchantVoucherService {
         , k-> merchantVoucherMapper.getDetail(voucherId));
     }
 
+    //检测某商家是否真的有某优惠券
+    @Override
+    public Boolean exist(long voucherId){
+        return merchantVoucherMapper.exist(quickGetMerchantId(),voucherId);
+    }
+
     private long quickGetMerchantId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
     }

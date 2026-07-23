@@ -69,6 +69,8 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
         long merchantId=quickGetMerchantId();
         //检查冷却
         quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionInsertCooldown(),merchantId);
+        //检查是否真的存在这个优惠券
+        voucherClient.merchantVoucherExist(promotion.getVoucherId());
         //放入必要数据
         promotion.setMerchantId(merchantId);
         promotion.setPromotionId(IdUtil.IdGenerateByIncrease(promotionRedisKeyConfig.getMerchantLoginPromotionIdCount().getName(),stringRedisTemplate));
@@ -120,7 +122,7 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
         //冷却期判断
         quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionGetVoucherCooldown(),userId);
         //判断用户是否已经持有该优惠券
-        if (Boolean.TRUE.equals(voucherClient.exist(userId,promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
+        if (Boolean.TRUE.equals(voucherClient.connectionExist(promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
         //获取优惠券,并且发送至MQ，使Voucher写入该持有关系
         if (!merchantLoginPromotionMapper.getVoucher(promotionId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()

@@ -41,8 +41,14 @@ public class VoucherConnectionController {
 
     //其他模块通过Feign调用获取判断是否存在持有关系
     @GetMapping(RequestPathEnum.Voucher_Connection_Exist)
-    public Result<Boolean> exist(long userId,long promotionId) {
-        return Result.success(voucherConnectionService.exist(userId,promotionId));
+    public Result<Boolean> exist(long promotionId) {
+        return Result.success(voucherConnectionService.exist(promotionId));
+    }
+
+    //其他模块通过Feign调用获取判断是否存在持有关系
+    @GetMapping(RequestPathEnum.Voucher_Connection_Lock)
+    public Result<Boolean> lock(long connectionId,long orderId) {
+        return Result.success(voucherConnectionService.lock(connectionId,orderId));
     }
 
 

@@ -9,4 +9,5 @@ public interface MerchantVoucherService {
     public List<MerchantVoucherDTO> getSimple(int start, int need);
     public List<MerchantVoucherDTO> getSimpleEffective(int start, int need);
     public MerchantVoucherDTO getDetail(long voucherId);
+    public Boolean exist(long voucherId);
 }

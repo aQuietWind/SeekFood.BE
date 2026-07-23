@@ -4,7 +4,6 @@ import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.Voucher.MerchantVoucherDTO;
 import com.seek.food.voucher.Enum.RequestPathEnum;
 import com.seek.food.voucher.Service.MerchantVoucherService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +43,11 @@ public class MerchantVoucherController {
         return Result.success(merchantVoucherService.getDetail(voucherId));
     }
 
-
+    //通过Feign检测某商家是否真的有某优惠券
+    @GetMapping(RequestPathEnum.Merchant_Voucher_Exist)
+    public Result<Boolean> exist(long voucherId) {
+        return Result.success(merchantVoucherService.exist(voucherId));
+    }
 
 
 
