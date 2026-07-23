@@ -42,12 +42,18 @@ public class ConfigKeyEnum {
     public static final String Voucher_Caffeine_Config="voucher.self.jvm-caffeine";
 
 
+    public static final String Promotion_Params_Rules_Config="promotion.self.params.rules";
+    public static final String Promotion_Redis_Key_Config="promotion.self.redis.key";
+    public static final String Promotion_Caffeine_Config="promotion.self.jvm-caffeine";
+
+
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";
     public static final String Meal_Exchange_Config="mq.name.bind.meal-exchange";
     public static final String Fund_Exchange_Config="mq.name.bind.fund-exchange";
     public static final String Voucher_Exchange_Config="mq.name.bind.voucher-exchange";
+    public static final String Promotion_Exchange_Config="mq.name.bind.promotion-exchange";
     public static final String Order_Exchange_Config="mq.name.bind.order-exchange";
     public static final String Dead_Letter_Exchange_Config="mq.name.bind.dead-letter-exchange";
 //    public static final String =;

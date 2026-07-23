@@ -31,7 +31,7 @@ spring:
 
 #  端口设置
 server:
-  port: 10009
+  port: 10010
 
 
 

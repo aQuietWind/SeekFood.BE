@@ -89,11 +89,6 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         //发送消息
         MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getUseVoucherQueue().getRoutingKey()
         ,record.getOrderId(),rabbitTemplate);
-        //发送消息进行延时全局回滚
-        MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()
-                ,new FundOrderRecordMQDTO(recordId,record.getOrderId(),record.getAccountId(),record.getCost())
-                ,rabbitTemplate
-                ,MQUtil.minuteToMillis(fundParamsRulesConfig.getDeadlineMinuteMax()) );
     }
 
     //回滚订单

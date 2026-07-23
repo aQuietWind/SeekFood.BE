@@ -1,9 +1,5 @@
 package com.seek.food.config.AutoConfig;
 
-import com.seek.food.config.NacosConfig.Meal.MealCaffeineConfig;
-import com.seek.food.config.NacosConfig.Meal.MealParamsRulesConfig;
-import com.seek.food.config.NacosConfig.Meal.MealRedisKeyConfig;
-import com.seek.food.config.NacosConfig.Meal.MealRedisStreamConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherRedisKeyConfig;

@@ -26,7 +26,7 @@ public class RollbackVoucherConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Meal_Exchange_Delete_File_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Order_Exchange_Rollback_Voucher_Queue)
     public void rollbackVoucherQueue(FundOrderRecordMQDTO record){
         voucherConnectionMapper.rollback(record.getOrderId());
     }
