@@ -12,5 +12,5 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class PromotionExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData orderAckQueue;
+    private QueueData registerVoucherConnectionQueue;
 }
