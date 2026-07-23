@@ -1,7 +1,9 @@
 package com.seek.food.promotion.Caffeine;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig;
 import com.seek.food.config.NacosConfig.Voucher.VoucherCaffeineConfig;
+import com.seek.food.dto.Promotion.MerchantGrabPromotionDTO;
 import com.seek.food.dto.Voucher.VoucherConnectionDTO;
 import com.seek.food.util.Caffeine.JvmCaffeineParent;
 import jakarta.annotation.PostConstruct;
@@ -12,20 +14,20 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class VoucherConnectionCaffeine extends JvmCaffeineParent<Long, VoucherConnectionDTO> {
+public class MerchantGrabPromotionCaffeine extends JvmCaffeineParent<Long, MerchantGrabPromotionDTO> {
     // 构造注入配置
-    private final VoucherCaffeineConfig voucherCaffeineConfig;
+    private final PromotionCaffeineConfig promotionCaffeineConfig;
     @Autowired
-    public VoucherConnectionCaffeine(VoucherCaffeineConfig voucherCaffeineConfig) {
-        this.voucherCaffeineConfig = voucherCaffeineConfig;
+    public MerchantGrabPromotionCaffeine(PromotionCaffeineConfig promotionCaffeineConfig) {
+        this.promotionCaffeineConfig = promotionCaffeineConfig;
     }
 
     // 容器启动构建缓存
     @PostConstruct
     public void init() {
         super.CACHE = Caffeine.newBuilder()
-                .maximumSize(voucherCaffeineConfig.getVoucherConnection().getMaxSize())
-                .expireAfterWrite(voucherCaffeineConfig.getVoucherConnection().getExpireTime(), TimeUnit.MINUTES)
+                .maximumSize(promotionCaffeineConfig.getMerchantGrabPromotion().getMaxSize())
+                .expireAfterWrite(promotionCaffeineConfig.getMerchantGrabPromotion().getExpireTime(), TimeUnit.MINUTES)
                 .recordStats()
                 .build();
     }
