@@ -1178,7 +1178,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },
     {
-      "name": "promotion.self.redis.key.merchant-grab-promotion-get-voucher-cooldown",
+      "name": "promotion.self.redis.key.merchant-grab-promotion-get-voucher-lock",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },
@@ -1208,7 +1208,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },
     {
-      "name": "promotion.self.redis.key.merchant-login-promotion-get-voucher-cooldown",
+      "name": "promotion.self.redis.key.merchant-login-promotion-get-voucher-lock",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },

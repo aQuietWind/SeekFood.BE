@@ -2,10 +2,12 @@ package com.seek.food.promotion.Service.Impl;
 
 import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
+import com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig;
 import com.seek.food.dto.Promotion.MerchantGrabPromotionDTO;
 import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
+import com.seek.food.dto.Voucher.VoucherConnectionMQDTO;
 import com.seek.food.promotion.Caffeine.MerchantGrabPromotionCaffeine;
 import com.seek.food.promotion.Caffeine.MerchantLoginPromotionCaffeine;
 import com.seek.food.promotion.Feign.VoucherClient;
@@ -14,8 +16,14 @@ import com.seek.food.promotion.Service.MerchantGrabPromotionService;
 import com.seek.food.promotion.Service.MerchantLoginPromotionService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -35,19 +43,25 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
     private final MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine;
     private final PromotionParamsRulesConfig promotionParamsRulesConfig;
     private final VoucherClient voucherClient;
+    private final RedissonClient redissonClient;
+    private final PromotionExchangeConfig promotionExchangeConfig;
+    private final RabbitTemplate rabbitTemplate;
 
     public MerchantGrabPromotionServiceImpl(PromotionRedisKeyConfig promotionRedisKeyConfig, StringRedisTemplate stringRedisTemplate
             , CommonParamRulesConfig commonParamRulesConfig, MerchantGrabPromotionMapper merchantGrabPromotionMapper
-            , MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine, PromotionParamsRulesConfig promotionParamsRulesConfig, VoucherClient voucherClient) {
+            , MerchantGrabPromotionCaffeine merchantGrabPromotionCaffeine, PromotionParamsRulesConfig promotionParamsRulesConfig, VoucherClient voucherClient, RedissonClient redissonClient, PromotionExchangeConfig promotionExchangeConfig, RabbitTemplate rabbitTemplate) {
         this.promotionRedisKeyConfig = promotionRedisKeyConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.merchantGrabPromotionMapper = merchantGrabPromotionMapper;
         this.merchantGrabPromotionCaffeine = merchantGrabPromotionCaffeine;
         this.promotionParamsRulesConfig = promotionParamsRulesConfig;
-        //初始化id计数器，如果觉得写这里不符合工业化方针，可以写到@Init里
-        stringRedisTemplate.opsForValue().setIfAbsent(promotionRedisKeyConfig.getMerchantGrabPromotionIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
         this.voucherClient = voucherClient;
+        this.redissonClient = redissonClient;
+        this.promotionExchangeConfig = promotionExchangeConfig;
+        this.rabbitTemplate = rabbitTemplate;
+        //初始化id计数器，如果觉得写这里不符合工业化方针，可以写到@Init里,且抢夺型商家活动的id开头为2
+        stringRedisTemplate.opsForValue().setIfAbsent(promotionRedisKeyConfig.getMerchantGrabPromotionIdCount().getName(),""+2*commonParamRulesConfig.getIdCapacity());
     }
 
     //新增活动
@@ -111,7 +125,25 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
     //通过活动获取优惠券
     @Override
     public void getVoucher(long promotionId){
-
+        //获取用户id
+        long userId=quickGetUserId();
+        //获取Redisson锁对象
+        RLock lock=redissonClient.getLock(promotionRedisKeyConfig.getMerchantGrabPromotionGetVoucherLock().getRedisKey(promotionId));
+        //尝试上锁，如果没有上锁成功，则直接返回
+        if (!lock.tryLock()) throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
+        //尝试代码块，并且不捕捉异常
+        try {
+            //判断用户是否已经持有该优惠券
+            if (Boolean.TRUE.equals(voucherClient.connectionExist(promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
+            //获取优惠券
+            if (!merchantGrabPromotionMapper.getVoucher(promotionId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+            //发送至MQ，使Voucher写入该持有关系
+            MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()
+                    ,new VoucherConnectionMQDTO(getDetail(promotionId).getVoucherId(),userId,promotionId),rabbitTemplate);
+        }finally {
+            //解锁
+            lock.unlock();
+        }
     }
 
     private void quickCooldown(RedisKeyData key, Object id){

@@ -66,6 +66,10 @@
         select count(*) from voucher_connection where user_id=#{userId} and promotion_id=#{promotionId}
     </select>
 
+    <update id="lock">
+        update voucher_connection set is_lock=true,order_id=#{orderId}
+        where connection_id=#{connectionId} and user_id=#{userId} and is_lock=false and is_use=false
+    </update>
 
 
 

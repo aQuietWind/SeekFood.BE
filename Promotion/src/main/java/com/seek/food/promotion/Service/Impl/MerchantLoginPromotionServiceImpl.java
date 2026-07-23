@@ -19,6 +19,8 @@ import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -40,10 +42,11 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
     private final MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine;
     private final PromotionExchangeConfig promotionExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
+    private final RedissonClient redissonClient;
 
     public MerchantLoginPromotionServiceImpl(CommonParamRulesConfig commonParamRulesConfig, PromotionParamsRulesConfig promotionParamsRulesConfig
             , StringRedisTemplate stringRedisTemplate, PromotionRedisKeyConfig promotionRedisKeyConfig, VoucherClient voucherClient
-            , MerchantLoginPromotionMapper merchantLoginPromotionMapper, MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine, PromotionExchangeConfig promotionExchangeConfig, RabbitTemplate rabbitTemplate) {
+            , MerchantLoginPromotionMapper merchantLoginPromotionMapper, MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine, PromotionExchangeConfig promotionExchangeConfig, RabbitTemplate rabbitTemplate, RedissonClient redissonClient) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.promotionParamsRulesConfig = promotionParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
@@ -55,6 +58,7 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
         this.merchantLoginPromotionCaffeine = merchantLoginPromotionCaffeine;
         this.promotionExchangeConfig = promotionExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
+        this.redissonClient = redissonClient;
     }
 
     //新增活动
@@ -119,14 +123,23 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
     public void getVoucher(long promotionId){
         //获取用户id
         long userId=quickGetUserId();
-        //冷却期判断
-        quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionGetVoucherCooldown(),userId);
-        //判断用户是否已经持有该优惠券
-        if (Boolean.TRUE.equals(voucherClient.connectionExist(promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
-        //获取优惠券,并且发送至MQ，使Voucher写入该持有关系
-        if (!merchantLoginPromotionMapper.getVoucher(promotionId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-        MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()
-        ,new VoucherConnectionMQDTO(getDetail(promotionId).getVoucherId(),userId,promotionId),rabbitTemplate);
+        //获取Redisson锁对象
+        RLock lock=redissonClient.getLock(promotionRedisKeyConfig.getMerchantLoginPromotionGetVoucherLock().getRedisKey(promotionId));
+        //尝试上锁，如果没有上锁成功，则直接返回
+        if (!lock.tryLock()) throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
+        //尝试代码块，并且不捕捉异常
+        try {
+            //判断用户是否已经持有该优惠券
+            if (Boolean.TRUE.equals(voucherClient.connectionExist(promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
+            //获取优惠券
+            if (!merchantLoginPromotionMapper.getVoucher(promotionId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+            //发送至MQ，使Voucher写入该持有关系
+            MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()
+                    ,new VoucherConnectionMQDTO(getDetail(promotionId).getVoucherId(),userId,promotionId),rabbitTemplate);
+        }finally {
+            //解锁
+            lock.unlock();
+        }
     }
 
     private void quickCooldown(RedisKeyData key,Object id){

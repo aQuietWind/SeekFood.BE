@@ -10,14 +10,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RedissonConfig {
 
-    @Value("#{spring.data.redis}")
+    @Value("#{spring.data.redis.host}")
+    private String host;
+    @Value("#{spring.data.redis.port}")
+    private String port;
+    @Value("#{spring.data.redis.password}")
+    private String password;
 
     @Bean
     public RedissonClient redissonClient() {
         //获取配置对象
         Config config = new Config();
         //设置地址和密码
-        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword("439176");
+        config.useSingleServer().setAddress("redis://"+host+":"+port).setPassword(password);
         //导入配置，并且返回工具对象给springboot
         return Redisson.create(config);
     }

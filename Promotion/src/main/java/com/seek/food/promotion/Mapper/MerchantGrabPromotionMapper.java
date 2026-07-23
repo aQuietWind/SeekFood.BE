@@ -11,5 +11,5 @@ public interface MerchantGrabPromotionMapper {
     public List<MerchantGrabPromotionDTO> getSimple(int start, int need, long merchantId);
     public List<MerchantGrabPromotionDTO> getSimpleEffective(int start, int need,long merchantId);
     public MerchantGrabPromotionDTO getDetail(long promotionId);
-    public void getVoucher(long promotionId);
+    public boolean getVoucher(long promotionId);
 }
