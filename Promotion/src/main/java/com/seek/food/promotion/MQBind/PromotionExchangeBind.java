@@ -1,6 +1,8 @@
 package com.seek.food.promotion.MQBind;
 
+import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig;
+import com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig;
 import com.seek.food.util.MQ.MQUtil;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

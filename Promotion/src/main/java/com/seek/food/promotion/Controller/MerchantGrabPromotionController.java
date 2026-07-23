@@ -2,13 +2,9 @@ package com.seek.food.promotion.Controller;
 
 import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.Promotion.MerchantGrabPromotionDTO;
-import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
 import com.seek.food.promotion.Enum.RequestPathEnum;
 import com.seek.food.promotion.Service.MerchantGrabPromotionService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,13 +14,13 @@ public class MerchantGrabPromotionController {
 
     private final MerchantGrabPromotionService merchantGrabPromotionService;
 
-    public MerchantGrabPromotionController( MerchantGrabPromotionService merchantGrabPromotionService) {
+    public MerchantGrabPromotionController(MerchantGrabPromotionService merchantGrabPromotionService) {
         this.merchantGrabPromotionService = merchantGrabPromotionService;
     }
 
     //新增活动
     @PostMapping
-    public Result<Void> insertPromotion(MerchantGrabPromotionDTO promotion) {
+    public Result<Void> insertPromotion(@RequestBody MerchantGrabPromotionDTO promotion) {
         merchantGrabPromotionService.insertPromotion(promotion);
         return Result.success();
     }

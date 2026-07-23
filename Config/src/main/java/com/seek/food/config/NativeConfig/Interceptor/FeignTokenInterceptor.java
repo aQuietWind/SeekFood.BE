@@ -40,6 +40,8 @@ public class FeignTokenInterceptor {
             if (tokenId != null && !tokenId.isBlank()) {
                 //Feign发起远程调用时自动带上该Header
                 template.header(jwtConfig.getHeaderTokenName(), tokenId);
+                //用于sentinel检测
+                template.header("x-origin", "service");
             }
         };
     }

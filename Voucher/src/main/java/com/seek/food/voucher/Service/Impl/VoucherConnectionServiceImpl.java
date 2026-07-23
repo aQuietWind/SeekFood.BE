@@ -76,6 +76,12 @@ public class VoucherConnectionServiceImpl implements VoucherConnectionService {
                 , k-> voucherConnectionMapper.getDetail(connectionId,userId));
     }
 
+    //判断用户是否从活动中已经获取了优惠券
+    @Override
+    public boolean exist(long userId,long promotionId){
+        return voucherConnectionMapper.exist(userId,promotionId);
+    }
+
 
 
     private long quickGetUserId(){

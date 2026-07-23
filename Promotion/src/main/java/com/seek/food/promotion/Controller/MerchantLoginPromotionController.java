@@ -4,10 +4,7 @@ import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
 import com.seek.food.promotion.Enum.RequestPathEnum;
 import com.seek.food.promotion.Service.MerchantLoginPromotionService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,8 +20,8 @@ public class MerchantLoginPromotionController {
 
     //新增活动
     @PostMapping
-    public Result<Void> insertPromotion(MerchantLoginPromotionDTO merchantLoginPromotionDTO) {
-        merchantLoginPromotionService.insertPromotion(merchantLoginPromotionDTO);
+    public Result<Void> insertPromotion(@RequestBody MerchantLoginPromotionDTO promotion) {
+        merchantLoginPromotionService.insertPromotion(promotion);
         return Result.success();
     }
 

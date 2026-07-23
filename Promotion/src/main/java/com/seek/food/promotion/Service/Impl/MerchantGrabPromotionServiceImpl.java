@@ -88,7 +88,7 @@ public class MerchantGrabPromotionServiceImpl implements MerchantGrabPromotionSe
         //检查冷却，防止脚本频繁从DB中获取数据,因为正常情况下前端恰好可以通过节流等操作控制间隔时间，所以1~2秒冷却对于正常用户使用是不会有任何影响的
         quickCooldown(promotionRedisKeyConfig.getMerchantGrabPromotionGetSimpleEffectiveCooldown(),quickGetStringId());
         //返回数据
-        return merchantGrabPromotionMapper.getSimple(start, need, merchantId);
+        return merchantGrabPromotionMapper.getSimpleEffective(start, need, merchantId);
     }
 
     //获取详细的活动信息

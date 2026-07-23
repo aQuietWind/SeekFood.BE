@@ -20,13 +20,13 @@ CREATE TABLE `voucher_connection` (
                                       `voucher_id` bigint COMMENT '优惠券id',
                                       `user_id` bigint NOT NULL COMMENT '持有该优惠券的用户id',
                                       `promotion_id` bigint NOT NULL COMMENT '获取该优惠券的活动id',
-                                      `order_id` bigint NOT NULL COMMENT '使用该优惠券的订单id',
+                                      `order_id` bigint COMMENT '使用该优惠券的订单id',
                                       `start_time` datetime NOT NULL COMMENT '开始可使用时间',
                                       `end_time` datetime NOT NULL COMMENT '截止可使用时间',
                                       `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                                       `is_lock` boolean default false COMMENT '是否处于冻结状态',
                                       `is_use` boolean default false COMMENT '是否使用',
-                                      PRIMARY KEY (`voucher_id`),
+                                      PRIMARY KEY (`connection_id`),
                                       INDEX `user_index`(`user_id`),
                                       INDEX `order_index`(`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='优惠券持有表';

@@ -8,4 +8,5 @@ public interface VoucherConnectionService {
     public List<VoucherConnectionDTO> getSimple(int start, int need);
     public List<VoucherConnectionDTO> getSimpleEffective(int start, int need);
     public VoucherConnectionDTO getDetail(long connectionId);
+    public boolean exist(long userId,long promotionId);
 }

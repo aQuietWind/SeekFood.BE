@@ -29,6 +29,7 @@
       <set>
         <option value="$PROJECT_DIR$/Activity/pom.xml" />
         <option value="$PROJECT_DIR$/Coupon/pom.xml" />
+        <option value="$PROJECT_DIR$/Feign/pom.xml" />
         <option value="$PROJECT_DIR$/voucher/pom.xml" />
       </set>
     </option>

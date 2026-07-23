@@ -18,6 +18,8 @@ public class PromotionRedisKeyConfig {
     private RedisKeyData merchantLoginPromotionMessageCaffeine;
     private RedisKeyData merchantGrabPromotionGetSimpleCooldown;
     private RedisKeyData merchantGrabPromotionGetSimpleEffectiveCooldown;
+    private RedisKeyData merchantLoginPromotionGetVoucherCooldown;
+    private RedisKeyData merchantGrabPromotionGetVoucherCooldown;
     private RedisKeyData merchantGrabPromotionIdCount;
     private RedisKeyData merchantGrabPromotionMessageCaffeine;
 }

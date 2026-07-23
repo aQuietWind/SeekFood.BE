@@ -158,7 +158,6 @@
         <module>DTO</module>
         <module>Util</module>
         <module>Config</module>
-        <module>Feign</module>
     </modules>
 
     <build>

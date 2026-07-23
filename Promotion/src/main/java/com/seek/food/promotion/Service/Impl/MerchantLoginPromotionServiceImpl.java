@@ -2,16 +2,24 @@ package com.seek.food.promotion.Service.Impl;
 
 import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
+import com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig;
+import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
 import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
+import com.seek.food.dto.Voucher.VoucherConnectionMQDTO;
 import com.seek.food.promotion.Caffeine.MerchantLoginPromotionCaffeine;
+import com.seek.food.promotion.Feign.VoucherClient;
 import com.seek.food.promotion.Mapper.MerchantLoginPromotionMapper;
 import com.seek.food.promotion.Service.MerchantLoginPromotionService;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
+import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,20 +35,26 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
     private final PromotionParamsRulesConfig promotionParamsRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
     private final PromotionRedisKeyConfig promotionRedisKeyConfig;
+    private final VoucherClient voucherClient;
     private final MerchantLoginPromotionMapper merchantLoginPromotionMapper;
     private final MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine;
+    private final PromotionExchangeConfig promotionExchangeConfig;
+    private final RabbitTemplate rabbitTemplate;
 
     public MerchantLoginPromotionServiceImpl(CommonParamRulesConfig commonParamRulesConfig, PromotionParamsRulesConfig promotionParamsRulesConfig
-            , StringRedisTemplate stringRedisTemplate, PromotionRedisKeyConfig promotionRedisKeyConfig
-            , MerchantLoginPromotionMapper merchantLoginPromotionMapper, MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine) {
+            , StringRedisTemplate stringRedisTemplate, PromotionRedisKeyConfig promotionRedisKeyConfig, VoucherClient voucherClient
+            , MerchantLoginPromotionMapper merchantLoginPromotionMapper, MerchantLoginPromotionCaffeine merchantLoginPromotionCaffeine, PromotionExchangeConfig promotionExchangeConfig, RabbitTemplate rabbitTemplate) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.promotionParamsRulesConfig = promotionParamsRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.promotionRedisKeyConfig = promotionRedisKeyConfig;
+        this.voucherClient = voucherClient;
         this.merchantLoginPromotionMapper = merchantLoginPromotionMapper;
         //初始化id计数器，如果觉得写这里不符合工业化方针，可以写到@Init里
         stringRedisTemplate.opsForValue().setIfAbsent(promotionRedisKeyConfig.getMerchantLoginPromotionIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
         this.merchantLoginPromotionCaffeine = merchantLoginPromotionCaffeine;
+        this.promotionExchangeConfig = promotionExchangeConfig;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     //新增活动
@@ -83,7 +97,7 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
         //检查冷却，防止脚本频繁从DB中获取数据,因为正常情况下前端恰好可以通过节流等操作控制间隔时间，所以1~2秒冷却对于正常用户使用是不会有任何影响的
         quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionGetSimpleEffectiveCooldown(),quickGetStringId());
         //返回数据
-        return merchantLoginPromotionMapper.getSimple(start, need, merchantId);
+        return merchantLoginPromotionMapper.getSimpleEffective(start, need, merchantId);
     }
 
     //获取详细的活动信息
@@ -101,7 +115,16 @@ public class MerchantLoginPromotionServiceImpl implements MerchantLoginPromotion
     //通过活动获取优惠券
     @Override
     public void getVoucher(long promotionId){
-
+        //获取用户id
+        long userId=quickGetUserId();
+        //冷却期判断
+        quickCooldown(promotionRedisKeyConfig.getMerchantLoginPromotionGetVoucherCooldown(),userId);
+        //判断用户是否已经持有该优惠券
+        if (Boolean.TRUE.equals(voucherClient.exist(userId,promotionId).getData())) throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
+        //获取优惠券,并且发送至MQ，使Voucher写入该持有关系
+        if (!merchantLoginPromotionMapper.getVoucher(promotionId)) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        MQUtil.send(promotionExchangeConfig.getExchangeName(),promotionExchangeConfig.getRegisterVoucherConnectionQueue().getRoutingKey()
+        ,new VoucherConnectionMQDTO(getDetail(promotionId).getVoucherId(),userId,promotionId),rabbitTemplate);
     }
 
     private void quickCooldown(RedisKeyData key,Object id){

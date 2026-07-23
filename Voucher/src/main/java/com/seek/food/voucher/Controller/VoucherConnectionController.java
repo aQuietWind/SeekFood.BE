@@ -38,4 +38,26 @@ public class VoucherConnectionController {
     public Result<VoucherConnectionDTO> getDetail(long connectionId) {
         return Result.success(voucherConnectionService.getDetail(connectionId));
     }
+
+    //其他模块通过Feign调用获取判断是否存在持有关系
+    @GetMapping(RequestPathEnum.Voucher_Connection_Exist)
+    public Result<Boolean> exist(long userId,long promotionId) {
+        return Result.success(voucherConnectionService.exist(userId,promotionId));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

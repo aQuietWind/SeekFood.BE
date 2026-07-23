@@ -25,13 +25,13 @@
         <module name="Merchant" />
         <module name="Gateway" />
         <module name="Chat" />
-        <module name="Feign" />
         <module name="DTO" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="21">
       <module name="Activity" target="21" />
       <module name="Coupon" target="21" />
+      <module name="Feign" target="21" />
       <module name="voucher" target="21" />
     </bytecodeTargetLevel>
   </component>

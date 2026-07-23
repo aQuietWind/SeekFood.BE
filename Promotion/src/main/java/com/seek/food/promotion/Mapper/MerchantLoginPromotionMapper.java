@@ -11,5 +11,5 @@ public interface MerchantLoginPromotionMapper {
     public List<MerchantLoginPromotionDTO> getSimple(int start, int need, long merchantId);
     public List<MerchantLoginPromotionDTO> getSimpleEffective(int start, int need,long merchantId);
     public MerchantLoginPromotionDTO getDetail(long promotionId);
-    public void getVoucher(long promotionId);
+    public boolean getVoucher(long promotionId);
 }

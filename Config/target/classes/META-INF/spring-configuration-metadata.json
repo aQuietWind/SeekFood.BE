@@ -141,6 +141,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
+      "name": "mq.name.bind.promotion-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -149,6 +154,21 @@
       "name": "mq.name.bind.voucher-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
+    },
+    {
+      "name": "promotion.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig"
+    },
+    {
+      "name": "promotion.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },
     {
       "name": "user.self.jvm-caffeine",
@@ -1058,6 +1078,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
+      "name": "mq.name.bind.promotion-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.promotion-exchange.register-voucher-connection-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.promotion-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange.delete-file-user-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -1096,6 +1131,101 @@
       "name": "mq.name.bind.voucher-exchange.type",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
+    },
+    {
+      "name": "promotion.self.jvm-caffeine.merchant-grab-promotion",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig"
+    },
+    {
+      "name": "promotion.self.jvm-caffeine.merchant-login-promotion",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig"
+    },
+    {
+      "name": "promotion.self.params.rules.duration-day-min",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.params.rules.grab-amount-min",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.params.rules.promotion-description-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.params.rules.promotion-notice-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.params.rules.promotion-title-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-get-simple-effective-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-get-voucher-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-grab-promotion-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-get-simple-effective-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-get-voucher-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-insert-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "promotion.self.redis.key.merchant-login-promotion-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
     },
     {
       "name": "user.self.jvm-caffeine.phone",

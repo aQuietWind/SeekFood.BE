@@ -5,6 +5,7 @@ import com.seek.food.config.Import.MQImport;
 import com.seek.food.config.Import.VoucherImport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MQImport
 @CommonImport
 @VoucherImport
+@EnableFeignClients
 public class VoucherApplication {
 
     public static void main(String[] args) {
