@@ -128,7 +128,7 @@ public class MerchantController {
     }
 
     //获取与商家的距离
-    @PutMapping(RequestPathEnum.Merchant_Get_Distance)
+    @GetMapping(RequestPathEnum.Merchant_Get_Distance)
     public Result<Long> getDistance(double lon,double lat,long merchantId){
         return Result.success(merchantService.getDistance(lon,lat,merchantId));
     }

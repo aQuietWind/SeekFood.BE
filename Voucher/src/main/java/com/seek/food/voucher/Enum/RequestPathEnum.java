@@ -14,5 +14,6 @@ public class RequestPathEnum {
     public static final String Voucher_Connection_Get_Detail = "/detail";
     public static final String Voucher_Connection_Lock = "/lock";
     public static final String Voucher_Connection_Exist = "/exist";
+    public static final String Voucher_Connection_Check = "/check";
 
 }

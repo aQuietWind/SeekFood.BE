@@ -63,9 +63,9 @@ public class OrderServicerImpl implements OrderService {
 
     //新增订单
     @Override
-    public void insertOrder(long mealId,long connectionId,int number,double lon,double lat,String deliveryAddress){
+    public void insertOrder(long mealId,Long connectionId,int number,double lon,double lat,String deliveryAddress){
         commonParamRulesConfig.commonIdCheck(mealId);
-        commonParamRulesConfig.commonIdCheck(connectionId);
+        if (connectionId!=null)commonParamRulesConfig.commonIdCheck(connectionId);
         //获取用户id
         long userId=quickGetUserId();
         //上锁
@@ -77,15 +77,19 @@ public class OrderServicerImpl implements OrderService {
             if (meal == null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
             //获取运送距离
             Long distance = merchantClient.merchantGetDistance(lon, lat, meal.getMerchantId()).getData();
+            System.err.println(distance);
             if (distance == null) throw new BizException(ErrorCodeEnum.DATA_NOT_RIGHT);
             //检查优惠券
-            Double discountCost=voucherClient.connectionCheck(connectionId, connectionId).getData();
-            if (discountCost==null) throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
+            Double discountCost=0.0;
+            if (connectionId!=null) {
+                discountCost = voucherClient.connectionCheck(connectionId, connectionId).getData();
+                if (discountCost == null) throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
+            }
             OrderDTO order=OrderDTO.quickGet(
                     IdUtil.IdGenerateByIncrease(orderRedisKeyConfig.getOrderIdCount().getName(),stringRedisTemplate)
                     ,userId,meal,connectionId,number,lon,lat,deliveryAddress,discountCost,orderParamsRulesConfig.distanceCost(distance));
             //锁定优惠券
-            voucherClient.connectionLock(connectionId, order.getOrderId());
+            if (connectionId!=null)voucherClient.connectionLock(connectionId, order.getOrderId());
             //新增该订单
             orderMapper.insertOrder(order);
             //发送至Fund处新增订单记录，然后等待支付

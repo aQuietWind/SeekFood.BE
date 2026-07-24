@@ -1,7 +1,7 @@
 package com.seek.food.order.Service;
 
 public interface OrderService {
-    public void insertOrder(long mealId,long connectionId,int number,double lon,double lat,String deliveryAddress);
+    public void insertOrder(long mealId,Long connectionId,int number,double lon,double lat,String deliveryAddress);
 //    public void getSimple(int start,int need);
 //    public void getSimpleState(int start,int need,int state);
 //    public void getDetail(long orderId);

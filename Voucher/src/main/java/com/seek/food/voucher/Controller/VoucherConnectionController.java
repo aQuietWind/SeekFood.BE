@@ -55,7 +55,7 @@ public class VoucherConnectionController {
     }
 
     //其他模块通过Feign判断是否返回优惠券条件
-    @GetMapping(RequestPathEnum.Voucher_Connection_Lock)
+    @GetMapping(RequestPathEnum.Voucher_Connection_Check)
     public Result<Double> check(long connectionId, double cost) {
         return Result.success(voucherConnectionService.check(connectionId,cost));
     }

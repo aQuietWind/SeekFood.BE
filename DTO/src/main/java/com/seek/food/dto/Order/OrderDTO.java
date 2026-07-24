@@ -41,7 +41,7 @@ public class OrderDTO {
     private Boolean complete;
 
 
-    public static OrderDTO quickGet(long orderId,long userId,MealDTO meal,long voucherConnectionId,int number
+    public static OrderDTO quickGet(long orderId,long userId,MealDTO meal,Long voucherConnectionId,int number
             ,double lon,double lat,String deliveryAddress,double discountCost,double riderCost) {
         OrderDTO order=quickGetFromMeal(meal);
         order.setOrderId(orderId);

@@ -170,7 +170,7 @@
     </update>
 
 
-    <select id="getDeleteMerchant" resultType="com.seek.food.dto.Common.SimplePoint">
+    <select id="getLonLat" resultType="com.seek.food.dto.Common.SimplePoint">
         select
             merchant_lon as lon,
             merchant_lat as lat
