@@ -20,6 +20,8 @@ import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.spatial4j.context.SpatialContext;
+import org.locationtech.spatial4j.distance.DistanceUtils;
+import org.locationtech.spatial4j.shape.Point;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -384,7 +386,10 @@ public class MerchantServiceImpl implements MerchantService {
         ,merchantRedisKeyConfig.getMerchantGetDistanceCooldown().getDuration());
         SimplePoint simplePoint=merchantMapper.getLonLat(merchantId);
         if (simplePoint==null)return null;
-        return (long) ctx.calcDistance(ctx.getShapeFactory().pointXY(lon,lat),ctx.getShapeFactory().pointXY(simplePoint.getLon(),simplePoint.getLat()));
+        Point userPoint=ctx.getShapeFactory().pointLatLon(lat,lon);
+        Point merchantPoint=ctx.getShapeFactory().pointLatLon(simplePoint.getLat(),simplePoint.getLon());
+        //返回值为角度，所以要再乘上常量变为km,最后乘上1000变为m
+        return (long) (ctx.calcDistance(userPoint,merchantPoint)*DistanceUtils.DEG_TO_KM*1000);
     }
 
 

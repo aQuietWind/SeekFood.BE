@@ -2,6 +2,7 @@ package com.seek.food.dto.Order;
 
 
 import com.seek.food.dto.Meal.MealDTO;
+import com.seek.food.util.CommonUtil.DoubleUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,10 +52,10 @@ public class OrderDTO {
         order.setDeliveryLon(lon);
         order.setDeliveryLat(lat);
         order.setDeliveryAddress(deliveryAddress);
-        order.setDiscountCost(discountCost);
-        order.setRiderCost(riderCost);
-        order.setOriginCost(meal.getMealPrice()*number+riderCost);
-        order.setTotalCost(order.getOriginCost()-discountCost);
+        order.setDiscountCost(only2AfterPoint(discountCost));
+        order.setRiderCost(only2AfterPoint(riderCost));
+        order.setOriginCost(only2AfterPoint(meal.getMealPrice() * number + riderCost));
+        order.setTotalCost(only2AfterPoint(order.getOriginCost()-discountCost));
         return order;
     }
 
@@ -71,4 +72,7 @@ public class OrderDTO {
         return order;
     }
 
+    public static double only2AfterPoint(double number) {
+        return DoubleUtil.onlyXAfterPoint(2, number);
+    }
 }
