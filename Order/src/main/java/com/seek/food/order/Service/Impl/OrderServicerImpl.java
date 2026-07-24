@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 @RefreshScope
 @Slf4j
 public class OrderServicerImpl implements OrderService {
+
 }
