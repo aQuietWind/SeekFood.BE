@@ -9,7 +9,7 @@ CREATE TABLE `meal` (
                         `meal_last_price` double COMMENT '餐品上次价格',
                         `meal_description` varchar(300) COMMENT '餐品介绍',
                         `meal_show_image_addr` varchar(50) COMMENT '餐品展示照片',
-                        `meal_content` varchar(100) COMMENT '餐品内容',
+                        `meal_content` varchar(100) not null COMMENT '餐品内容',
                         `meal_type` int not null default 0 COMMENT '餐品类型',
                         `meal_sales_volume` int not null default 0 COMMENT '餐品销售总数',
                         `next_discount_time` datetime COMMENT '下次打折时间',

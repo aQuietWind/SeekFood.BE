@@ -10,6 +10,7 @@ public enum ErrorCodeEnum {
     BAD_REQUEST_PATH(14104,HttpStatus.NOT_FOUND,"请求路径无法达到"),
     DATA_SURVIVE(14105,HttpStatus.CONFLICT,"目标数据已存在"),
     CONDITION_NOT_PASS(14106,HttpStatus.BAD_REQUEST,"该请求不符合条件"),
+    DATA_NOT_RIGHT(14107,HttpStatus.BAD_REQUEST,"目标数据不正常"),
     //验证码异常,
     OPT_SURVIVE(14201,HttpStatus.LOCKED,"验证码已存在"),
     OPT_NOT_SURVIVE(14202,HttpStatus.NOT_FOUND,"验证码不存在"),

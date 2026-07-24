@@ -12,10 +12,14 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Data
 public class OrderParamsRulesConfig {
     private int deliveryAddressMax;
+    private int everyKmCost;
 
     //------------------------
     //校验参数
     public void deliveryAddressCheck(String address) {
         if (address==null||address.isBlank()||address.length()>deliveryAddressMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    };
+    public double distanceCost(long distance) {
+        return (double) ((distance/1000)*everyKmCost);
     };
 }

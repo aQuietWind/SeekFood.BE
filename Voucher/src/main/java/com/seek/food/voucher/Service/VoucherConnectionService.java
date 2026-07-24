@@ -9,5 +9,6 @@ public interface VoucherConnectionService {
     public List<VoucherConnectionDTO> getSimpleEffective(int start, int need);
     public VoucherConnectionDTO getDetail(long connectionId);
     public boolean exist(long promotionId);
-    public boolean lock(long voucherId,long orderId);
+    public boolean lock(long connectionId,long orderId);
+    public Double check(long connectionId,double cost);
 }

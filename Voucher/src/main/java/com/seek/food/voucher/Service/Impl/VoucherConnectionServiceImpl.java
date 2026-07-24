@@ -88,6 +88,12 @@ public class VoucherConnectionServiceImpl implements VoucherConnectionService {
         return voucherConnectionMapper.lock(quickGetUserId(),connectionId,orderId);
     }
 
+    //检查某优惠券是否返回条件
+    @Override
+    public Double check(long connectionId,double cost){
+        return voucherConnectionMapper.check(quickGetUserId(),connectionId,cost);
+    }
+
 
 
     private long quickGetUserId(){

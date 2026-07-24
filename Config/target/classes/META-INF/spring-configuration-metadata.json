@@ -156,6 +156,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
     },
     {
+      "name": "order.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Order.OrderCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderCaffeineConfig"
+    },
+    {
+      "name": "order.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig"
+    },
+    {
+      "name": "order.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
       "name": "promotion.self.jvm-caffeine",
       "type": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionCaffeineConfig"
@@ -813,6 +828,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
     },
     {
+      "name": "merchant.self.redis.key.merchant-get-distance-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
+    },
+    {
       "name": "merchant.self.redis.key.merchant-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisKeyConfig"
@@ -1063,6 +1083,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
+      "name": "mq.name.bind.order-exchange.rollback-all-fund-dead-letter-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.order-exchange.rollback-fund-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
@@ -1131,6 +1156,86 @@
       "name": "mq.name.bind.voucher-exchange.type",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
+    },
+    {
+      "name": "order.self.jvm-caffeine.order",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderCaffeineConfig"
+    },
+    {
+      "name": "order.self.params.rules.delivery-address-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig"
+    },
+    {
+      "name": "order.self.params.rules.every-km-cost",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-get-simple-by-state-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-get-simple-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-insert-lock",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-merchant-ack-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-merchant-make-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-merchant-reject-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-refund-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-rider-accept-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-rider-ack-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-rider-delivery-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-user-receive-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
     },
     {
       "name": "promotion.self.jvm-caffeine.merchant-grab-promotion",

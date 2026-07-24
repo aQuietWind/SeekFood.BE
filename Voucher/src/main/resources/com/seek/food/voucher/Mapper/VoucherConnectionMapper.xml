@@ -66,6 +66,13 @@
         select count(*) from voucher_connection where user_id=#{userId} and promotion_id=#{promotionId}
     </select>
 
+    <select id="check" resultType="java.lang.Double">
+        select discount_cost from merchant_voucher
+        where voucher_id=(select voucher_id from voucher_connection where connection_id=#{connectionId} and user_id=#{userId} and is_lock=false and is_use=false)
+        and start_time &lt;= now() and end_time &gt;= now()
+        and min_cost &lt;= #{cost}
+    </select>
+
     <update id="lock">
         update voucher_connection set is_lock=true,order_id=#{orderId}
         where connection_id=#{connectionId} and user_id=#{userId} and is_lock=false and is_use=false

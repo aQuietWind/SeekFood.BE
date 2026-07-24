@@ -10,7 +10,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Order_Redis_Key_Config)
 @Data
 public class OrderRedisKeyConfig {
-    private RedisKeyData orderInsertCooldown;
+    private RedisKeyData orderInsertLock;
     private RedisKeyData orderGetSimpleCooldown;
     private RedisKeyData orderGetSimpleByStateCooldown;
     private RedisKeyData orderRefundCooldown;

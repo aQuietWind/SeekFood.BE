@@ -1,6 +1,7 @@
 package com.seek.food.dto.Order;
 
 
+import com.seek.food.dto.Meal.MealDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class OrderDTO {
     private Long userId;
     private Long merchantId;
     private Long riderId;
-    private Long voucherId;
+    private Long voucherConnectionId;
     private Long mealId;
     private String mealName;
     private Double mealPrice;
@@ -38,4 +39,36 @@ public class OrderDTO {
     private Boolean lock;
     private Boolean ack;
     private Boolean complete;
+
+
+    public static OrderDTO quickGet(long orderId,long userId,MealDTO meal,long voucherConnectionId,int number
+            ,double lon,double lat,String deliveryAddress,double discountCost,double riderCost) {
+        OrderDTO order=quickGetFromMeal(meal);
+        order.setOrderId(orderId);
+        order.setUserId(userId);
+        order.setVoucherConnectionId(voucherConnectionId);
+        order.setNumber(number);
+        order.setDeliveryLon(lon);
+        order.setDeliveryLat(lat);
+        order.setDeliveryAddress(deliveryAddress);
+        order.setDiscountCost(discountCost);
+        order.setRiderCost(riderCost);
+        order.setOriginCost(meal.getMealPrice()*number+riderCost);
+        order.setTotalCost(order.getOriginCost()-discountCost);
+        return order;
+    }
+
+    public static OrderDTO quickGetFromMeal(MealDTO meal) {
+        OrderDTO order=new OrderDTO();
+        order.setMerchantId(meal.getMerchantId());
+        order.setMealId(meal.getMealId());
+        order.setMealName(meal.getMealName());
+        order.setMealPrice(meal.getMealPrice());
+        order.setMealDescription(meal.getMealDescription());
+        order.setMealShowImageAddr(meal.getMealShowImageAddr());
+        order.setMealContent(meal.getMealContent());
+        order.setMealType(meal.getMealType());
+        return order;
+    }
+
 }

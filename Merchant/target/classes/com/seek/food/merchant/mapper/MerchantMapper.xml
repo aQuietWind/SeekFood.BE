@@ -170,4 +170,11 @@
     </update>
 
 
+    <select id="getDeleteMerchant" resultType="com.seek.food.dto.Common.SimplePoint">
+        select
+            merchant_lon as lon,
+            merchant_lat as lat
+        from merchant where merchant_id=#{merchantId} and is_delete=false
+    </select>
+
 </mapper>

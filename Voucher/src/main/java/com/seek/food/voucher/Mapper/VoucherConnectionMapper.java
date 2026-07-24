@@ -14,5 +14,6 @@ public interface VoucherConnectionMapper {
     public void use(long orderId);
     public void insertConnection(VoucherConnectionDTO connection);
     public boolean lock(long userId,long connectionId,long orderId);
+    public Double check(long userId,long connectionId,double cost);
     public boolean exist(long userId,long promotionId);
 }

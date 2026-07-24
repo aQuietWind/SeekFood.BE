@@ -20,8 +20,8 @@ public class OrderController {
 
     //新增订单
     @PostMapping
-    public Result<Void> order(long mealId,long merchantId,long connectionId,int number,double lon,double lat,String deliveryAddress){
-        orderService.insertOrder( mealId,merchantId,connectionId,number,lon,lat,deliveryAddress);
+    public Result<Void> order(long mealId,long connectionId,int number,double lon,double lat,String deliveryAddress){
+        orderService.insertOrder( mealId,connectionId,number,lon,lat,deliveryAddress);
         return Result.success();
     }
 }

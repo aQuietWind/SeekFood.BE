@@ -4,6 +4,7 @@ import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.Voucher.VoucherConnectionDTO;
 import com.seek.food.voucher.Enum.RequestPathEnum;
 import com.seek.food.voucher.Service.VoucherConnectionService;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,10 +46,18 @@ public class VoucherConnectionController {
         return Result.success(voucherConnectionService.exist(promotionId));
     }
 
-    //其他模块通过Feign调用获取判断是否存在持有关系
+    //其他模块通过Feign调用来锁定优惠券持有
     @GetMapping(RequestPathEnum.Voucher_Connection_Lock)
+    //seata全局回滚用
+    @GlobalTransactional
     public Result<Boolean> lock(long connectionId,long orderId) {
         return Result.success(voucherConnectionService.lock(connectionId,orderId));
+    }
+
+    //其他模块通过Feign判断是否返回优惠券条件
+    @GetMapping(RequestPathEnum.Voucher_Connection_Lock)
+    public Result<Double> check(long connectionId, double cost) {
+        return Result.success(voucherConnectionService.check(connectionId,cost));
     }
 
 

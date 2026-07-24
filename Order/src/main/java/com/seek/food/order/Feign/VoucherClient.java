@@ -9,5 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("voucher")
 public interface VoucherClient {
     @GetMapping("/connection/lock")
-    Result<Boolean> connectionLock( @RequestParam("promotionId") long connectionId,@RequestParam("orderId") long orderId);
+    Result<Boolean> connectionLock( @RequestParam("connectionId") long connectionId,@RequestParam("orderId") long orderId);
+    @GetMapping("/connection/check")
+    Result<Double> connectionCheck( @RequestParam("connectionId") long connectionId,@RequestParam("cost") double cost);
 }
