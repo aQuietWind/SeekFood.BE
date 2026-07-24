@@ -17,6 +17,7 @@ public class OrderRedisKeyConfig {
     private RedisKeyData orderMerchantRejectCooldown;
     private RedisKeyData orderMerchantAckCooldown;
     private RedisKeyData orderMerchantMakeCooldown;
+    private RedisKeyData orderRiderAcceptCooldown;
     private RedisKeyData orderRiderAckCooldown;
     private RedisKeyData orderRiderDeliveryCooldown;
     private RedisKeyData orderUserReceiveCooldown;

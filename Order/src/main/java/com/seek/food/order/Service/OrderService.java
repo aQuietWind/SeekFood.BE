@@ -1,4 +1,4 @@
 package com.seek.food.order.Service;
 
-public class ServiceTest {
+public interface OrderService {
 }

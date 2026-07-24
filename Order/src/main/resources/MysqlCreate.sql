@@ -6,7 +6,7 @@ CREATE TABLE `order` (
                          `user_id` bigint NOT NULL COMMENT '用户id',
                          `merchant_id` bigint NOT NULL COMMENT '商家id',
                          `rider_id` bigint COMMENT '骑手id',
-                         `voucher_id` bigint NOT NULL COMMENT '优惠券id',
+                         `voucher_id` bigint COMMENT '优惠券id',
                          `meal_id` bigint NOT NULL COMMENT '餐品id',
                          `meal_name` varchar(15) NOT NULL COMMENT '餐品名称',
                          `meal_price` double NOT NULL COMMENT '餐品价格',

@@ -6,7 +6,7 @@
 
     <!-- 全局统一字段映射 -->
     <resultMap id="UserResultMap" type="com.seek.food.dto.User.UserDTO">
-        <result property="isDelete" column="delete" />
+        <result property="delete" column="is_delete" />
     </resultMap>
 
     <select id="getUserDetailMessage" resultMap="UserResultMap">
