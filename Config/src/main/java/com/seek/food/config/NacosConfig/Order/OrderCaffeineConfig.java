@@ -7,9 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.User_Caffeine_Config)
+@ConfigurationProperties(ConfigKeyEnum.Order_Caffeine_Config)
 @Data
 public class OrderCaffeineConfig {
-    private CaffeineData user;
-    private CaffeineData phone;
+    private CaffeineData order;
 }

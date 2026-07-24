@@ -8,15 +8,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.User_Params_Rules_Config)
+@ConfigurationProperties(ConfigKeyEnum.Order_Params_Rules_Config)
 @Data
 public class OrderParamsRulesConfig {
-    private int usernameLengthMax;
-    private String headerImageDest;
+    private int deliveryAddressMax;
 
     //------------------------
     //校验参数
-    public void usernameCheck(String username) {
-        if (username!=null&&username.length()>usernameLengthMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void deliveryAddressCheck(String address) {
+        if (address==null||address.isBlank()||address.length()>deliveryAddressMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     };
 }

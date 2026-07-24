@@ -15,7 +15,7 @@ CREATE TABLE `order` (
                          `meal_content` varchar(100) NOT NULL COMMENT '餐品的包含内容',
                          `meal_type` int NOT NULL COMMENT '餐品的类型',
                          `number` int NOT NULL COMMENT '下单数量',
-                         `delivery_address` varchar(300) COMMENT '用户的运输地址',
+                         `delivery_address` varchar(60) COMMENT '用户的运输地址',
                          `delivery_lon` double COMMENT '用户的运输经度',
                          `delivery_lat` double COMMENT '用户的运输纬度',
                          `origin_cost` double NOT NULL COMMENT '初始金额',

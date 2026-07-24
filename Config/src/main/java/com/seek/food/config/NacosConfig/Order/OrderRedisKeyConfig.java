@@ -7,20 +7,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @RefreshScope
-@ConfigurationProperties(ConfigKeyEnum.User_Redis_Key_Config)
+@ConfigurationProperties(ConfigKeyEnum.Order_Redis_Key_Config)
 @Data
 public class OrderRedisKeyConfig {
-    private RedisKeyData registerOpt;
-    private RedisKeyData loginOpt;
-    private RedisKeyData deleteUserOpt;
-    private RedisKeyData updatePasswordOpt;
-    private RedisKeyData registerCooldown;
-    private RedisKeyData loginPasswordCooldown;
-    private RedisKeyData loginRefreshCooldown;
-    private RedisKeyData updateHeaderImageCooldown;
-    private RedisKeyData updateMessageCooldown;
-    private RedisKeyData updatePasswordCooldown;
-    private RedisKeyData caffeineMessage;
-    private RedisKeyData caffeinePhone;
-    private RedisKeyData userIdCount;
+    private RedisKeyData orderInsertCooldown;
+    private RedisKeyData orderGetSimpleCooldown;
+    private RedisKeyData orderGetSimpleByStateCooldown;
+    private RedisKeyData orderRefundCooldown;
+    private RedisKeyData orderMerchantRejectCooldown;
+    private RedisKeyData orderMerchantAckCooldown;
+    private RedisKeyData orderMerchantMakeCooldown;
+    private RedisKeyData orderRiderAckCooldown;
+    private RedisKeyData orderRiderDeliveryCooldown;
+    private RedisKeyData orderUserReceiveCooldown;
+    private RedisKeyData orderIdCount;
+    private RedisKeyData orderMessageCaffeine;
 }
