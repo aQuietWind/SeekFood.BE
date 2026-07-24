@@ -28,6 +28,7 @@ public class MerchantRedisKeyConfig {
     private RedisKeyData merchantUpdateHomeCooldown;
     private RedisKeyData merchantDeleteCooldown;
     private RedisKeyData merchantUpdateOpenCooldown;
+    private RedisKeyData merchantGetDistanceCooldown;
     private RedisKeyData merchantMasterIsSet;
     private RedisKeyData merchantIdCount;
     private RedisKeyData merchantMessageCaffeine;

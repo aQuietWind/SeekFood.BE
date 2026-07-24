@@ -21,4 +21,5 @@ public interface MerchantService {
     public String getDeleteMerchantOpt();
     public void deleteMerchant(String opt);
     public void updateOpen();
+    public Long getDistance(double lon, double lat,long merchantId);
 }

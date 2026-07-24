@@ -90,6 +90,11 @@
             <groupId>com.seek.food</groupId>
             <artifactId>Config</artifactId>
         </dependency>
+        <!--        地理位置运算依赖-->
+        <dependency>
+            <groupId>org.locationtech.spatial4j</groupId>
+            <artifactId>spatial4j</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,10 +1,10 @@
 package com.seek.food.merchant.Service.Impl;
 
-import com.seek.food.config.Data.RedisStreamData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.MerchantExchangeConfig;
 import com.seek.food.config.NacosConfig.Merchant.*;
+import com.seek.food.dto.Common.SimplePoint;
 import com.seek.food.dto.Merchant.MerchantDTO;
 import com.seek.food.merchant.Caffeine.MerchantCaffeine;
 import com.seek.food.merchant.Caffeine.PhoneCaffeine;
@@ -19,6 +19,7 @@ import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.spatial4j.context.SpatialContext;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -28,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RefreshScope
@@ -46,6 +45,8 @@ public class MerchantServiceImpl implements MerchantService {
     private final RabbitTemplate rabbitTemplate;
     private final CommonRedisKeyConfig commonRedisKeyConfig;
     private final MerchantUtil merchantUtil;
+    // 地球模型
+    private static final SpatialContext ctx = SpatialContext.GEO;
 
     @Autowired
     public MerchantServiceImpl(MerchantMapper merchantMapper, MerchantRedisKeyConfig merchantRedisKeyConfig
@@ -368,6 +369,26 @@ public class MerchantServiceImpl implements MerchantService {
         //通知同步
         esSync(merchantId);
     }
+
+    //获取距离
+    @Override
+    public Long getDistance(double lon,double lat,long merchantId){
+        //检测经纬度格式
+        commonParamRulesConfig.lonAndLatCheck(lon,lat);
+        //检测商家id的合法性
+        commonParamRulesConfig.merchantIdCheck(merchantId);
+        //获取id
+        long tokenId=TokenIdContext.getAndToLong();
+        //检查冷却
+        RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantGetDistanceCooldown().getRedisKey(tokenId)
+        ,merchantRedisKeyConfig.getMerchantGetDistanceCooldown().getDuration());
+        SimplePoint simplePoint=merchantMapper.getLonLat(merchantId);
+        if (simplePoint==null)return null;
+        return (long) ctx.calcDistance(ctx.getShapeFactory().pointXY(lon,lat),ctx.getShapeFactory().pointXY(simplePoint.getLon(),simplePoint.getLat()));
+    }
+
+
+
 
     //快捷的发送至MQ删除文件
     private void quickToMQDeleteFile(String dest,String addr){

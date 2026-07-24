@@ -1,5 +1,6 @@
 package com.seek.food.merchant.Mapper;
 
+import com.seek.food.dto.Common.SimplePoint;
 import com.seek.food.dto.Merchant.MerchantDTO;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,6 +28,7 @@ public interface MerchantMapper {
     public MerchantEsDTO getEsMerchant(long merchantId);
     public MerchantDTO getDeleteMerchant(long merchantId);
     public boolean updateEmployeeAmount(long merchantId,int changeNumber);
+    public SimplePoint getLonLat(long merchantId);
 
 
 

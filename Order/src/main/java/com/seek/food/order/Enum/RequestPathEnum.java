@@ -5,7 +5,7 @@ public class RequestPathEnum {
     public static final String Order = "/order";
     public static final String Order_Get_Simple="/simple";
     public static final String Order_Get_Simple_State="/simple/state";
-    public static final String Order_Get_Detail="/simple/state";
+    public static final String Order_Get_Detail="/detail";
     public static final String Order_Refund="/refund";
     public static final String Order_Merchant_Reject="/merchant/reject";
     public static final String Order_Merchant_Ack="/merchant/ack";

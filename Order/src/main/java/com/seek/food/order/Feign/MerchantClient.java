@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 //可改为动态指定名称，但是需要在Config模块手写一个枚举类
-@FeignClient("voucher")
-public interface VoucherClient {
-    @GetMapping("/connection/lock")
-    Result<Boolean> connectionLock( @RequestParam("promotionId") long connectionId,@RequestParam("orderId") long orderId);
+@FeignClient("merchant")
+public interface MerchantClient {
+    @GetMapping("/merchant/distance")
+    Result<Long> merchantGetDistance( @RequestParam("lon") double lon,@RequestParam("lat") double lat
+            ,@RequestParam("merchantId") long merchantId);
 }
