@@ -9,6 +9,7 @@ import com.seek.food.config.NacosConfig.Merchant.MerchantEsTableConfig;
 import com.seek.food.dto.Common.EsSearchResult;
 import com.seek.food.dto.Merchant.MerchantEsDTO;
 import com.seek.food.merchant.EsRepository.MerchantRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,9 @@ public class SearchMapper {
     private final MerchantEsTableConfig merchantEsTableConfig;
     private final MerchantRepository merchantRepository;
     private final ElasticsearchOperations elasticsearchOperations;
+    //排序函数
+    private static List<SortOptions> sortList ;
+
 
     @Autowired
     SearchMapper(MerchantEsTableConfig merchantEsTableConfig, MerchantRepository merchantRepository
@@ -35,6 +39,13 @@ public class SearchMapper {
         this.merchantEsTableConfig = merchantEsTableConfig;
         this.merchantRepository = merchantRepository;
         this.elasticsearchOperations = elasticsearchOperations;
+    }
+
+    @PostConstruct
+    public void init(){
+        sortList = List.of(
+                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
+                SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc))));
     }
 
     //获取随机推送的商家
@@ -72,12 +83,6 @@ public class SearchMapper {
                                 .location(loc -> loc.latlon(ll -> ll.lat(lat).lon(lon)))
                                 .distance(distance + "km")
                         ))
-        );
-
-        //排序函数
-        List<SortOptions> sortList = List.of(
-                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
-                SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc)))
         );
 
         //汇总查询条件
@@ -121,11 +126,6 @@ public class SearchMapper {
                 .weight((double) (seed % 10))
         );
 
-        //排序函数
-        List<SortOptions> sortList = List.of(
-                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
-                SortOptions.of(s -> s.field(f -> f.field(merchantEsTableConfig.getMerchantId()).order(SortOrder.Asc)))
-        );
 
         Query allQuery=QueryBuilders.functionScore(fs -> fs
                 .query(boolQuery)

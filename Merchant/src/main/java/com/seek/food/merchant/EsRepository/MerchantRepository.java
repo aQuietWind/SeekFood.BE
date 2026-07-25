@@ -2,8 +2,6 @@ package com.seek.food.merchant.EsRepository;
 
 import com.seek.food.dto.Merchant.MerchantEsDTO;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository

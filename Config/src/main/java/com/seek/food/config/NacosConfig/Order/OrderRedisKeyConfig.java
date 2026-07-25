@@ -21,6 +21,7 @@ public class OrderRedisKeyConfig {
     private RedisKeyData orderRiderAckCooldown;
     private RedisKeyData orderRiderDeliveryCooldown;
     private RedisKeyData orderUserReceiveCooldown;
+    private RedisKeyData orderRiderGetEsOrderCooldown;
     private RedisKeyData orderIdCount;
     private RedisKeyData orderMessageCaffeine;
 }

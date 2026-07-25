@@ -5,15 +5,19 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
+import com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.dto.Fund.FundRechargeRecordDTO;
 import com.seek.food.dto.Meal.MealDTO;
 import com.seek.food.dto.Order.OrderDTO;
+import com.seek.food.dto.Order.RiderOrderEsDTO;
 import com.seek.food.order.Caffeine.OrderCaffeine;
+import com.seek.food.order.EsRepository.RiderOrderRepository;
 import com.seek.food.order.Feign.MealClient;
 import com.seek.food.order.Feign.MerchantClient;
 import com.seek.food.order.Feign.VoucherClient;
 import com.seek.food.order.Mapper.OrderMapper;
+import com.seek.food.order.Mapper.SearchMapper;
 import com.seek.food.order.Service.OrderService;
 import com.seek.food.util.CommonUtil.DoubleUtil;
 import com.seek.food.util.CommonUtil.IdUtil;
@@ -28,10 +32,15 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -52,9 +61,14 @@ public class OrderServicerImpl implements OrderService {
     private final OrderExchangeConfig orderExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final OrderCaffeine orderCaffeine;
+    private final RiderOrderRepository riderOrderRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
+    private final OrderRiderOrderEsTableConfig orderRiderOrderEsTableConfig;
 
     public OrderServicerImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
-            , OrderRedisKeyConfig orderRedisKeyConfig, MealClient mealClient, VoucherClient voucherClient, MerchantClient merchantClient, RedissonClient redissonClient, OrderParamsRulesConfig orderParamsRulesConfig, OrderMapper orderMapper, OrderExchangeConfig orderExchangeConfig, RabbitTemplate rabbitTemplate, OrderCaffeine orderCaffeine) {
+            , OrderRedisKeyConfig orderRedisKeyConfig, MealClient mealClient, VoucherClient voucherClient, MerchantClient merchantClient
+            , RedissonClient redissonClient, OrderParamsRulesConfig orderParamsRulesConfig, OrderMapper orderMapper
+            , OrderExchangeConfig orderExchangeConfig, RabbitTemplate rabbitTemplate, OrderCaffeine orderCaffeine, RiderOrderRepository riderOrderRepository, ElasticsearchOperations elasticsearchOperations, OrderRiderOrderEsTableConfig orderRiderOrderEsTableConfig) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.orderRedisKeyConfig = orderRedisKeyConfig;
@@ -68,6 +82,9 @@ public class OrderServicerImpl implements OrderService {
         this.orderExchangeConfig = orderExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.orderCaffeine = orderCaffeine;
+        this.riderOrderRepository = riderOrderRepository;
+        this.elasticsearchOperations = elasticsearchOperations;
+        this.orderRiderOrderEsTableConfig = orderRiderOrderEsTableConfig;
     }
 
     //新增订单
@@ -184,6 +201,8 @@ public class OrderServicerImpl implements OrderService {
         long merchantId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderMerchantAckCooldown(),quickGetMerchantId());
         //更新尝试
         quickUpdate(orderId,k->orderMapper.merchantAck(orderId,merchantId));
+        //插入至es，使骑手可以获取订单信息来决定是否抢单
+        riderOrderRepository.save(new RiderOrderEsDTO(quickGetOrder(orderId)));
     }
 
     //商家确认制作完订单
@@ -210,6 +229,11 @@ public class OrderServicerImpl implements OrderService {
         long riderId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRiderAcceptCooldown(),quickGetRiderId());
         //更新尝试
         quickUpdate(orderId,k->orderMapper.riderAccept(orderId,riderId));
+        //es同步,执行局部更新
+        elasticsearchOperations.update(UpdateQuery.builder("你的文档ID")
+                        .withDocument(Document.from(Map.of(orderRiderOrderEsTableConfig.getAccept(),true)))
+                        .build()
+                , IndexCoordinates.of(orderRiderOrderEsTableConfig.getIndexName()));
     }
 
     //骑手确认已经拿到订单餐品

@@ -99,7 +99,7 @@ public class MerchantServiceImpl implements MerchantService {
         //检查格式
         commonParamRulesConfig.personNameCheck(masterName);
         commonParamRulesConfig.codeCheck(masterCode);
-        //检查冷却期，同时作为分布式锁防止多重设置
+        //检查冷却期，同时一定程度上作为伪分布式锁防止多重设置
         RedisUtil.checkCooldown(stringRedisTemplate,merchantRedisKeyConfig.getMerchantUpdateMasterCooldown().getName()+merchantId,
                 merchantRedisKeyConfig.getMerchantUpdateMasterCooldown().getDuration());
         //检查照片并且保存

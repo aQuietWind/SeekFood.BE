@@ -50,6 +50,7 @@ public class ConfigKeyEnum {
     public static final String Order_Params_Rules_Config="order.self.params.rules";
     public static final String Order_Redis_Key_Config="order.self.redis.key";
     public static final String Order_Caffeine_Config="order.self.jvm-caffeine";
+    public static final String Order_Rider_Order_Es_Table_Config="order.self.es.rider-order";
 
 
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
