@@ -50,7 +50,8 @@ public class RegisterFundOrderRecordConsumer {
         fundOrderRecordMapper.insertRecord(record);
         //发送一条延时全局回滚消息,无论支付未支付，只要到回滚时间，统一回滚资金和优惠券
         MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()
-                ,record.getOrderId() , rabbitTemplate , MQUtil.minuteToMillis(fundParamsRulesConfig.getRollbackMinuteMax()) );
+                ,record.getOrderId() , rabbitTemplate , MQUtil.minuteToMillis(fundParamsRulesConfig.getRollbackMinuteMax())
+        );
     }
 
 

@@ -84,11 +84,15 @@
             is_lock,
             is_ack,
             is_complete
-        from merchant_voucher
-        where voucher_id=#{voucherId}
+        from `order`
+        where order_id=#{orderId}
     </select>
 
-
+    <update id="lock">
+        update `order` set is_lock=true
+        where order_id=#{orderId}
+        and is_ack=false and is_lock=false and state_now=0
+    </update>
 
 
 

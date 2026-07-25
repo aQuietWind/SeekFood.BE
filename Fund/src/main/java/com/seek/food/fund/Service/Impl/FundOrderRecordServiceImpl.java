@@ -19,6 +19,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -74,6 +75,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
 
     //支付订单
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void pay(long recordId){
         //获取userId
         long userId= quickGetUserId();
@@ -84,6 +86,8 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         if(record==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         //如果失败会报错的，所以不用检验结果
         fundService.decreaseFund(record.getCost(),userId);
+        //设置订单记录为已经支付
+        fundOrderRecordMapper.ackPay(recordId);
         //发送消息
         MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getUseVoucherQueue().getRoutingKey()
         ,record.getOrderId(),rabbitTemplate);
@@ -94,8 +98,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     public void rollback(long recordId){
         //获取userId
         long userId= quickGetUserId();
-        //检查冷却期，尽量可以设置的长一些，一分钟差不多，因为前端会根据ableRollbackTime拒绝正常用户的回滚,况且这个回滚一般都会正常执行
-        //前端可以在常规回滚失败的前提下再使这个回滚按钮出现，所以冷却期长一些无所谓
+        //检查冷却期
         quickCooldown(fundRedisKeyConfig.getFundRollbackOrderRecordCooldown(),userId);
         //进行回滚条件判断,获取详细记录信息
         Long orderId=fundOrderRecordMapper.ableRollback(recordId,userId);

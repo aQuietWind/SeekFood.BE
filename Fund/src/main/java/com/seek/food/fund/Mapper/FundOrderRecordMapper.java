@@ -13,5 +13,6 @@ public interface FundOrderRecordMapper {
     public Long ableRollback(long recordId, long accountId);
     //使用orderId是为了兼容性
     public Long refund(long orderId);
+    public void ackPay(long recordId);
     public Long getRecordIdByOrderId(long orderId);
 }

@@ -6,4 +6,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OrderMapper {
     public void insertOrder(OrderDTO order);
+    public boolean lock(long orderId);
 }
