@@ -79,7 +79,7 @@ public class FundRechargeRecordServiceImpl implements FundRechargeRecordService 
         long userId=quickGetUserId();
         //检查冷却
         quickCooldown(fundRedisKeyConfig.getFundRechargeCooldown(),userId);
-        //写入MQ
+        //写入DB
         fundService.increaseFund(rechargeAmount,userId);
         //写入记录档
         fundRechargeRecordMapper.insertRechargeRecord(new FundRechargeRecordDTO(

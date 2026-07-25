@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class DeleteFundConsumer {
-    private FundMapper fundMapper;
+    private final FundMapper fundMapper;
     @Autowired
     public DeleteFundConsumer(FundMapper fundMapper) {
         this.fundMapper = fundMapper;

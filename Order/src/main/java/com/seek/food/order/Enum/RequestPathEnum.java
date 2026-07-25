@@ -13,6 +13,6 @@ public class RequestPathEnum {
     public static final String Order_Rider_Accept="/rider/accept";
     public static final String Order_Rider_Ack="/rider/ack";
     public static final String Order_Rider_Delivery="/rider/delivery";
-    public static final String Order_User_Receive="/rider/receive";
+    public static final String Order_User_Receive="/user/receive";
 
 }

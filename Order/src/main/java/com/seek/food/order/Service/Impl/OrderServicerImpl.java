@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
+import com.seek.food.dto.Fund.FundRechargeRecordDTO;
 import com.seek.food.dto.Meal.MealDTO;
 import com.seek.food.dto.Order.OrderDTO;
 import com.seek.food.order.Caffeine.OrderCaffeine;
@@ -14,12 +15,14 @@ import com.seek.food.order.Feign.MerchantClient;
 import com.seek.food.order.Feign.VoucherClient;
 import com.seek.food.order.Mapper.OrderMapper;
 import com.seek.food.order.Service.OrderService;
+import com.seek.food.util.CommonUtil.DoubleUtil;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.Context.TokenIdContext;
 import com.seek.food.util.Exception.BizException;
 import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.Redis.RedisUtil;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -139,8 +142,8 @@ public class OrderServicerImpl implements OrderService {
         commonParamRulesConfig.commonIdCheck(orderId);
         //获取tokenId
         long tokenId=quickGetTokenId();
-        OrderDTO order=orderCaffeine.getAndAutoLoad(orderId,stringRedisTemplate,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId)
-                ,orderRedisKeyConfig.getOrderMessageCaffeine().getDuration(),OrderDTO.class,k->orderMapper.getDetail(orderId));
+        //获取订单信息
+        OrderDTO order=quickGetOrder(orderId);
         //鉴别该tokenId是否有资格获取该订单信息
         checkIdWithOrder(order,tokenId);
         return order;
@@ -183,7 +186,7 @@ public class OrderServicerImpl implements OrderService {
         quickUpdate(orderId,k->orderMapper.merchantAck(orderId,merchantId));
     }
 
-    //商家制作订单
+    //商家确认制作完订单
     @Override
     public void merchantMake(long orderId){
         //检查订单id
@@ -192,6 +195,10 @@ public class OrderServicerImpl implements OrderService {
         long merchantId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderMerchantMakeCooldown(),quickGetMerchantId());
         //更新尝试
         quickUpdate(orderId,k->orderMapper.merchantMake(orderId,merchantId));
+        //打款到商家端
+        OrderDTO order=quickGetOrder(orderId);
+        double amount= DoubleUtil.onlyXAfterPoint(2,order.getTotalCost()-order.getRiderCost());
+        quickTransfer(merchantId,"商家完成订单制作,获得打款。  订单Id为:"+orderId,amount);
     }
 
     //骑手接受订单
@@ -225,6 +232,8 @@ public class OrderServicerImpl implements OrderService {
         long riderId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRiderDeliveryCooldown(),quickGetRiderId());
         //更新尝试
         quickUpdate(orderId,k->orderMapper.riderDelivery(orderId,riderId));
+        //打款到骑手端
+        quickTransfer(riderId,"骑手完成订单,获得打款。  订单Id为:"+orderId,quickGetOrder(orderId).getRiderCost());
     }
 
     //用户确认接收到订单餐品
@@ -282,6 +291,16 @@ public class OrderServicerImpl implements OrderService {
     private void quickRollback(long orderId){
         MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRollbackFundQueue().getRoutingKey()
                 , orderId,rabbitTemplate);
+    }
+
+    private OrderDTO quickGetOrder(long orderId){
+        return orderCaffeine.getAndAutoLoad(orderId,stringRedisTemplate,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId)
+            ,orderRedisKeyConfig.getOrderMessageCaffeine().getDuration(),OrderDTO.class,k->orderMapper.getDetail(orderId));
+    }
+
+    private void quickTransfer(long accountId,String description,double amount){
+        MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRollbackFundQueue().getRoutingKey()
+                , new FundRechargeRecordDTO(null,accountId,description,amount,null),rabbitTemplate);
     }
 
 }

@@ -16,5 +16,6 @@ public class OrderExchangeConfig {
     private QueueData registerFundOrderRecordQueue;
     private QueueData rollbackVoucherQueue;
     private QueueData rollbackFundQueue;
+    private QueueData transferFundQueue;
     private QueueData rollbackAllFundDeadLetterQueue;
 }

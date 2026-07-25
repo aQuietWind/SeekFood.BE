@@ -100,7 +100,7 @@
             is_ack,
             is_complete
         from `order`
-        where order_id=#{orderId} and (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId}) and state_now=#{state}
+        where (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId}) and state_now=#{state}
         order by order_id desc
         limit #{start},#{need}
     </select>
@@ -145,19 +145,19 @@
     </update>
 
     <update id="refund">
-        update `order` set is_refund=true and is_lock=true
+        update `order` set is_refund=true,is_lock=true
         where order_id=#{orderId} and user_id=#{userId}
         and is_ack=true and is_lock=false and is_refund=false and is_complete=false and state_now = 1
     </update>
 
     <update id="ack">
-        update `order` set is_ack=true
+        update `order` set is_ack=true,state_now=1
         where order_id=#{orderId}
         and is_ack=false and is_lock=false and is_refund=false and is_complete=false and state_now=0
     </update>
 
     <update id="merchantReject">
-        update `order` set is_refund=true and is_lock=true
+        update `order` set is_refund=true, is_lock=true
         where order_id=#{orderId} and merchant_id=#{merchantId}
           and is_ack=true and is_lock=false and is_refund=false and is_complete=false and state_now = 1
     </update>

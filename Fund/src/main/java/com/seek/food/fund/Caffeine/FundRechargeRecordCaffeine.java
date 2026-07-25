@@ -2,7 +2,6 @@ package com.seek.food.fund.Caffeine;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.seek.food.config.NacosConfig.Fund.FundCaffeineConfig;
-import com.seek.food.dto.Fund.FundDTO;
 import com.seek.food.dto.Fund.FundRechargeRecordDTO;
 import com.seek.food.util.Caffeine.JvmCaffeineParent;
 import jakarta.annotation.PostConstruct;

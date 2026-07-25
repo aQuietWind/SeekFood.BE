@@ -25,6 +25,7 @@ public class MQNameKeyEnum {
     public static final String Order_Exchange_Register_Fund_Order_Record_Queue ="${mq.name.bind.order-exchange.register-fund-order-record-queue.name}";
     public static final String Order_Exchange_Rollback_Fund_Queue ="${mq.name.bind.order-exchange.rollback-fund-queue.name}";
     public static final String Order_Exchange_Rollback_Voucher_Queue ="${mq.name.bind.order-exchange.rollback-voucher-queue.name}";
+    public static final String Order_Exchange_Transfer_Fund_Queue ="${mq.name.bind.order-exchange.transfer-fund-queue.name}";
 
 
     public static final String Dead_Letter_Exchange_Delete_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";

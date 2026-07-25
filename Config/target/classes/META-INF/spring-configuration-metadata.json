@@ -1168,6 +1168,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig"
     },
     {
+      "name": "order.self.params.rules.state-number-max",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig"
+    },
+    {
       "name": "order.self.redis.key.order-get-simple-by-state-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
