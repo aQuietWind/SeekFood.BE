@@ -135,7 +135,7 @@
             is_ack,
             is_complete
         from `order`
-        where order_id=#{orderId} and (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId})
+        where order_id=#{orderId}
     </select>
 
     <update id="lock">

@@ -20,7 +20,7 @@
             create_time,
             is_pay,
             is_refund
-        from fund_order_record where account_id=#{accountId} order by record_id limit #{start},#{need}
+        from fund_order_record where account_id=#{accountId} order by record_id desc limit #{start},#{need}
     </select>
 
     <select id="getDetail" resultMap="FundOrderRecordResultMap">

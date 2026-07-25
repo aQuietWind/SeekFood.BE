@@ -8,6 +8,7 @@ import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.dto.Meal.MealDTO;
 import com.seek.food.dto.Order.OrderDTO;
+import com.seek.food.order.Caffeine.OrderCaffeine;
 import com.seek.food.order.Feign.MealClient;
 import com.seek.food.order.Feign.MerchantClient;
 import com.seek.food.order.Feign.VoucherClient;
@@ -27,6 +28,9 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.function.Function;
+
 @Service
 @RefreshScope
 @Slf4j
@@ -44,9 +48,10 @@ public class OrderServicerImpl implements OrderService {
     private final OrderMapper orderMapper;
     private final OrderExchangeConfig orderExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
+    private final OrderCaffeine orderCaffeine;
 
     public OrderServicerImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
-            , OrderRedisKeyConfig orderRedisKeyConfig, MealClient mealClient, VoucherClient voucherClient, MerchantClient merchantClient, RedissonClient redissonClient, OrderParamsRulesConfig orderParamsRulesConfig, OrderMapper orderMapper, OrderExchangeConfig orderExchangeConfig, RabbitTemplate rabbitTemplate) {
+            , OrderRedisKeyConfig orderRedisKeyConfig, MealClient mealClient, VoucherClient voucherClient, MerchantClient merchantClient, RedissonClient redissonClient, OrderParamsRulesConfig orderParamsRulesConfig, OrderMapper orderMapper, OrderExchangeConfig orderExchangeConfig, RabbitTemplate rabbitTemplate, OrderCaffeine orderCaffeine) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.orderRedisKeyConfig = orderRedisKeyConfig;
@@ -59,6 +64,7 @@ public class OrderServicerImpl implements OrderService {
         this.orderMapper = orderMapper;
         this.orderExchangeConfig = orderExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
+        this.orderCaffeine = orderCaffeine;
     }
 
     //新增订单
@@ -101,7 +107,136 @@ public class OrderServicerImpl implements OrderService {
         }
     }
 
+    //获取订单的简易信息
+    @Override
+    public List<OrderDTO> getSimple(int start, int need){
+        //检测参数
+        commonParamRulesConfig.needNumberCheck(need);
+        //检测冷却
+        long tokenId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderGetSimpleCooldown(),quickGetTokenId());
+        //从DB返回
+        return orderMapper.getSimple(start,need,tokenId);
+    }
 
+    //根据所处阶段获取订单的简易信息
+    @Override
+    public List<OrderDTO> getSimpleState(int start, int need, int state){
+        //检测参数
+        commonParamRulesConfig.needNumberCheck(need);
+        orderParamsRulesConfig.stateNumberCheck(state);
+        //检测冷却
+        long tokenId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderGetSimpleByStateCooldown(),quickGetTokenId());
+        //如果目标阶段为0，则检测是不是用户要去获取订单
+        if (state==0)commonParamRulesConfig.userIdCheck(tokenId);
+        //从DB返回
+        return orderMapper.getSimpleState(start,need,state,tokenId);
+    }
+
+    //获取订单详细信息
+    @Override
+    public OrderDTO  getDetail(long orderId){
+        //检测参数
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //获取tokenId
+        long tokenId=quickGetTokenId();
+        OrderDTO order=orderCaffeine.getAndAutoLoad(orderId,stringRedisTemplate,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId)
+                ,orderRedisKeyConfig.getOrderMessageCaffeine().getDuration(),OrderDTO.class,k->orderMapper.getDetail(orderId));
+        //鉴别该tokenId是否有资格获取该订单信息
+        checkIdWithOrder(order,tokenId);
+        return order;
+    }
+
+    //用户订单退款
+    @Override
+    public void refund(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long userId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRefundCooldown(),quickGetUserId());
+        //退款尝试
+        quickUpdate(orderId,k->orderMapper.refund(orderId,userId));
+        //回滚资金
+        quickRollback(orderId);
+    }
+
+    //商家拒绝执行订单
+    @Override
+    public void merchantReject(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long merchantId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderMerchantRejectCooldown(),quickGetMerchantId());
+        //退款尝试
+        quickUpdate(orderId,k->orderMapper.merchantReject(orderId,merchantId));
+        //回滚资金
+        quickRollback(orderId);
+    }
+
+    //商家确定订单
+    @Override
+    public void merchantAck(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long merchantId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderMerchantAckCooldown(),quickGetMerchantId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.merchantAck(orderId,merchantId));
+    }
+
+    //商家制作订单
+    @Override
+    public void merchantMake(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long merchantId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderMerchantMakeCooldown(),quickGetMerchantId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.merchantMake(orderId,merchantId));
+    }
+
+    //骑手接受订单
+    @Override
+    public void riderAccept(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long riderId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRiderAcceptCooldown(),quickGetRiderId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.riderAccept(orderId,riderId));
+    }
+
+    //骑手确认已经拿到订单餐品
+    @Override
+    public void riderAck(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long riderId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRiderAckCooldown(),quickGetRiderId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.riderAck(orderId,riderId));
+    }
+
+    //骑手确认已经运送餐品到目标地点
+    @Override
+    public void riderDelivery(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long riderId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderRiderDeliveryCooldown(),quickGetRiderId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.riderDelivery(orderId,riderId));
+    }
+
+    //用户确认接收到订单餐品
+    @Override
+    public void userReceive(long orderId){
+        //检查订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //检查冷却
+        long userId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderUserReceiveCooldown(),quickGetUserId());
+        //更新尝试
+        quickUpdate(orderId,k->orderMapper.userReceive(orderId,userId));
+    }
 
 
 
@@ -118,6 +253,35 @@ public class OrderServicerImpl implements OrderService {
 
     private long quickGetUserId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
+    }
+
+    private long quickGetRiderId(){
+        return TokenIdContext.getAndCheck(commonParamRulesConfig.getRiderIdStart(),commonParamRulesConfig.getIdCapacity());
+    }
+
+    private long quickGetTokenId(){
+        return TokenIdContext.getAndToLong();
+    }
+
+    private long quickGetIdAndCheckCooldown(RedisKeyData key, long id){
+        quickCooldown(key,id);
+        return id;
+    }
+
+    private void checkIdWithOrder(OrderDTO order,long tokenId){
+        if (order.getUserId()!=tokenId&&order.getRiderId()!=tokenId&&order.getMerchantId()!=tokenId){
+            throw new BizException(ErrorCodeEnum.REQUEST_NOT_QUALIFIED);
+        }
+    }
+
+    private void quickUpdate(long orderId, Function<Long,Boolean> function){
+        orderCaffeine.updateAndRemoveCaffeine(orderId,stringRedisTemplate
+                ,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId),function);
+    }
+
+    private void quickRollback(long orderId){
+        MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRollbackFundQueue().getRoutingKey()
+                , orderId,rabbitTemplate);
     }
 
 }
