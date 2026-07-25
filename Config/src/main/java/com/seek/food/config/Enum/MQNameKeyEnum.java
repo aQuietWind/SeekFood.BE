@@ -20,6 +20,8 @@ public class MQNameKeyEnum {
 
     public static final String Promotion_Exchange_Register_Voucher_Connection_Queue ="${mq.name.bind.promotion-exchange.register-voucher-connection-queue.name}";
 
+    public static final String Voucher_Exchange_Register_Order_Ack_Queue ="${mq.name.bind.voucher-exchange.order-ack-queue.name}";
+
     public static final String Order_Exchange_Register_Fund_Order_Record_Queue ="${mq.name.bind.order-exchange.register-fund-order-record-queue.name}";
     public static final String Order_Exchange_Rollback_Fund_Queue ="${mq.name.bind.order-exchange.rollback-fund-queue.name}";
     public static final String Order_Exchange_Rollback_Voucher_Queue ="${mq.name.bind.order-exchange.rollback-voucher-queue.name}";

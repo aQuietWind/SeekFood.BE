@@ -28,7 +28,6 @@ public class RollbackAllFundImplConsumer {
 
     @RabbitListener(queues = MQNameKeyEnum.Dead_Letter_Exchange_Rollback_All_Fund_Impl_Queue)
     public void rollbackAllFundImplQueue(long orderId){
-        log.info("Rollback All Fund Impl Queue for orderId:{}",orderId);
         if (!orderMapper.lock(orderId)) return;
         //发送消息进行全局回滚
         MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRollbackFundQueue().getRoutingKey(),orderId

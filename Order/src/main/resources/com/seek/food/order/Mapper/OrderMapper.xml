@@ -94,6 +94,12 @@
         and is_ack=false and is_lock=false and state_now=0
     </update>
 
+    <update id="ack">
+        update `order` set is_ack=true
+        where order_id=#{orderId}
+        and is_ack=false and is_lock=false and state_now=0
+    </update>
+
 
 
 </mapper>
