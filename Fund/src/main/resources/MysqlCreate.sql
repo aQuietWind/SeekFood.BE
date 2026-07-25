@@ -20,20 +20,20 @@ CREATE TABLE `fund_order_record` (
                                      `able_rollback_time` datetime COMMENT '用户可回滚的时间',
                                      `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                                      `is_pay` boolean NOT NULL default false COMMENT '是否支付',
-                                     `is_rollback` boolean NOT NULL default false COMMENT '是否回滚',
                                      `is_refund` boolean NOT NULL default false COMMENT '是否退款',
                                      PRIMARY KEY (`record_id`),
                                      UNIQUE KEY (`order_id`),
                                      INDEX `account_index`(`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单消费记录表';
 
-#自动用于自动回滚资金的触发器
+#自动用于自动回滚资金并且自动插入退款的触发器
 create trigger auto_refund
     after update
     on fund_order_record for each row
 begin
     if new.is_refund=true and old.is_refund=false then
         update fund set fund_amount=fund_amount+new.cost where account_id=new.account_id;
+        insert into fund_order_refund_record (record_id, account_id, order_id, refund_cost) values (new.record_id,new.account_id,new.order_id,new.cost);
     end if;
 end;
 
@@ -42,9 +42,7 @@ CREATE TABLE `fund_order_refund_record` (
                                             `record_id` bigint NOT NULL COMMENT '记录id',
                                             `account_id` bigint NOT NULL COMMENT '账户id',
                                             `order_id` bigint not null COMMENT '订单id',
-                                            `order_refund_description` varchar(100) COMMENT '本次订单退款的详细描述',
                                             `refund_cost` double NOT NULL COMMENT '订单退款的金额量',
-                                            `refund_type` int COMMENT '退款的类型,0属于业务回滚退款,1属于用户手动退款',
                                             `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                                             PRIMARY KEY (`record_id`),
                                             UNIQUE KEY (`order_id`),

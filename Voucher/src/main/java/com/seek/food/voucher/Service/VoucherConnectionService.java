@@ -11,4 +11,5 @@ public interface VoucherConnectionService {
     public boolean exist(long promotionId);
     public boolean lock(long connectionId,long orderId);
     public Double check(long connectionId,double cost);
+    public void rollback(long orderId);
 }

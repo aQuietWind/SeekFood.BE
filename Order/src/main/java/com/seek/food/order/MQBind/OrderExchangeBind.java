@@ -63,17 +63,6 @@ public class OrderExchangeBind {
         return BindingBuilder.bind(rollbackFundQueue).to(orderExchange).with(orderExchangeConfig.getRollbackFundQueue().getRoutingKey());
     }
 
-    //用于资金退款的队列
-    @Bean
-    public Queue refundFundQueue(){
-        return MQUtil.generateQuorumQueue(orderExchangeConfig.getRefundFundQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding refundFundBinding(Queue refundFundQueue, DirectExchange orderExchange){
-        return BindingBuilder.bind(refundFundQueue).to(orderExchange).with(orderExchangeConfig.getRefundFundQueue().getRoutingKey());
-    }
-
     //延时回滚一切的死信队列,绑定死信交换机，同时监听FundExchange与OrderExchange,但是实现的消费者会出现在Order模块
     @Bean
     public Queue rollbackAllFundDeadLetterQueue(){

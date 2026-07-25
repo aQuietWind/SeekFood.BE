@@ -1073,11 +1073,6 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
-      "name": "mq.name.bind.order-exchange.refund-fund-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
-    },
-    {
       "name": "mq.name.bind.order-exchange.register-fund-order-record-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"

@@ -16,4 +16,5 @@ public interface VoucherConnectionMapper {
     public boolean lock(long userId,long connectionId,long orderId);
     public Double check(long userId,long connectionId,double cost);
     public boolean exist(long userId,long promotionId);
+    public Long getConnectionIdByOrderId(long orderId);
 }

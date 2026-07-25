@@ -4,11 +4,8 @@ import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
-import com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig;
 import com.seek.food.config.NacosConfig.MQ.FundExchangeConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
-import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
-import com.seek.food.fund.Mapper.FundMapper;
 import com.seek.food.fund.Mapper.FundOrderRecordMapper;
 import com.seek.food.util.CommonUtil.IdUtil;
 import com.seek.food.util.MQ.MQUtil;
@@ -29,7 +26,6 @@ public class RegisterFundOrderRecordConsumer {
     private final RabbitTemplate rabbitTemplate;
     private final StringRedisTemplate stringRedisTemplate;
     private final FundRedisKeyConfig fundRedisKeyConfig;
-    private final CommonParamRulesConfig commonParamRulesConfig;
 
     @Autowired
     public RegisterFundOrderRecordConsumer(FundOrderRecordMapper fundOrderRecordMapper, FundParamsRulesConfig fundParamsRulesConfig
@@ -40,7 +36,6 @@ public class RegisterFundOrderRecordConsumer {
         this.rabbitTemplate = rabbitTemplate;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;
-        this.commonParamRulesConfig = commonParamRulesConfig;
         //初始化计数器
         stringRedisTemplate.opsForValue().setIfAbsent(fundRedisKeyConfig.getFundOrderRecordIdCount().getName(),""+commonParamRulesConfig.getIdCapacity());
     }
@@ -55,8 +50,7 @@ public class RegisterFundOrderRecordConsumer {
         fundOrderRecordMapper.insertRecord(record);
         //发送一条延时全局回滚消息,无论支付未支付，只要到回滚时间，统一回滚资金和优惠券
         MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()
-                ,new FundOrderRecordMQDTO(record.getRecordId(), record.getOrderId(), record.getAccountId(), record.getCost())
-                ,rabbitTemplate,MQUtil.minuteToMillis(fundParamsRulesConfig.getRollbackMinuteMax()));
+                ,record.getOrderId() , rabbitTemplate , MQUtil.minuteToMillis(fundParamsRulesConfig.getRollbackMinuteMax()) );
     }
 
 

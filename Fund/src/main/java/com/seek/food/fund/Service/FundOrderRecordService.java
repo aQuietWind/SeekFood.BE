@@ -9,4 +9,5 @@ public interface FundOrderRecordService {
     public FundOrderRecordDTO getDetail(long recordId);
     public void pay(long recordId);
     public void rollback(long recordId);
+    public void ackRefund(long orderId);
 }

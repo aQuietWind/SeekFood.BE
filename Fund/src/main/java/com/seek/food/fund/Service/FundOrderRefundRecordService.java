@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface FundOrderRefundRecordService {
     public List<FundOrderRefundRecordDTO> getSimple(int start, int need);
-    public FundOrderRefundRecordDTO getDetail(long recordId);
 }

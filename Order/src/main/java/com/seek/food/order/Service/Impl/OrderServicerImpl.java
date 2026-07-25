@@ -5,7 +5,7 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
-import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
+import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.dto.Meal.MealDTO;
 import com.seek.food.dto.Order.OrderDTO;
 import com.seek.food.order.Feign.MealClient;
@@ -68,23 +68,23 @@ public class OrderServicerImpl implements OrderService {
         if (connectionId!=null)commonParamRulesConfig.commonIdCheck(connectionId);
         //获取用户id
         long userId=quickGetUserId();
-        //上锁
+        //上锁,没成功就直接返回
         RLock lock=redissonClient.getLock(orderRedisKeyConfig.getOrderInsertLock().getRedisKey(userId));
         if (!lock.tryLock()) throw new BizException(ErrorCodeEnum.REQUEST_IN_COOLDOWN);
         try {
             //获取餐品信息
             MealDTO meal = mealClient.mealGetDetail(mealId).getData();
             if (meal == null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
-            //获取运送距离
+            //通过运送地址，发到商家模块去获取运送距离
             Long distance = merchantClient.merchantGetDistance(lon, lat, meal.getMerchantId()).getData();
-            System.err.println(distance);
             if (distance == null) throw new BizException(ErrorCodeEnum.DATA_NOT_RIGHT);
-            //检查优惠券
+            //检查优惠券是否合规，不用担心并发问题，因为上了redis锁，除非redis故障了
             Double discountCost=0.0;
             if (connectionId!=null) {
                 discountCost = voucherClient.connectionCheck(connectionId, connectionId).getData();
                 if (discountCost == null) throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
             }
+            //生成order实体类用于DB插入
             OrderDTO order=OrderDTO.quickGet(
                     IdUtil.IdGenerateByIncrease(orderRedisKeyConfig.getOrderIdCount().getName(),stringRedisTemplate)
                     ,userId,meal,connectionId,number,lon,lat,deliveryAddress,discountCost,orderParamsRulesConfig.distanceCost(distance));
@@ -94,7 +94,7 @@ public class OrderServicerImpl implements OrderService {
             orderMapper.insertOrder(order);
             //发送至Fund处新增订单记录，然后等待支付
             MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRegisterFundOrderRecordQueue().getRoutingKey()
-            , new FundOrderRecordMQDTO(null, order.getOrderId(), userId,order.getTotalCost()),rabbitTemplate );
+            , new FundOrderRecordDTO(userId, order.getOrderId(), "正常下单",order.getTotalCost()),rabbitTemplate );
         }finally {
             //解锁
             lock.unlock();

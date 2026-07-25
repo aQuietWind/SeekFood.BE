@@ -10,7 +10,8 @@ public interface FundOrderRecordMapper {
     public void insertRecord(FundOrderRecordDTO fundOrderRecord);
     public List<FundOrderRecordDTO> getSimple(int start,int need,long accountId);
     public FundOrderRecordDTO getDetail(long recordId,long accountId);
-    public boolean rollback(long recordId,long accountId);
+    public Long ableRollback(long recordId, long accountId);
     //使用orderId是为了兼容性
-    public boolean ackRefund(long orderId,long accountId);
+    public Long refund(long orderId);
+    public Long getRecordIdByOrderId(long orderId);
 }

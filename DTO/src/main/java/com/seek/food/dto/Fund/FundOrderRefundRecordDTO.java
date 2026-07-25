@@ -13,8 +13,6 @@ public class FundOrderRefundRecordDTO {
     private Long recordId;
     private Long accountId;
     private Long orderId;
-    private String orderRefundDescription;
     private Double refundCost;
-    private Integer refundType;
     private LocalDateTime createTime;
 }

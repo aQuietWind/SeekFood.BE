@@ -31,10 +31,6 @@ public class FundOrderRefundRecordController {
         return Result.success(fundOrderRefundRecordService.getSimple(start, need));
     }
 
-    @GetMapping(RequestPathEnum.Fund_Order_Refund_Record_Get_Detail)
-    public Result<FundOrderRefundRecordDTO> getDetail(long recordId){
-        return Result.success(fundOrderRefundRecordService.getDetail(recordId));
-    }
 
 
 }

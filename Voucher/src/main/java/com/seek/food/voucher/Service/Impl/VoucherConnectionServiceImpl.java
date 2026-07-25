@@ -88,10 +88,19 @@ public class VoucherConnectionServiceImpl implements VoucherConnectionService {
         return voucherConnectionMapper.lock(quickGetUserId(),connectionId,orderId);
     }
 
-    //检查某优惠券是否返回条件
+    //检查某优惠券是否符合条件
     @Override
     public Double check(long connectionId,double cost){
         return voucherConnectionMapper.check(quickGetUserId(),connectionId,cost);
+    }
+
+    //回滚优惠券，并且清除缓存
+    @Override
+    public void rollback(long orderId){
+        Long connectionId=voucherConnectionMapper.getConnectionIdByOrderId(orderId);
+        if (connectionId==null)return;
+        voucherConnectionMapper.rollback(orderId);
+        quickClearCaffeine(connectionId);
     }
 
 
@@ -102,5 +111,10 @@ public class VoucherConnectionServiceImpl implements VoucherConnectionService {
 
     private void quickCooldown(RedisKeyData key, Object id){
         RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
+    }
+
+    private void quickClearCaffeine(long connectionId){
+        voucherConnectionCaffeine.deleteAllCaffeine(connectionId,stringRedisTemplate
+                ,voucherRedisKeyConfig.getVoucherConnectionMessageCaffeine().getRedisKey(connectionId));
     }
 }

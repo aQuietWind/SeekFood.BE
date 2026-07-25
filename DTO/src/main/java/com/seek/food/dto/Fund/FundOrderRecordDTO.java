@@ -19,6 +19,13 @@ public class FundOrderRecordDTO {
     private LocalDateTime ableRollbackTime;
     private LocalDateTime createTime;
     private Boolean pay;
-    private Boolean rollback;
     private Boolean refund;
+
+
+    public FundOrderRecordDTO(long accountId,long orderId,String orderDescription,double cost) {
+        this.accountId = accountId;
+        this.orderId = orderId;
+        this.orderDescription = orderDescription;
+        this.cost = cost;
+    }
 }

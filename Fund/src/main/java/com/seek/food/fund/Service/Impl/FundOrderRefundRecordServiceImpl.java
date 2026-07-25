@@ -39,7 +39,7 @@ public class FundOrderRefundRecordServiceImpl implements FundOrderRefundRecordSe
         this.fundOrderRefundRecordCaffeine = fundOrderRefundRecordCaffeine;
     }
 
-    //批量获取预览信息
+    //批量获取信息
     @Override
     public List<FundOrderRefundRecordDTO> getSimple(int start, int need){
         //检查需求量
@@ -51,18 +51,6 @@ public class FundOrderRefundRecordServiceImpl implements FundOrderRefundRecordSe
         //返回查询结果
         return fundOrderRefundRecordMapper.getSimple(start,need,userId);
     }
-
-    //获取详细信息
-    @Override
-    public FundOrderRefundRecordDTO getDetail(long recordId){
-        commonParamRulesConfig.commonIdCheck(recordId);
-        long tokenId= TokenIdContext.getAndToLong();
-        return fundOrderRefundRecordCaffeine.getAndAutoLoad(recordId,stringRedisTemplate
-                ,fundRedisKeyConfig.getFundOrderRefundRecordCaffeineMessage().getRedisKey(recordId)
-                ,fundRedisKeyConfig.getFundOrderRefundRecordCaffeineMessage().getDuration()
-                , FundOrderRefundRecordDTO.class, k->fundOrderRefundRecordMapper.getDetail(tokenId,recordId));
-    }
-
 
 
     private long quickGetUserId(){

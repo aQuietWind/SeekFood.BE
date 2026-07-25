@@ -78,7 +78,10 @@
         where connection_id=#{connectionId} and user_id=#{userId} and is_lock=false and is_use=false
     </update>
 
-
+    <select id="getConnectionIdByOrderId" resultType="java.lang.Long">
+        select connection_id from merchant_voucher
+        where order_id=#{orderId}
+    </select>
 
 
 </mapper>

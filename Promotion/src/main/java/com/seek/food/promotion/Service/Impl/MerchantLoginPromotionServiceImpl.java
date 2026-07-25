@@ -5,7 +5,6 @@ import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig;
-import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
 import com.seek.food.dto.Promotion.MerchantLoginPromotionDTO;
 import com.seek.food.dto.Voucher.VoucherConnectionMQDTO;
 import com.seek.food.promotion.Caffeine.MerchantLoginPromotionCaffeine;

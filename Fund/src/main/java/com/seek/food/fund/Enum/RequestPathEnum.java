@@ -19,7 +19,6 @@ public class RequestPathEnum {
 
     public static final String Fund_Order_Refund_Record = "/refund";
     public static final String Fund_Order_Refund_Record_Get_Simple = "/simple";
-    public static final String Fund_Order_Refund_Record_Get_Detail = "/detail";
 
 
 }

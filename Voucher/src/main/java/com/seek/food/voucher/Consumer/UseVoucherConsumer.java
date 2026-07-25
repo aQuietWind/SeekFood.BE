@@ -2,7 +2,6 @@ package com.seek.food.voucher.Consumer;
 
 import com.seek.food.config.Enum.MQNameKeyEnum;
 import com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig;
-import com.seek.food.dto.Fund.FundOrderRecordMQDTO;
 import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.voucher.Mapper.VoucherConnectionMapper;
 import lombok.extern.slf4j.Slf4j;
