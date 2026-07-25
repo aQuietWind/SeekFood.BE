@@ -25,9 +25,9 @@ CREATE TABLE `order` (
                          `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                          `complete_time` datetime COMMENT '完成时间',
                          `state_now` int NOT NULL default 0 COMMENT '现在所处状态，0代表还未被确认，1代表商家待确认，2代表商家待制作
-                                                                    ,3代表骑手待接收订单，4代表骑手待运送订单到指定地点，5代表用户待接收订单',
+                                                                    ,3代表骑手待接收订单，4代表骑手待运送订单到指定地点，5代表用户待接收订单,6代表用户已经签收订单',
                          `is_refund` boolean NOT NULL default false COMMENT '是否退款',
-                         `is_lock` boolean NOT NULL default false COMMENT '是否被锁定',
+                         `is_lock` boolean NOT NULL default false COMMENT '是否被锁定,锁定后再也不能被更改状态和信息',
                          `is_ack` boolean NOT NULL default false COMMENT '是否被确认',
                          `is_complete` boolean NOT NULL default false COMMENT '是否完成',
                          PRIMARY KEY (`order_id`),
