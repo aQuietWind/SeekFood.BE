@@ -27,17 +27,14 @@ import java.util.List;
 public class SearchMapper {
 
     private final MerchantEsTableConfig merchantEsTableConfig;
-    private final MerchantRepository merchantRepository;
     private final ElasticsearchOperations elasticsearchOperations;
     //排序函数
     private static List<SortOptions> sortList ;
 
 
     @Autowired
-    SearchMapper(MerchantEsTableConfig merchantEsTableConfig, MerchantRepository merchantRepository
-    , ElasticsearchOperations elasticsearchOperations) {
+    SearchMapper(MerchantEsTableConfig merchantEsTableConfig, ElasticsearchOperations elasticsearchOperations) {
         this.merchantEsTableConfig = merchantEsTableConfig;
-        this.merchantRepository = merchantRepository;
         this.elasticsearchOperations = elasticsearchOperations;
     }
 

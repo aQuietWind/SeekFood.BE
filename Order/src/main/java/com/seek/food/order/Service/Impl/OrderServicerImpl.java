@@ -230,7 +230,7 @@ public class OrderServicerImpl implements OrderService {
         //更新尝试
         quickUpdate(orderId,k->orderMapper.riderAccept(orderId,riderId));
         //es同步,执行局部更新
-        elasticsearchOperations.update(UpdateQuery.builder("你的文档ID")
+        elasticsearchOperations.update(UpdateQuery.builder(String.valueOf(orderId))
                         .withDocument(Document.from(Map.of(orderRiderOrderEsTableConfig.getAccept(),true)))
                         .build()
                 , IndexCoordinates.of(orderRiderOrderEsTableConfig.getIndexName()));
@@ -323,7 +323,7 @@ public class OrderServicerImpl implements OrderService {
     }
 
     private void quickTransfer(long accountId,String description,double amount){
-        MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRollbackFundQueue().getRoutingKey()
+        MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getTransferFundQueue().getRoutingKey()
                 , new FundRechargeRecordDTO(null,accountId,description,amount,null),rabbitTemplate);
     }
 

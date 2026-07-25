@@ -156,6 +156,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
     },
     {
+      "name": "order.self.es.rider-order",
+      "type": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
       "name": "order.self.jvm-caffeine",
       "type": "com.seek.food.config.NacosConfig.Order.OrderCaffeineConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Order.OrderCaffeineConfig"
@@ -1093,6 +1098,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
     {
+      "name": "mq.name.bind.order-exchange.transfer-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.order-exchange.type",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
@@ -1151,6 +1161,51 @@
       "name": "mq.name.bind.voucher-exchange.type",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.VoucherExchangeConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.accept",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.delivery-address",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.delivery-lat-lon",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.index-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.meal-content",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.merchant-id",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.number",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.order-id",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
+    },
+    {
+      "name": "order.self.es.rider-order.rider-cost",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig"
     },
     {
       "name": "order.self.jvm-caffeine.order",
@@ -1229,6 +1284,11 @@
     },
     {
       "name": "order.self.redis.key.order-rider-delivery-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
+    },
+    {
+      "name": "order.self.redis.key.order-rider-get-es-order-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig"
     },

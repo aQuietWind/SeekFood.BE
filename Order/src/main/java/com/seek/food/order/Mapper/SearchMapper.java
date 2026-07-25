@@ -13,10 +13,12 @@ import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Mapper
+//不能用@Mapper,只能用这个
+@Component
 public class SearchMapper {
 
 
