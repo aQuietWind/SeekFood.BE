@@ -55,6 +55,56 @@
                #{totalCost});
     </insert>
 
+    <select id="getSimple" resultMap="OrderResultMap">
+        select
+            order_id,
+            user_id,
+            merchant_id,
+            rider_id,
+            voucher_connection_id,
+            meal_id,
+            meal_name,
+            meal_price,
+            meal_show_image_addr,
+            number,
+            delivery_address,
+            total_cost,
+            state_now,
+            is_refund,
+            is_lock,
+            is_ack,
+            is_complete
+        from `order`
+        where (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId})
+        order by order_id desc
+        limit #{start},#{need}
+    </select>
+
+    <select id="getSimpleState" resultMap="OrderResultMap">
+        select
+            order_id,
+            user_id,
+            merchant_id,
+            rider_id,
+            voucher_connection_id,
+            meal_id,
+            meal_name,
+            meal_price,
+            meal_show_image_addr,
+            number,
+            delivery_address,
+            total_cost,
+            state_now,
+            is_refund,
+            is_lock,
+            is_ack,
+            is_complete
+        from `order`
+        where order_id=#{orderId} and (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId}) and state_now=#{state}
+        order by order_id desc
+        limit #{start},#{need}
+    </select>
+
     <select id="getDetail" resultMap="OrderResultMap">
         select
             order_id,
@@ -85,7 +135,7 @@
             is_ack,
             is_complete
         from `order`
-        where order_id=#{orderId}
+        where order_id=#{orderId} and (user_id=#{tokenId} or merchant_id=#{tokenId} or rider_id=#{tokenId})
     </select>
 
     <update id="lock">
