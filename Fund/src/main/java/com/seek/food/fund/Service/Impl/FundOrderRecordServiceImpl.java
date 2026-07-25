@@ -87,7 +87,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         //如果失败会报错的，所以不用检验结果
         fundService.decreaseFund(record.getCost(),userId);
         //设置订单记录为已经支付
-        fundOrderRecordMapper.ackPay(recordId);
+        if (!fundOrderRecordMapper.ackPay(recordId))throw new BizException(ErrorCodeEnum.DATA_SURVIVE);
         //发送消息
         MQUtil.send(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getUseVoucherQueue().getRoutingKey()
         ,record.getOrderId(),rabbitTemplate);

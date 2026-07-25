@@ -102,6 +102,12 @@ public class OrderServicerImpl implements OrderService {
     }
 
 
+
+
+
+
+
+
     private void quickCooldown(RedisKeyData key, Object id){
         RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
     }
