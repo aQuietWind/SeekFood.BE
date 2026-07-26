@@ -14,4 +14,5 @@ public class RiderExchangeConfig {
     private String type;
     private String exchangeName;
     private QueueData registerFundQueue;
+    private QueueData deleteFundQueue;
 }

@@ -35,6 +35,16 @@ public class RiderExchangeBind {
     public Binding registerFundBinding(Queue registerFundQueue, DirectExchange riderExchange){
         return BindingBuilder.bind(registerFundQueue).to(riderExchange).with(riderExchangeConfig.getRegisterFundQueue().getRoutingKey());
     }
+    //资金账户删除队列
+    @Bean
+    public Queue deleteFundQueue(){
+        return MQUtil.generateQuorumQueue(riderExchangeConfig.getDeleteFundQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding deleteFundBinding(Queue deleteFundQueue, DirectExchange riderExchange){
+        return BindingBuilder.bind(deleteFundQueue).to(riderExchange).with(riderExchangeConfig.getDeleteFundQueue().getRoutingKey());
+    }
 
 
 

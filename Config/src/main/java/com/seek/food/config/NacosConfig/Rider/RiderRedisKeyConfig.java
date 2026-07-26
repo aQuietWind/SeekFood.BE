@@ -21,4 +21,5 @@ public class RiderRedisKeyConfig {
     private RedisKeyData updatePasswordCooldown;
     private RedisKeyData riderIdCount;
     private RedisKeyData riderMessageCaffeine;
+    private RedisKeyData riderPhoneCaffeine;
 }

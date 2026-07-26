@@ -27,24 +27,23 @@ import org.springframework.stereotype.Service;
 public class RegisterServiceImpl implements RegisterService {
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final StringRedisTemplate stringRedisTemplate;
-    private final RiderParamsRulesConfig riderParamsRulesConfig;
     private final RiderRedisKeyConfig riderRedisKeyConfig;
     private final RiderExchangeConfig riderExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final RegisterMapper registerMapper;
 
     @Autowired
-    public RegisterServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate, RiderParamsRulesConfig riderParamsRulesConfig, RiderRedisKeyConfig riderRedisKeyConfig, RiderExchangeConfig riderExchangeConfig, RabbitTemplate rabbitTemplate, RegisterMapper registerMapper) {
+    public RegisterServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
+            , RiderRedisKeyConfig riderRedisKeyConfig, RiderExchangeConfig riderExchangeConfig, RabbitTemplate rabbitTemplate
+            , RegisterMapper registerMapper) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
-        this.riderParamsRulesConfig = riderParamsRulesConfig;
         this.riderRedisKeyConfig = riderRedisKeyConfig;
-        //初始化id计数器
-        stringRedisTemplate.opsForValue().setIfAbsent(riderRedisKeyConfig.getRiderIdCount().getName()
-                ,""+commonParamRulesConfig.getRiderIdStart()*commonParamRulesConfig.getIdCapacity());
         this.riderExchangeConfig = riderExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.registerMapper = registerMapper;
+        //初始化id计数器
+        stringRedisTemplate.opsForValue().setIfAbsent(riderRedisKeyConfig.getRiderIdCount().getName(),""+commonParamRulesConfig.getRiderIdStart()*commonParamRulesConfig.getIdCapacity());
     }
 
 

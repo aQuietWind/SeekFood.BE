@@ -11,4 +11,5 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @ConfigurationProperties(ConfigKeyEnum.Rider_Caffeine_Config)
 public class RiderCaffeineConfig {
     private CaffeineData rider;
+    private CaffeineData riderPhone;
 }
