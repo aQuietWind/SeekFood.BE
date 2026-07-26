@@ -53,6 +53,11 @@ public class ConfigKeyEnum {
     public static final String Order_Rider_Order_Es_Table_Config="order.self.es.rider-order";
 
 
+    public static final String Rider_Params_Rules_Config="rider.self.params.rules";
+    public static final String Rider_Redis_Key_Config="rider.self.redis.key";
+    public static final String Rider_Caffeine_Config="rider.self.jvm-caffeine";
+    public static final String Rider_Redis_Stream_Config="rider.self.redis.stream";
+
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";

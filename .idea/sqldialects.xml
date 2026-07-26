@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/Merchant/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Order/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Promotion/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/Rider/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/User/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/Voucher/src/main/resources/MysqlCreate.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="MySQL" />
