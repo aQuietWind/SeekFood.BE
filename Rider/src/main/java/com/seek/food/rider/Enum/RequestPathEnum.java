@@ -9,7 +9,7 @@ public class RequestPathEnum {
     public static final String Login_Opt = "/opt";
     public static final String Login_Password = "/password";
     public static final String Login_Refresh = "/refresh";
-    //user
+    //rider
     public static final String Rider = "/rider";
     public static final String Rider_Update_Person_Image = "/image";
     public static final String Rider_Update_Password = "/password";
@@ -17,5 +17,5 @@ public class RequestPathEnum {
     public static final String Rider_Get_Detail = "/detail";
     public static final String Rider_Get_Self = "/self";
     public static final String Rider_Get_Delete_Opt = "/delete/opt";
-    public static final String Rider_Get_Delete = "/delete";
+    public static final String Rider_Delete = "/delete";
 }

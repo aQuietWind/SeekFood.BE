@@ -146,6 +146,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
     },
     {
+      "name": "mq.name.bind.rider-exchange",
+      "type": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange",
       "type": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -189,6 +194,26 @@
       "name": "promotion.self.redis.key",
       "type": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.jvm-caffeine",
+      "type": "com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig"
+    },
+    {
+      "name": "rider.self.params.rules",
+      "type": "com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig"
+    },
+    {
+      "name": "rider.self.redis.key",
+      "type": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.stream",
+      "type": "com.seek.food.config.NacosConfig.Rider.RiderRedisStreamConfig",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisStreamConfig"
     },
     {
       "name": "user.self.jvm-caffeine",
@@ -1123,6 +1148,21 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
     },
     {
+      "name": "mq.name.bind.rider-exchange.exchange-name",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.rider-exchange.register-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.rider-exchange.type",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.user-exchange.delete-file-user-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.UserExchangeConfig"
@@ -1391,6 +1431,76 @@
       "name": "promotion.self.redis.key.merchant-login-promotion-message-caffeine",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Promotion.PromotionRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.jvm-caffeine.rider",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig"
+    },
+    {
+      "name": "rider.self.params.rules.rider-person-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig"
+    },
+    {
+      "name": "rider.self.redis.key.delete-rider-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.login-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.login-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.login-refresh-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.register-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.register-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.rider-id-count",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.rider-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.update-password-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.update-password-opt",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.update-person-image-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.stream.old-file-stream",
+      "type": "com.seek.food.config.Data.RedisStreamData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisStreamConfig"
     },
     {
       "name": "user.self.jvm-caffeine.phone",

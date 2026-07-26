@@ -10,14 +10,15 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Rider_Redis_Key_Config)
 public class RiderRedisKeyConfig {
-    private RedisKeyData mealInsertCooldown;
-    private RedisKeyData mealGetSimpleCooldown;
-    private RedisKeyData mealGetSimpleByTypeCooldown;
-    private RedisKeyData mealUpdateMessageCooldown;
-    private RedisKeyData mealUpdatePriceCooldown;
-    private RedisKeyData mealUpdateShowImageCooldown;
-    private RedisKeyData mealUpdateSellCooldown;
-    private RedisKeyData mealDeleteCooldown;
-    private RedisKeyData mealIdCount;
-    private RedisKeyData mealMessageCaffeine;
+    private RedisKeyData registerOpt;
+    private RedisKeyData loginOpt;
+    private RedisKeyData deleteRiderOpt;
+    private RedisKeyData updatePasswordOpt;
+    private RedisKeyData registerCooldown;
+    private RedisKeyData loginPasswordCooldown;
+    private RedisKeyData loginRefreshCooldown;
+    private RedisKeyData updatePersonImageCooldown;
+    private RedisKeyData updatePasswordCooldown;
+    private RedisKeyData riderIdCount;
+    private RedisKeyData riderMessageCaffeine;
 }

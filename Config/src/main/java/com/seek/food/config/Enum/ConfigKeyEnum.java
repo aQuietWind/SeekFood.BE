@@ -66,6 +66,7 @@ public class ConfigKeyEnum {
     public static final String Voucher_Exchange_Config="mq.name.bind.voucher-exchange";
     public static final String Promotion_Exchange_Config="mq.name.bind.promotion-exchange";
     public static final String Order_Exchange_Config="mq.name.bind.order-exchange";
+    public static final String Rider_Exchange_Config="mq.name.bind.rider-exchange";
     public static final String Dead_Letter_Exchange_Config="mq.name.bind.dead-letter-exchange";
 //    public static final String =;
 //    public static final String =;

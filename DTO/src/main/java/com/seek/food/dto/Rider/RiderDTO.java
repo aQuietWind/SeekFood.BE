@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RiderDTO {
-    private Long rider_id;
-    private String rider_name;
-    private String rider_code;
-    private String rider_phone_number;
-    private String rider_password;
-    private String rider_person_image_addr;
-    private Integer rider_sex;
-    private LocalDateTime create_time;
-    private Boolean is_delete;
+    private Long riderId;
+    private String riderName;
+    private String riderCode;
+    private String riderPhoneNumber;
+    private String riderPassword;
+    private String riderPersonImageAddr;
+    private Integer riderSex;
+    private LocalDateTime createTime;
+    private Boolean delete;
 }

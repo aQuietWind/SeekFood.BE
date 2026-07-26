@@ -91,7 +91,7 @@ public class LoginServiceImpl implements LoginService {
         //检查冷却期，防止频繁刷新token
         RedisUtil.checkCooldown(stringRedisTemplate, userRedisKeyConfig.getLoginRefreshCooldown().getName()+userId
                 ,userRedisKeyConfig.getLoginRefreshCooldown().getDuration());
-        loginAndGetToken(TokenIdContext.getAndToLong(), response);
+        loginAndGetToken(userId, response);
     }
 
     //发放登录信息
