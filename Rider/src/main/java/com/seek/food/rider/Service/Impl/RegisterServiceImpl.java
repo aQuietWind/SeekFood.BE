@@ -60,7 +60,6 @@ public class RegisterServiceImpl implements RegisterService {
     //注册骑手
     @Override
     public void registerRider(RiderDTO rider, String opt) {
-        System.err.println(rider);
         //验证格式
         commonParamRulesConfig.personNameCheck(rider.getRiderName());
         commonParamRulesConfig.codeCheck(rider.getRiderCode());

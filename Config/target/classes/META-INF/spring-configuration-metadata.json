@@ -1148,6 +1148,16 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.PromotionExchangeConfig"
     },
     {
+      "name": "mq.name.bind.rider-exchange.delete-file-rider-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.rider-exchange.delete-fund-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
+    },
+    {
       "name": "mq.name.bind.rider-exchange.exchange-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig"
@@ -1438,6 +1448,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig"
     },
     {
+      "name": "rider.self.jvm-caffeine.rider-phone",
+      "type": "com.seek.food.config.Data.CaffeineData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig"
+    },
+    {
       "name": "rider.self.params.rules.rider-person-image-dest",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig"
@@ -1479,6 +1494,11 @@
     },
     {
       "name": "rider.self.redis.key.rider-message-caffeine",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
+    },
+    {
+      "name": "rider.self.redis.key.rider-phone-caffeine",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig"
     },

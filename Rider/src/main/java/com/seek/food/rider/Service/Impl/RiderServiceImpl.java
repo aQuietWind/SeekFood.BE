@@ -54,6 +54,8 @@ public class RiderServiceImpl implements RiderService {
         this.riderParamsRulesConfig = riderParamsRulesConfig;
         this.riderExchangeConfig = riderExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
+        //先创建目录，这样后续就不用创建了
+        FileSave.createDestDir(riderParamsRulesConfig.getRiderPersonImageDest());
     }
 
     public RiderDTO getDetail(long riderId){
