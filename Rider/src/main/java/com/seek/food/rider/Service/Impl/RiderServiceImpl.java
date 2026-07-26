@@ -17,7 +17,6 @@ import com.seek.food.util.MQ.MQUtil;
 import com.seek.food.util.OPT.OPTUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -133,6 +132,11 @@ public class RiderServiceImpl implements RiderService {
         OPTUtil.checkOPT(stringRedisTemplate,riderRedisKeyConfig.getDeleteRiderOpt().getRedisKey(phone),opt);
         //删除骑手
         riderMapper.delete(riderId);
+        //删除图片
+        quickDeleteFile(Paths.get(riderParamsRulesConfig.getRiderPersonImageDest(), riderMapper.getPersonImageAddrAfterDelete(riderId)));
+        //发送至MQ删除资金账户
+        MQUtil.send(riderExchangeConfig.getExchangeName(),riderExchangeConfig.getDeleteFundQueue().getRoutingKey()
+                ,riderId,rabbitTemplate);
     }
 
     private long quickGetRiderId(){
