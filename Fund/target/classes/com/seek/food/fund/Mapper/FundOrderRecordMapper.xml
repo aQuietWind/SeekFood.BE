@@ -60,7 +60,7 @@
 
     <update id="ackPay">
         update fund_order_record set is_pay=true
-        where record_id=#{recordId}
+        where record_id=#{recordId} and now() &lt; deadline
         and is_pay=false and is_refund=false
     </update>
 

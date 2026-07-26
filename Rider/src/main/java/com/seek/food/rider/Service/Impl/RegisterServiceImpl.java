@@ -5,6 +5,7 @@ import com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig;
 import com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig;
 import com.seek.food.dto.Rider.RiderDTO;
+import com.seek.food.rider.Consumer.RiderCaffeine;
 import com.seek.food.rider.Mapper.RegisterMapper;
 import com.seek.food.rider.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;
@@ -31,11 +32,12 @@ public class RegisterServiceImpl implements RegisterService {
     private final RiderExchangeConfig riderExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final RegisterMapper registerMapper;
+    private final RiderCaffeine riderCaffeine;
 
     @Autowired
     public RegisterServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
             , RiderRedisKeyConfig riderRedisKeyConfig, RiderExchangeConfig riderExchangeConfig, RabbitTemplate rabbitTemplate
-            , RegisterMapper registerMapper) {
+            , RegisterMapper registerMapper, RiderCaffeine riderCaffeine) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.riderRedisKeyConfig = riderRedisKeyConfig;
@@ -44,6 +46,7 @@ public class RegisterServiceImpl implements RegisterService {
         this.registerMapper = registerMapper;
         //初始化id计数器
         stringRedisTemplate.opsForValue().setIfAbsent(riderRedisKeyConfig.getRiderIdCount().getName(),""+commonParamRulesConfig.getRiderIdStart()*commonParamRulesConfig.getIdCapacity());
+        this.riderCaffeine = riderCaffeine;
     }
 
 
@@ -80,6 +83,8 @@ public class RegisterServiceImpl implements RegisterService {
         //写入MQ
         MQUtil.send(riderExchangeConfig.getExchangeName(),riderExchangeConfig.getRegisterFundQueue().getRoutingKey(),rider.getRiderId()
                 ,rabbitTemplate);
+        //删除可能存在的空缓存（当有人试图在插入前查询该riderId时就会出现）
+        riderCaffeine.deleteAllCaffeine(rider.getRiderId(),stringRedisTemplate,riderRedisKeyConfig.getRiderMessageCaffeine().getRedisKey(rider.getRiderId()));
     }
 
 

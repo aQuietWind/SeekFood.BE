@@ -11,5 +11,5 @@ public interface RiderMapper {
     public String getPersonImageAddrAfterDelete(long riderId);
     public String getPhoneByRiderId(long riderId);
     public void updatePassword(String password,long riderId);
-    public void delete(long riderId);
+    public boolean delete(long riderId);
 }

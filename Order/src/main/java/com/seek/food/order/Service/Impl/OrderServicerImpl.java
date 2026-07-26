@@ -118,6 +118,8 @@ public class OrderServicerImpl implements OrderService {
             if (connectionId!=null)voucherClient.connectionLock(connectionId, order.getOrderId());
             //新增该订单
             orderMapper.insertOrder(order);
+            //删除可能存在的空缓存
+            quickDeleteCaffeine(order.getOrderId());
             //发送至Fund处新增订单记录，然后等待支付
             MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getRegisterFundOrderRecordQueue().getRoutingKey()
             , new FundOrderRecordDTO(userId, order.getOrderId(), "正常下单",order.getTotalCost()),rabbitTemplate );
@@ -325,6 +327,10 @@ public class OrderServicerImpl implements OrderService {
     private void quickTransfer(long accountId,String description,double amount){
         MQUtil.send(orderExchangeConfig.getExchangeName(),orderExchangeConfig.getTransferFundQueue().getRoutingKey()
                 , new FundRechargeRecordDTO(null,accountId,description,amount,null),rabbitTemplate);
+    }
+
+    private void quickDeleteCaffeine(long orderId){
+        orderCaffeine.deleteAllCaffeine(orderId,stringRedisTemplate,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId));
     }
 
 }

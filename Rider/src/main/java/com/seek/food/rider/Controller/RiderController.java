@@ -52,8 +52,8 @@ public class RiderController {
 
     //获取注销自身的验证码
     @GetMapping(RequestPathEnum.Rider_Get_Delete_Opt)
-    public String getDeleteOpt(){
-        return riderService.getDeleteOpt();
+    public Result<String> getDeleteOpt(){
+        return Result.success(riderService.getDeleteOpt());
     }
 
     //注销自身

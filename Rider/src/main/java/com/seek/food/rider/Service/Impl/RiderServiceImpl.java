@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -87,6 +88,8 @@ public class RiderServiceImpl implements RiderService {
             quickDeleteFile(Paths.get(riderParamsRulesConfig.getRiderPersonImageDest(),addr));
             throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
         }
+        //删除缓存
+        riderCaffeine.deleteAllCaffeine(riderId,stringRedisTemplate,riderRedisKeyConfig.getRiderMessageCaffeine().getRedisKey(riderId));
         //发送消息到mq中删除旧文件
         if (oldAddr!=null&&!oldAddr.isBlank()) quickDeleteFile(Paths.get(riderParamsRulesConfig.getRiderPersonImageDest(),oldAddr));
     }
@@ -133,7 +136,7 @@ public class RiderServiceImpl implements RiderService {
         //检查验证码
         OPTUtil.checkOPT(stringRedisTemplate,riderRedisKeyConfig.getDeleteRiderOpt().getRedisKey(phone),opt);
         //删除骑手
-        riderMapper.delete(riderId);
+        quickUpdate(riderId,k->riderMapper.delete(riderId));
         //删除图片
         quickDeleteFile(Paths.get(riderParamsRulesConfig.getRiderPersonImageDest(), riderMapper.getPersonImageAddrAfterDelete(riderId)));
         //发送至MQ删除资金账户
@@ -153,5 +156,10 @@ public class RiderServiceImpl implements RiderService {
     private void quickDeleteFile(Path path){
         MQUtil.send(riderExchangeConfig.getExchangeName(),riderExchangeConfig.getDeleteFileRiderQueue().getRoutingKey()
                 ,path.toString(),rabbitTemplate);
+    }
+
+    private void quickUpdate(long riderId, Function<Long,Boolean> function){
+        riderCaffeine.updateAndRemoveCaffeine(riderId,stringRedisTemplate,riderRedisKeyConfig.getRiderMessageCaffeine().getRedisKey(riderId)
+                ,function);
     }
 }

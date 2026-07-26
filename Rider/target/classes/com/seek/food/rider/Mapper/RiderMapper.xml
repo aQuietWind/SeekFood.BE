@@ -43,7 +43,7 @@
 
     <update id="updatePassword">
         update rider set
-            rider_password=#{apasswordddr}
+            rider_password=#{password}
         where rider_id=#{riderId} and is_delete=false
     </update>
 

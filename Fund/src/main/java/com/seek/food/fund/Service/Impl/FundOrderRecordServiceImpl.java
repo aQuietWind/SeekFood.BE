@@ -21,6 +21,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -84,6 +85,8 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         //获取记录
         FundOrderRecordDTO record=quickGetRecord(userId,recordId);
         if(record==null) throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //检测是否已经过了截止期
+        if (LocalDateTime.now().isAfter(record.getDeadline())) throw new BizException(ErrorCodeEnum.DATA_IS_EXPIRE);
         //如果失败会报错的，所以不用检验结果
         fundService.decreaseFund(record.getCost(),userId);
         //设置订单记录为已经支付
