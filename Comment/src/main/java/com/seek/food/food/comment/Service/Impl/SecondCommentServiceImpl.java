@@ -9,4 +9,5 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RefreshScope
 public class SecondCommentServiceImpl implements SecondCommentService {
+
 }

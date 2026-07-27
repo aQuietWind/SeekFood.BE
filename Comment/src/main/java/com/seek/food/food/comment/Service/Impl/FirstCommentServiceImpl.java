@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.Comment.CommentRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.CommentExchangeConfig;
 import com.seek.food.dto.Comment.FirstCommentDTO;
+import com.seek.food.dto.Common.ChangeAmountDTO;
 import com.seek.food.food.comment.Caffeine.FirstCommentCaffeine;
 import com.seek.food.food.comment.Feign.OrderClient;
 import com.seek.food.food.comment.Mapper.FirstCommentMapper;
@@ -75,7 +76,7 @@ public class FirstCommentServiceImpl implements FirstCommentService {
         FirstCommentDTO firstComment = orderClient.commentSelect(orderId).getData();
         //设置好必要的id
         firstComment.setFirstCommentId(IdUtil.IdGenerateByIncrease(commentRedisKeyConfig.getFirstCommentIdCount().getName(),stringRedisTemplate));
-        //设置文件地址
+        //如果图片不为空，则保存图片并设置文件地址
         if (file!=null&&!file.isEmpty())firstComment.setCommentImageAddr(quickSave(file));
         //设置好内容
         firstComment.setCommentDescription(description);
@@ -86,6 +87,9 @@ public class FirstCommentServiceImpl implements FirstCommentService {
             //失败则删除原先的图片
             quickDeleteFile(firstComment.getCommentImageAddr());
         }
+        //发送至mq更改商家的一级评论数
+        quickSend(commentExchangeConfig.getChangeMerchantFirstCommentAmountQueue().getRoutingKey()
+                ,new ChangeAmountDTO(firstComment.getMerchantId(), 1));
         //清除可能存在的空缓存
         firstCommentCaffeine.deleteAllCaffeine(firstComment.getFirstCommentId(),stringRedisTemplate
                 ,commentRedisKeyConfig.getFirstCommentCaffeine().getRedisKey(firstComment.getFirstCommentId()));
@@ -133,10 +137,6 @@ public class FirstCommentServiceImpl implements FirstCommentService {
         RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
     }
 
-    private long quickGetMerchantId(){
-        return TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
-    }
-
     private long quickGetUserId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
     }
@@ -156,6 +156,9 @@ public class FirstCommentServiceImpl implements FirstCommentService {
     private void quickDeleteFile(String addr){
         MQUtil.send(commentExchangeConfig.getExchangeName(),commentExchangeConfig.getDeleteFileCommentQueue().getRoutingKey()
                 , Paths.get(commentParamsRulesConfig.getFirstCommentImageDest(),addr).toString(),rabbitTemplate);
+    }
+    private void quickSend(String routingKey,Object message){
+        MQUtil.send(commentExchangeConfig.getExchangeName(),routingKey,message,rabbitTemplate);
     }
 
 }
