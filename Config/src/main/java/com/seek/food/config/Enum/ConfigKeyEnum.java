@@ -58,6 +58,31 @@ public class ConfigKeyEnum {
     public static final String Rider_Caffeine_Config="rider.self.jvm-caffeine";
     public static final String Rider_Redis_Stream_Config="rider.self.redis.stream";
 
+
+    public static final String Comment_Params_Rules_Config="comment.self.params.rules";
+    public static final String Comment_Redis_Key_Config="comment.self.redis.key";
+    public static final String Comment_Caffeine_Config="comment.self.jvm-caffeine";
+    public static final String Comment_Redis_Stream_Config="comment.self.redis.stream";
+
+
+    public static final String Interaction_Params_Rules_Config="interaction.self.params.rules";
+    public static final String Interaction_Redis_Key_Config="interaction.self.redis.key";
+    public static final String Interaction_Caffeine_Config="interaction.self.jvm-caffeine";
+    public static final String Interaction_Redis_Stream_Config="interaction.self.redis.stream";
+
+
+    public static final String Chat_Params_Rules_Config="chat.self.params.rules";
+    public static final String Chat_Redis_Key_Config="chat.self.redis.key";
+    public static final String Chat_Caffeine_Config="chat.self.jvm-caffeine";
+    public static final String Chat_Redis_Stream_Config="chat.self.redis.stream";
+
+
+    public static final String Admin_Params_Rules_Config="admin.self.params.rules";
+    public static final String Admin_Redis_Key_Config="admin.self.redis.key";
+    public static final String Admin_Caffeine_Config="admin.self.jvm-caffeine";
+    public static final String Admin_Redis_Stream_Config="admin.self.redis.stream";
+
+
     public static final String User_Exchange_Config="mq.name.bind.user-exchange";
     public static final String Merchant_Exchange_Config="mq.name.bind.merchant-exchange";
     public static final String Employee_Exchange_Config="mq.name.bind.employee-exchange";
