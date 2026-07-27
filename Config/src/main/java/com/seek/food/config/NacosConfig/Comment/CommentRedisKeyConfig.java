@@ -10,14 +10,11 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Comment_Redis_Key_Config)
 public class CommentRedisKeyConfig {
-    private RedisKeyData mealInsertCooldown;
-    private RedisKeyData mealGetSimpleCooldown;
-    private RedisKeyData mealGetSimpleByTypeCooldown;
-    private RedisKeyData mealUpdateMessageCooldown;
-    private RedisKeyData mealUpdatePriceCooldown;
-    private RedisKeyData mealUpdateShowImageCooldown;
-    private RedisKeyData mealUpdateSellCooldown;
-    private RedisKeyData mealDeleteCooldown;
-    private RedisKeyData mealIdCount;
-    private RedisKeyData mealMessageCaffeine;
+    private RedisKeyData commentInsertCooldown;
+    private RedisKeyData firstGetSimpleCooldown;
+    private RedisKeyData secondGetListCooldown;
+    private RedisKeyData commentDeleteCooldown;
+    private RedisKeyData firstCommentIdCount;
+    private RedisKeyData secondCommentIdCount;
+    private RedisKeyData firstCommentCaffeine;
 }
