@@ -14,6 +14,7 @@ public class RequestPathEnum {
     public static final String Order_Rider_Ack="/rider/ack";
     public static final String Order_Rider_Delivery="/rider/delivery";
     public static final String Order_User_Receive="/user/receive";
+    public static final String Order_Comment_Select="/comment/select";
 
     public static final String Order_Search = "/search";
     public static final String Order_Search_Rider_Order = "/rider";

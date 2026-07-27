@@ -1,5 +1,6 @@
 package com.seek.food.order.Service;
 
+import com.seek.food.dto.Comment.FirstCommentDTO;
 import com.seek.food.dto.Order.OrderDTO;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface OrderService {
     public void riderAck(long orderId);
     public void riderDelivery(long orderId);
     public void userReceive(long orderId);
+    public FirstCommentDTO commentSelect(long orderId);
 }

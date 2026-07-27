@@ -1,6 +1,7 @@
 package com.seek.food.order.Controller;
 
 
+import com.seek.food.dto.Comment.FirstCommentDTO;
 import com.seek.food.dto.Common.Result;
 import com.seek.food.dto.Order.OrderDTO;
 import com.seek.food.order.Enum.RequestPathEnum;
@@ -100,6 +101,12 @@ public class OrderController {
     public Result<Void> userReceive(long orderId){
         orderService.userReceive(orderId);
         return Result.success();
+    }
+
+    //用户插入评论时查询订单获取一定信息
+    @PutMapping(RequestPathEnum.Order_Comment_Select)
+    public Result<FirstCommentDTO> commentSelect(long orderId){
+        return Result.success(orderService.commentSelect(orderId));
     }
 
 }

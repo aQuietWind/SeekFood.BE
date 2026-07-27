@@ -1,5 +1,6 @@
 package com.seek.food.order.Mapper;
 
+import com.seek.food.dto.Comment.FirstCommentDTO;
 import com.seek.food.dto.Order.OrderDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,4 +22,5 @@ public interface OrderMapper {
     public Boolean riderAck(long orderId,long riderId);
     public Boolean riderDelivery(long orderId,long riderId);
     public Boolean userReceive(long orderId,long userId);
+    public FirstCommentDTO commentSelect(long orderId, long userId);
 }

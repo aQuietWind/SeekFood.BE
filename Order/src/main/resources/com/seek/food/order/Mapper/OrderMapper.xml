@@ -199,6 +199,18 @@
     </update>
 
 
+    <select id="commentSelect" resultType="com.seek.food.dto.Comment.FirstCommentDTO">
+        select
+            order_id,
+            user_id,
+            merchant_id,
+            meal_id,
+            meal_name,
+            meal_content
+        from `order`
+        where order_id=#{orderId} and user_id=#{userId}
+          and is_ack=true and is_lock=true and is_refund=false and is_complete=true and state_now = 6
+    </select>
 
 
 

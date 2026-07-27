@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig;
+import com.seek.food.dto.Comment.FirstCommentDTO;
 import com.seek.food.dto.Common.ChangeAmountDTO;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.dto.Fund.FundRechargeRecordDTO;
@@ -278,6 +279,17 @@ public class OrderServicerImpl implements OrderService {
         quickUpdate(orderId,k->orderMapper.userReceive(orderId,userId));
         //发送增加用户订单数
         quickSend(orderExchangeConfig.getChangeUserOrderAmountQueue().getRoutingKey(),new ChangeAmountDTO(userId,1));
+    }
+
+    //用户插入评论时查询订单获取一定信息
+    @Override
+    public FirstCommentDTO commentSelect(long orderId){
+        //检测订单id
+        commonParamRulesConfig.commonIdCheck(orderId);
+        //获取用户id
+        long userId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderCommentSelectCooldown(),quickGetUserId());
+        //获取信息
+        return orderMapper.commentSelect(orderId,userId);
     }
 
 
