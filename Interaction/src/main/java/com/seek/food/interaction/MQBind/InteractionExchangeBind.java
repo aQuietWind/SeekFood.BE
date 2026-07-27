@@ -75,6 +75,21 @@ public class InteractionExchangeBind {
     public Binding changeMerchantCollectAmountBinding(Queue changeMerchantCollectAmountQueue, DirectExchange interactionExchange){
         return BindingBuilder.bind(changeMerchantCollectAmountQueue).to(interactionExchange).with(interactionExchangeConfig.getChangeMerchantCollectAmountQueue().getRoutingKey());
     }
+    //同步商家点赞状态队列
+    @Bean
+    public Queue syncMerchantLikeStateQueue(){
+        return MQUtil.generateQuorumQueue(interactionExchangeConfig.getSyncMerchantLikeStateQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding syncMerchantLikeStateBinding(Queue syncMerchantLikeStateQueue, DirectExchange interactionExchange){
+        return BindingBuilder.bind(syncMerchantLikeStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncMerchantLikeStateQueue().getRoutingKey());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding syncMerchantCollectStateBinding(Queue syncMerchantCollectStateQueue, DirectExchange interactionExchange){
+        return BindingBuilder.bind(syncMerchantCollectStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncMerchantCollectStateQueue().getRoutingKey());
+    }
 
 
 

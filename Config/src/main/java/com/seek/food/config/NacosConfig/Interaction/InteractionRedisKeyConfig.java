@@ -10,14 +10,11 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Interaction_Redis_Key_Config)
 public class InteractionRedisKeyConfig {
+    private RedisKeyData interactionLikeMerchant;
+    private RedisKeyData interactionLikeFirstComment;
+    private RedisKeyData interactionLikeSecondComment;
+    private RedisKeyData interactionCollectMerchant;
     private RedisKeyData mealInsertCooldown;
-    private RedisKeyData mealGetSimpleCooldown;
-    private RedisKeyData mealGetSimpleByTypeCooldown;
-    private RedisKeyData mealUpdateMessageCooldown;
-    private RedisKeyData mealUpdatePriceCooldown;
-    private RedisKeyData mealUpdateShowImageCooldown;
-    private RedisKeyData mealUpdateSellCooldown;
-    private RedisKeyData mealDeleteCooldown;
     private RedisKeyData mealIdCount;
     private RedisKeyData mealMessageCaffeine;
 }

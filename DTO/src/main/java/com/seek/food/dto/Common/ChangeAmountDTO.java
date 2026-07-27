@@ -10,4 +10,9 @@ import lombok.NoArgsConstructor;
 public class ChangeAmountDTO {
     private long id;
     private int changeNumber;
+
+    public ChangeAmountDTO(long id, boolean changeNumber) {
+        this.id = id;
+        this.changeNumber = changeNumber?1:-1;
+    }
 }
