@@ -39,6 +39,9 @@ public class CommonParamRulesConfig {
     public void merchantIdCheck(long merchantId) {
         if (! ((merchantId/idCapacity)==merchantIdStart) ) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
+    public void userOrMerchantIdCheck(long tokenId) {
+        if (! ((tokenId/idCapacity)==merchantIdStart)&& !((tokenId/idCapacity)==userIdStart) ) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
     public void riderIdCheck(long riderId) {
         if (! ((riderId/idCapacity)==riderIdStart) ) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }

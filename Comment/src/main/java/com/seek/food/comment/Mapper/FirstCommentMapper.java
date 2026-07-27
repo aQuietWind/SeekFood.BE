@@ -10,5 +10,6 @@ public interface FirstCommentMapper {
     public void insertComment(FirstCommentDTO comment);
     public List<FirstCommentDTO> getSimple(long merchantId, int start, int need);
     public FirstCommentDTO getDetail(long commentId);
-    public void deleteComment(long commentId,long userId);
+    public boolean deleteComment(long commentId,long userId);
+    public String getImageAddrAfterDelete(long commentId);
 }

@@ -72,5 +72,11 @@
         where first_comment_id=#{commentId} and user_id=#{userId} and is_delete=false
     </update>
 
+    <select id="getImageAddrAfterDelete" resultType="java.lang.String">
+        select
+            comment_image_addr
+        from first_comment
+        where first_comment_id=#{commentId} and is_delete=true
+    </select>
 
 </mapper>

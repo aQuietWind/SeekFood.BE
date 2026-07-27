@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class SecondCommentDTO {
     private Long secondCommentId;
     private Long firstCommentId;
-    private Long userId;
+    private Long accountId;
     private String commentImageAddr;
     private String commentDescription;
     private LocalDateTime createTime;

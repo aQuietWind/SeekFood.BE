@@ -133,7 +133,10 @@ public class FirstCommentServiceImpl implements FirstCommentService {
         //检查冷却
         long userId=quickGetIdAndCheckCooldown(commentRedisKeyConfig.getCommentDeleteCooldown(),quickGetUserId());
         //删除评论,如果你觉得该评论业务应该需要强一致性,可以在这里加一个删除缓存
-        firstCommentMapper.deleteComment(commentId,userId);
+        if (!firstCommentMapper.deleteComment(commentId,userId))throw new BizException(ErrorCodeEnum.DATA_NOT_FOUND);
+        //删除照片
+        String addr=firstCommentMapper.getImageAddrAfterDelete(commentId);
+        if (addr!=null&&!addr.isEmpty())quickDeleteFile(addr);
     }
 
 
@@ -144,6 +147,7 @@ public class FirstCommentServiceImpl implements FirstCommentService {
     private long quickGetUserId(){
         return TokenIdContext.getAndCheck(commonParamRulesConfig.getUserIdStart(),commonParamRulesConfig.getIdCapacity());
     }
+
 
     private long quickGetIdAndCheckCooldown(RedisKeyData key, long id){
         quickCooldown(key,id);
