@@ -86,6 +86,7 @@ public class FirstCommentServiceImpl implements FirstCommentService {
         try {
             firstCommentMapper.insertComment(firstComment);
         }catch (Exception e){
+            log.error("",e);
             //失败则删除原先的图片
             if (file!=null&&!file.isEmpty())quickDeleteFile(firstComment.getCommentImageAddr());
             throw new BizException(ErrorCodeEnum.DATA_SURVIVE);

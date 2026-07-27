@@ -32,11 +32,11 @@ public class SearchMapper {
 
 
     //获取随机推送的商家
-    public EsSearchResult<RiderOrderEsDTO> feedRiderOrder(double lat, double lon, int distance, int need, Double docScore, Long docId) {
+    public EsSearchResult<RiderOrderEsDTO> feedRiderOrder(double lat, double lon, int distance, int need, Double docDistance, Long docId) {
         SearchHits<RiderOrderEsDTO> result;
         //判断是否为SearchAfter
-        if (docId == null||docScore==null) result=getFeedRequest(lon,lat,distance,need,null);
-        else result=getFeedRequest(lon,lat,distance,need,List.of(docScore,docId));
+        if (docId == null||docDistance==null) result=getFeedRequest(lon,lat,distance,need,null);
+        else result=getFeedRequest(lon,lat,distance,need,List.of(docDistance,docId));
         //返回结果
         return EsSearchResult.success(result.getSearchHits());
     }
@@ -55,7 +55,6 @@ public class SearchMapper {
                         .distance(distance + "km")
                 ))
         );
-
 
         List<SortOptions> sortList = List.of(
                 //构造距离由近到远的排序

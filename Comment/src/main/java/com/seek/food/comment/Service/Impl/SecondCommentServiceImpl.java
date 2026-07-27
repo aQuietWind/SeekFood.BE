@@ -78,8 +78,6 @@ public class SecondCommentServiceImpl implements SecondCommentService {
                 new SecondCommentDTO(IdUtil.IdGenerateByIncrease(commentRedisKeyConfig.getSecondCommentIdCount().getName(),stringRedisTemplate),
                 firstCommentId,userId,null,description,null,null,false,null)
                 ,file);
-        //发送消息到MQ自增一级评论的二级评论数
-        quickSend(commentExchangeConfig.getChangeSecondCommentAmountQueue().getRoutingKey(),new ChangeAmountDTO(firstCommentId,1));
     }
 
     //插入一条商家回复,该逻辑主要与上文重复，可合并方法，但是我实在太累了
@@ -179,6 +177,8 @@ public class SecondCommentServiceImpl implements SecondCommentService {
             if (addr!=null)quickDeleteFile(addr);
             throw new BizException(ErrorCodeEnum.SERVER_ERROR);
         }
+        //发送消息到MQ自增一级评论的二级评论数
+        quickSend(commentExchangeConfig.getChangeSecondCommentAmountQueue().getRoutingKey(),new ChangeAmountDTO(comment.getFirstCommentId(),1));
     }
 
 }

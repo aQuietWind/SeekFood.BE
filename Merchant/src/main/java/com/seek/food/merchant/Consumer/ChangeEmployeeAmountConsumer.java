@@ -22,9 +22,7 @@ public class ChangeEmployeeAmountConsumer {
 
     @RabbitListener(queues = MQNameKeyEnum.Employee_Exchange_Change_Amount_Employee_Queue)
     public void changeEmployeeAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        if (!merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
-            log.warn("merchantId:{} ,在增减职员数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
-        }
+        merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
     }
 
 

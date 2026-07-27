@@ -28,7 +28,7 @@
               );
     </insert>
 
-    <select id="getList" resultMap="FirstCommentResultMap">
+    <select id="getList" resultMap="SecondCommentResultMap">
         select
             second_comment_id,
             first_comment_id,
