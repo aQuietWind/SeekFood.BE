@@ -19,10 +19,10 @@ public class ChangeMerchantCollectAmountConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Employee_Exchange_Change_Amount_Employee_Queue)
-    public void changeEmployeeAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        if (!merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
-            log.warn("merchantId:{} ,在增减职员数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
+    @RabbitListener(queues = MQNameKeyEnum.Interaction_Exchange_Change_Merchant_Collect_Amount_Queue)
+    public void changeMerchantCollectAmountQueue(ChangeAmountDTO changeAmountDTO) {
+        if (!merchantMapper.updateCollectAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
+            log.warn("merchantId:{} ,在增减收藏数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
         }
     }
 

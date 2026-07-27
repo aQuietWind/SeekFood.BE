@@ -26,8 +26,20 @@ public class MQNameKeyEnum {
     public static final String Order_Exchange_Rollback_Fund_Queue ="${mq.name.bind.order-exchange.rollback-fund-queue.name}";
     public static final String Order_Exchange_Rollback_Voucher_Queue ="${mq.name.bind.order-exchange.rollback-voucher-queue.name}";
     public static final String Order_Exchange_Transfer_Fund_Queue ="${mq.name.bind.order-exchange.transfer-fund-queue.name}";
+    public static final String Order_Exchange_Change_Merchant_Order_Amount_Queue ="${mq.name.bind.order-exchange.change-merchant-order-amount-queue.name}";
+    public static final String Order_Exchange_Change_Meal_Sales_Volume_Queue ="${mq.name.bind.order-exchange.change-meal-sales-volume-queue.name}";
+    public static final String Order_Exchange_Change_User_Order_Amount_Queue ="${mq.name.bind.order-exchange.change-user-order-amount-queue.name}";
 
     public static final String Rider_Exchange_Delete_File_Rider_Queue ="${mq.name.bind.rider-exchange.delete-file-rider-queue.name}";
+
+    public static final String Comment_Exchange_Change_Merchant_First_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-merchant-first-comment-amount-queue.name}";
+    public static final String Comment_Exchange_Change_Second_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-second-comment-amount-queue.name}";
+
+    public static final String Interaction_Exchange_Delete_File_Interaction_Queue ="${mq.name.bind.interaction-exchange.delete-file-interaction-queue.name}";
+    public static final String Interaction_Exchange_Change_First_Comment_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-first-comment-like-amount-queue.name}";
+    public static final String Interaction_Exchange_Change_Second_Comment_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-second-comment-like-amount-queue.name}";
+    public static final String Interaction_Exchange_Change_Merchant_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-merchant-like-amount-queue.name}";
+    public static final String Interaction_Exchange_Change_Merchant_Collect_Amount_Queue ="${mq.name.bind.interaction-exchange.change-merchant-collect-amount-queue.name}";
 
 
     public static final String Dead_Letter_Exchange_Delete_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";

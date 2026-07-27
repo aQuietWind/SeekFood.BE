@@ -165,8 +165,23 @@
     </select>
 
     <update id="updateEmployeeAmount">
-        <!-- mysql底层为数字存储boolean值，所以可直接进行数字判断（1=true，0=false） -->
         update merchant set merchant_employee_amount=merchant_employee_amount+#{changeNumber} where merchant_id=#{merchantId} and is_delete=false
+    </update>
+
+    <update id="updateOrderAmount">
+        update merchant set merchant_order_amount=merchant_order_amount+#{changeNumber} where merchant_id=#{merchantId} and is_delete=false
+    </update>
+
+    <update id="updateLikeAmount">
+        update merchant set merchant_like_amount=merchant_like_amount+#{changeNumber} where merchant_id=#{merchantId} and is_delete=false
+    </update>
+
+    <update id="updateCollectAmount">
+        update merchant set merchant_collect_amount=merchant_collect_amount+#{changeNumber} where merchant_id=#{merchantId} and is_delete=false
+    </update>
+
+    <update id="updateFirstCommentAmount">
+        update merchant set merchant_first_comment_amount=merchant_first_comment_amount+#{changeNumber} where merchant_id=#{merchantId} and is_delete=false
     </update>
 
 

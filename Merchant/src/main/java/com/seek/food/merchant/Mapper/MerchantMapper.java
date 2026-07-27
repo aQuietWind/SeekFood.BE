@@ -28,6 +28,10 @@ public interface MerchantMapper {
     public MerchantEsDTO getEsMerchant(long merchantId);
     public MerchantDTO getDeleteMerchant(long merchantId);
     public boolean updateEmployeeAmount(long merchantId,int changeNumber);
+    public boolean updateCollectAmount(long merchantId,int changeNumber);
+    public boolean updateFirstCommentAmount(long merchantId,int changeNumber);
+    public boolean updateLikeAmount(long merchantId,int changeNumber);
+    public boolean updateOrderAmount(long merchantId,int changeNumber);
     public SimplePoint getLonLat(long merchantId);
 
 
