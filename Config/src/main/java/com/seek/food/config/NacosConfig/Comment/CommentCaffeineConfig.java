@@ -10,5 +10,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Comment_Caffeine_Config)
 public class CommentCaffeineConfig {
-    private CaffeineData meal;
+    private CaffeineData firstComment;
+    private CaffeineData secondComment;
 }
