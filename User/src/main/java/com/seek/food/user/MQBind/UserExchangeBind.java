@@ -16,12 +16,12 @@ public class UserExchangeBind {
     public UserExchangeBind(UserExchangeConfig userExchangeConfig) {
         this.userExchangeConfig = userExchangeConfig;
     }
-    //创建一个用于用户注册消息投递的交换机
+    //创建一个用于用户消息投递的交换机
     @Bean
     public DirectExchange userExchange(){
         return new DirectExchange(userExchangeConfig.getExchangeName());
     }
-    //用户注册队列
+    //用户注册资金队列
     @Bean
     public Queue registerFundQueue(){
         return MQUtil.generateQuorumQueue(userExchangeConfig.getRegisterFundQueue().getName());
@@ -31,15 +31,15 @@ public class UserExchangeBind {
     public Binding registerFundBinding(Queue registerFundQueue, DirectExchange userExchange){
         return BindingBuilder.bind(registerFundQueue).to(userExchange).with(userExchangeConfig.getRegisterFundQueue().getRoutingKey());
     }
-    //用户文件更新队列
+    //用户文件删除队列
     @Bean
-    public Queue updateFileUserQueue(){
+    public Queue deleteFileUserQueue(){
         return MQUtil.generateQuorumQueue(userExchangeConfig.getDeleteFileUserQueue().getName());
     }
     //绑定交换机与队列
     @Bean
-    public Binding userFileUserBinding(Queue updateFileUserQueue, DirectExchange userExchange){
-        return BindingBuilder.bind(updateFileUserQueue).to(userExchange).with(userExchangeConfig.getDeleteFileUserQueue().getRoutingKey());
+    public Binding deleteFileUserBinding(Queue deleteFileUserQueue, DirectExchange userExchange){
+        return BindingBuilder.bind(deleteFileUserQueue).to(userExchange).with(userExchangeConfig.getDeleteFileUserQueue().getRoutingKey());
     }
     //用户删除时资金操作队列
     @Bean
