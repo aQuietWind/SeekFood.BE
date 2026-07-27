@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig;
+import com.seek.food.dto.Common.ChangeAmountDTO;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.dto.Fund.FundRechargeRecordDTO;
 import com.seek.food.dto.Meal.MealDTO;
@@ -220,6 +221,10 @@ public class OrderServicerImpl implements OrderService {
         OrderDTO order=quickGetOrder(orderId);
         double amount= DoubleUtil.onlyXAfterPoint(2,order.getTotalCost()-order.getRiderCost());
         quickTransfer(merchantId,"商家完成订单制作,获得打款。  订单Id为:"+orderId,amount);
+        //发送至MQ增加商家订单数
+        quickSend(orderExchangeConfig.getChangeMerchantOrderAmountQueue().getRoutingKey(),new ChangeAmountDTO(merchantId,1));
+        //发送至MQ增加餐品的销售量
+        quickSend(orderExchangeConfig.getChangeMealSalesVolumeQueue().getRoutingKey(),new ChangeAmountDTO(order.getMealId(),order.getNumber()));
     }
 
     //骑手接受订单
@@ -271,6 +276,8 @@ public class OrderServicerImpl implements OrderService {
         long userId=quickGetIdAndCheckCooldown(orderRedisKeyConfig.getOrderUserReceiveCooldown(),quickGetUserId());
         //更新尝试
         quickUpdate(orderId,k->orderMapper.userReceive(orderId,userId));
+        //发送增加用户订单数
+        quickSend(orderExchangeConfig.getChangeUserOrderAmountQueue().getRoutingKey(),new ChangeAmountDTO(userId,1));
     }
 
 
@@ -331,6 +338,10 @@ public class OrderServicerImpl implements OrderService {
 
     private void quickDeleteCaffeine(long orderId){
         orderCaffeine.deleteAllCaffeine(orderId,stringRedisTemplate,orderRedisKeyConfig.getOrderMessageCaffeine().getRedisKey(orderId));
+    }
+
+    private void quickSend(String routingKey,Object message){
+        MQUtil.send(orderExchangeConfig.getExchangeName(),routingKey,message,rabbitTemplate);
     }
 
 }
