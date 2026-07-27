@@ -17,7 +17,7 @@ public class FirstCommentDTO {
     private String mealName;
     private String mealContent;
     private Long merchantId;
-    private String commentImage_addr;
+    private String commentImageAddr;
     private String commentDescription;
     private LocalDateTime createTime;
     private Integer likeAmount;
