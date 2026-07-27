@@ -26,7 +26,6 @@
             merchant_like_amount,
             merchant_collect_amount,
             merchant_employee_amount,
-            merchant_score,
             create_time,
             is_qualified,
             is_open
@@ -49,7 +48,6 @@
             merchant_like_amount,
             merchant_collect_amount,
             merchant_employee_amount,
-            merchant_score,
             create_time,
             is_qualified,
             is_open

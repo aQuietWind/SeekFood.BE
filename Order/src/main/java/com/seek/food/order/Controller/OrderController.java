@@ -104,7 +104,7 @@ public class OrderController {
     }
 
     //用户插入评论时查询订单获取一定信息
-    @PutMapping(RequestPathEnum.Order_Comment_Select)
+    @GetMapping(RequestPathEnum.Order_Comment_Select)
     public Result<FirstCommentDTO> commentSelect(long orderId){
         return Result.success(orderService.commentSelect(orderId));
     }

@@ -20,7 +20,7 @@ public class SearchController {
     }
 
     @GetMapping(RequestPathEnum.Order_Search_Rider_Order)
-    public Result<EsSearchResult<RiderOrderEsDTO>> getRiderOrder(double lat, double lon, int distance,int need, Double docScore, Long docId){
-        return Result.success(searchService.riderSearchOrders(lat, lon, distance, need, docScore, docId));
+    public Result<EsSearchResult<RiderOrderEsDTO>> getRiderOrder(double lat, double lon, int distance,int need, Double docDistance, Long docId){
+        return Result.success(searchService.riderSearchOrders(lat, lon, distance, need, docDistance, docId));
     }
 }

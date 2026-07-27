@@ -77,6 +77,9 @@
         select header_image_addr from user where user_id=#{userId} and is_delete=true
     </select>
 
+    <update id="updateOrderAmount">
+        update user set order_amount=order_amount+#{changeNumber} where user_id=#{userId} and is_delete=false
+    </update>
 
 
 

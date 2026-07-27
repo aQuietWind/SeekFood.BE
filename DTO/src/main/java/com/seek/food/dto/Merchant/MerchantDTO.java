@@ -26,7 +26,6 @@ public class MerchantDTO {
     private Integer merchantLikeAmount;
     private Integer merchantCollectAmount;
     private Integer merchantEmployeeAmount;
-    private Double merchantScore;
     private String merchantPassword;
     private String createTime;
     private Boolean qualified;

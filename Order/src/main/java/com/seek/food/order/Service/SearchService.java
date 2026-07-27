@@ -5,5 +5,5 @@ import com.seek.food.dto.Order.RiderOrderEsDTO;
 
 
 public interface SearchService {
-    public EsSearchResult<RiderOrderEsDTO> riderSearchOrders(double lat, double lon, int distance,int need,Double docScore,Long docId);
+    public EsSearchResult<RiderOrderEsDTO> riderSearchOrders(double lat, double lon, int distance,int need,Double docDistance,Long docId);
 }

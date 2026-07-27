@@ -20,7 +20,6 @@ CREATE TABLE `merchant` (
                             `merchant_like_amount` int NOT NULL DEFAULT 0 COMMENT '点赞数',
                             `merchant_collect_amount` int NOT NULL DEFAULT 0 COMMENT '收藏数',
                             `merchant_employee_amount` int NOT NULL DEFAULT 0 COMMENT '员工数',
-                            `merchant_score` double NOT NULL default 5 COMMENT '商家得分',
                             `merchant_password` varchar(20) NOT NULL COMMENT '登录密码',
                             `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                             `is_qualified` boolean NOT NULL DEFAULT true COMMENT '是否有资格营业',

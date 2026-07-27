@@ -4,10 +4,11 @@
 <mapper namespace="com.seek.food.comment.Mapper.FirstCommentMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="VoucherConnectionResultMap" type="com.seek.food.dto.Voucher.VoucherConnectionDTO">
+    <resultMap id="FirstCommentResultMap" type="com.seek.food.dto.Comment.FirstCommentDTO">
+        <result property="delete" column="is_delete" />
     </resultMap>
 
-    <insert id="insertConnection">
+    <insert id="insertComment">
         insert into first_comment (
                                    first_comment_id,
                                    user_id,
@@ -32,7 +33,7 @@
               );
     </insert>
 
-    <select id="getSimple" resultMap="VoucherConnectionResultMap">
+    <select id="getSimple" resultMap="FirstCommentResultMap">
         select
             first_comment_id,
             user_id,
@@ -43,11 +44,11 @@
             like_amount,
             second_comment_amount
         from first_comment
-        where merchant=#{merchantId} and is_delete=false
+        where merchant_id=#{merchantId} and is_delete=false
         order by first_comment_id desc limit #{start},#{need}
     </select>
 
-    <select id="getDetail" resultMap="VoucherConnectionResultMap">
+    <select id="getDetail" resultMap="FirstCommentResultMap">
         select
             first_comment_id,
             user_id,
@@ -66,9 +67,9 @@
         where first_comment_id=#{commentId} and is_delete=false
     </select>
 
-    <update id="delete">
+    <update id="deleteComment">
         update first_comment set is_delete=true
-        where first_comment_id=#{firstCommentId} and user_id=#{userId} and is_delete=false
+        where first_comment_id=#{commentId} and user_id=#{userId} and is_delete=false
     </update>
 
 

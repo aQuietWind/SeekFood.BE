@@ -22,5 +22,5 @@ public class FirstCommentDTO {
     private LocalDateTime createTime;
     private Integer likeAmount;
     private Integer secondCommentAmount;
-    private Boolean isDelete;
+    private Boolean delete;
 }

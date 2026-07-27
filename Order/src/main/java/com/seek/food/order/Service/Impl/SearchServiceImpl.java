@@ -33,7 +33,7 @@ public class SearchServiceImpl implements SearchService {
 
     //骑手获取未被抢的订单
     @Override
-    public EsSearchResult<RiderOrderEsDTO> riderSearchOrders(double lat, double lon, int distance,int need, Double docScore, Long docId){
+    public EsSearchResult<RiderOrderEsDTO> riderSearchOrders(double lat, double lon, int distance,int need, Double docDistance, Long docId){
         //检查参数
         commonParamRulesConfig.lonAndLatCheck(lon,lat);
         commonParamRulesConfig.needNumberCheck(need);
@@ -44,7 +44,7 @@ public class SearchServiceImpl implements SearchService {
         RedisUtil.checkCooldown(stringRedisTemplate,orderRedisKeyConfig.getOrderRiderGetEsOrderCooldown().getRedisKey(riderId)
                 ,orderRedisKeyConfig.getOrderRiderGetEsOrderCooldown().getDuration());
         //返回结果
-        return searchMapper.feedRiderOrder(lat,lon,distance,need,docScore,docId);
+        return searchMapper.feedRiderOrder(lat,lon,distance,need,docDistance,docId);
     }
 
 
