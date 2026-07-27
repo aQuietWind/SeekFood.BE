@@ -72,7 +72,6 @@ public class OrderExchangeBind {
     public Binding transferFundBinding(Queue transferFundQueue, DirectExchange orderExchange){
         return BindingBuilder.bind(transferFundQueue).to(orderExchange).with(orderExchangeConfig.getTransferFundQueue().getRoutingKey());
     }
-
     //延时回滚一切的死信队列,绑定死信交换机，同时监听FundExchange与OrderExchange,但是实现的消费者会出现在Order模块
     @Bean
     public Queue rollbackAllFundDeadLetterQueue(){
@@ -83,5 +82,35 @@ public class OrderExchangeBind {
     @Bean
     public Binding rollbackAllFundDeadLetterBinding(Queue rollbackAllFundDeadLetterQueue, DirectExchange fundExchange){
         return BindingBuilder.bind(rollbackAllFundDeadLetterQueue).to(fundExchange).with(orderExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey());
+    }
+    //用于改变数目的队列
+    @Bean
+    public Queue changeMerchantOrderAmountQueue(){
+        return MQUtil.generateQuorumQueue(orderExchangeConfig.getChangeMerchantOrderAmountQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding changeMerchantOrderAmountBinding(Queue changeMerchantOrderAmountQueue, DirectExchange orderExchange){
+        return BindingBuilder.bind(changeMerchantOrderAmountQueue).to(orderExchange).with(orderExchangeConfig.getChangeMerchantOrderAmountQueue().getRoutingKey());
+    }
+    //用于改变数目的队列
+    @Bean
+    public Queue changeMealSalesVolumeQueue(){
+        return MQUtil.generateQuorumQueue(orderExchangeConfig.getChangeMealSalesVolumeQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding changeMealSalesVolumeBinding(Queue changeMealSalesVolumeQueue, DirectExchange orderExchange){
+        return BindingBuilder.bind(changeMealSalesVolumeQueue).to(orderExchange).with(orderExchangeConfig.getChangeMealSalesVolumeQueue().getRoutingKey());
+    }
+    //用于改变数目的队列
+    @Bean
+    public Queue changeUserOrderAmountQueue(){
+        return MQUtil.generateQuorumQueue(orderExchangeConfig.getChangeUserOrderAmountQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding changeUserOrderAmountBinding(Queue changeUserOrderAmountQueue, DirectExchange orderExchange){
+        return BindingBuilder.bind(changeUserOrderAmountQueue).to(orderExchange).with(orderExchangeConfig.getChangeUserOrderAmountQueue().getRoutingKey());
     }
 }

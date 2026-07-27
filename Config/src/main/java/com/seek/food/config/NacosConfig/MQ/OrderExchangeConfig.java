@@ -18,4 +18,7 @@ public class OrderExchangeConfig {
     private QueueData rollbackFundQueue;
     private QueueData transferFundQueue;
     private QueueData rollbackAllFundDeadLetterQueue;
+    private QueueData changeMerchantOrderAmountQueue;
+    private QueueData changeMealSalesVolumeQueue;
+    private QueueData changeUserOrderAmountQueue;
 }
