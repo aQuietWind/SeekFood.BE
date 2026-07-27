@@ -93,8 +93,14 @@ public class RedisUtil {
     }
 
     //全局BitMap获取值
-    public static boolean oftenGetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id,long idCapacity){
-        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName, (id % idCapacity)));
+    public static boolean oftenGetBit(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id,long idCapacity,int areaNumber){
+        //最初偏移值，也就是不分区时的偏移值
+        long originBitOffset=(id % idCapacity);
+        //分区号数
+        long area= originBitOffset/(idCapacity/areaNumber);
+        //最终偏移值
+        long offset=originBitOffset%areaNumber;
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName+area,offset));
     }
 
     //个体BitMap获取值
@@ -109,6 +115,31 @@ public class RedisUtil {
     }
 
 
+    //全局BitMap设置值,每X个大小，就进行一次分区
+    public static boolean oftenSetBitWithPerX(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id
+            ,boolean value,long idCapacity,int X){
+        //最初偏移值，也就是不分区时的偏移值
+        long originBitOffset=(id % idCapacity);
+        //分区号数
+        long area= originBitOffset/X;
+        //最终偏移值
+        long offset=originBitOffset%X;
+        //注意返回值是原来的位置状态
+        Boolean originBit=stringRedisTemplate.opsForValue().setBit(redisKeyName+area,offset, value);
+        if (originBit==null)return false;
+        return value!=originBit;
+    }
+
+    //全局BitMap获取值
+    public static boolean oftenGetBitWithPerX(StringRedisTemplate stringRedisTemplate,String redisKeyName,long id,long idCapacity,int X){
+        //最初偏移值，也就是不分区时的偏移值（去除了首号标识）
+        long originBitOffset=(id % idCapacity);
+        //分区号数
+        long area= originBitOffset/X;
+        //最终偏移值
+        long offset=originBitOffset%X;
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForValue().getBit(redisKeyName+area,offset));
+    }
 
 
 
