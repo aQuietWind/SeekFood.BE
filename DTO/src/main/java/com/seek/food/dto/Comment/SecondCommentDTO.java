@@ -17,6 +17,6 @@ public class SecondCommentDTO {
     private String commentDescription;
     private LocalDateTime createTime;
     private Integer likeAmount;
-    private Boolean isMerchantComment;
-    private Boolean isDelete;
+    private Boolean merchantComment;
+    private Boolean delete;
 }
