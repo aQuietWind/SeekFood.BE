@@ -8,4 +8,5 @@ public class RequestPathEnum {
     //secondComment
     public static final String Comment_Second = "/second";
     public static final String Comment_Second_Merchant = "/merchant";
+    public static final String Comment_Second_Get_List = "/list";
 }
