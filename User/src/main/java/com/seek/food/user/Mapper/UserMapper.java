@@ -17,4 +17,5 @@ public interface UserMapper {
     public boolean deleteUser(long userId);
     public String getHeaderPath(long userId);
     public String getDeleteHeaderPath(long userId);
+    public boolean updateOrderAmount(long userId,int changeNumber);
 }

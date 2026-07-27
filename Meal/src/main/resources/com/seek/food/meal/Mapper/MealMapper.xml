@@ -119,6 +119,9 @@
         where merchant_id=#{merchantId} and is_delete=false
     </update>
 
+    <update id="updateSalesVolume">
+        update meal set meal_sales_volume=meal_sales_volume+#{changeNumber} where meal_id=#{mealId} and is_delete=false
+    </update>
 
 
 

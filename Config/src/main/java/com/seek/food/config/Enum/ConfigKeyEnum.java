@@ -92,6 +92,10 @@ public class ConfigKeyEnum {
     public static final String Promotion_Exchange_Config="mq.name.bind.promotion-exchange";
     public static final String Order_Exchange_Config="mq.name.bind.order-exchange";
     public static final String Rider_Exchange_Config="mq.name.bind.rider-exchange";
+    public static final String Comment_Exchange_Config="mq.name.bind.comment-exchange";
+    public static final String Interaction_Exchange_Config="mq.name.bind.interaction-exchange";
+    public static final String Chat_Exchange_Config="mq.name.bind.chat-exchange";
+    public static final String Admin_Exchange_Config="mq.name.bind.admin-exchange";
     public static final String Dead_Letter_Exchange_Config="mq.name.bind.dead-letter-exchange";
 //    public static final String =;
 //    public static final String =;

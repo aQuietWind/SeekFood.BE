@@ -21,4 +21,5 @@ public interface MealMapper {
     public boolean updatePrice(long mealId,double price,long merchantId);
     public boolean updateSell(long mealId,long merchantId);
     public boolean deleteMeal(long mealId,long merchantId);
+    public boolean updateSalesVolume(long mealId,int changeNumber);
 }

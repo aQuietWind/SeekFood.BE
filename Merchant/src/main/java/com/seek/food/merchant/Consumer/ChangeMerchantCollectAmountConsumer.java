@@ -21,9 +21,7 @@ public class ChangeMerchantCollectAmountConsumer {
 
     @RabbitListener(queues = MQNameKeyEnum.Interaction_Exchange_Change_Merchant_Collect_Amount_Queue)
     public void changeMerchantCollectAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        if (!merchantMapper.updateCollectAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
-            log.warn("merchantId:{} ,在增减收藏数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
-        }
+        merchantMapper.updateCollectAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
     }
 
 

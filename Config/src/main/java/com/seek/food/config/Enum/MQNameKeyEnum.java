@@ -32,6 +32,7 @@ public class MQNameKeyEnum {
 
     public static final String Rider_Exchange_Delete_File_Rider_Queue ="${mq.name.bind.rider-exchange.delete-file-rider-queue.name}";
 
+    public static final String Comment_Exchange_Delete_File_Comment_Queue ="${mq.name.bind.comment-exchange.delete-file-comment-queue.name}";
     public static final String Comment_Exchange_Change_Merchant_First_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-merchant-first-comment-amount-queue.name}";
     public static final String Comment_Exchange_Change_Second_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-second-comment-amount-queue.name}";
 

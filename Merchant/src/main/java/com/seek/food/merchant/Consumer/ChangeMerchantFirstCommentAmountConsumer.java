@@ -21,9 +21,7 @@ public class ChangeMerchantFirstCommentAmountConsumer {
 
     @RabbitListener(queues = MQNameKeyEnum.Comment_Exchange_Change_Merchant_First_Comment_Amount_Queue)
     public void changeMerchantFirstCommentAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        if (!merchantMapper.updateFirstCommentAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber())){
-            log.warn("merchantId:{} ,在增减一级评论数:{} 时,并未查询到该有效商家",changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
-        }
+        merchantMapper.updateFirstCommentAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
     }
 
 
