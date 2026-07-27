@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class ChangeSecondCommentAmountConsumer {
+public class ChangeFirstCommentLikeAmountConsumer {
     private final FirstCommentMapper firstCommentMapper;
     @Autowired
-    public ChangeSecondCommentAmountConsumer(FirstCommentMapper firstCommentMapper) {
+    public ChangeFirstCommentLikeAmountConsumer(FirstCommentMapper firstCommentMapper) {
         this.firstCommentMapper = firstCommentMapper;
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Comment_Exchange_Change_Second_Comment_Amount_Queue)
-    public void changeSecondCommentAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        firstCommentMapper.updateSecondCommentAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
+    @RabbitListener(queues = MQNameKeyEnum.Interaction_Exchange_Change_First_Comment_Like_Amount_Queue)
+    public void changeFirstCommentLikeAmountQueue(ChangeAmountDTO changeAmountDTO) {
+        firstCommentMapper.updateLikeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
     }
 
 

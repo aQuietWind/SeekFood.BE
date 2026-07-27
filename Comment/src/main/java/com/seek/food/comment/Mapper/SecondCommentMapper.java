@@ -10,5 +10,6 @@ public interface SecondCommentMapper {
     public boolean insertComment(SecondCommentDTO comment);
     public List<SecondCommentDTO> getList(int start, int need, long firstCommentId);
     public boolean deleteComment(long commentId,long accountId);
+    public boolean updateLikeAmount(long commentId,int changeNumber);
     public String getImageAddrAfterDelete(long commentId);
 }

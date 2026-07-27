@@ -12,5 +12,6 @@ public interface FirstCommentMapper {
     public FirstCommentDTO getDetail(long commentId);
     public boolean deleteComment(long commentId,long userId);
     public boolean updateSecondCommentAmount(long commentId,int changeNumber);
+    public boolean updateLikeAmount(long commentId,int changeNumber);
     public String getImageAddrAfterDelete(long commentId);
 }
