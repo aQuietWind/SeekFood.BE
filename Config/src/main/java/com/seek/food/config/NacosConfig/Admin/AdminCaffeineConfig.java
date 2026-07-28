@@ -10,5 +10,5 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Admin_Caffeine_Config)
 public class AdminCaffeineConfig {
-    private CaffeineData admin;
+    private CaffeineData suggestion;
 }

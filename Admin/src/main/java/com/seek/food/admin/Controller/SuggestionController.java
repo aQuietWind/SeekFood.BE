@@ -1,15 +1,10 @@
 package com.seek.food.admin.Controller;
 
 import com.seek.food.admin.Enum.RequestPathEnum;
-import com.seek.food.dto.Common.Result;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping(RequestPathEnum.Admin_Login)
+@RequestMapping(RequestPathEnum.Admin_Suggestion)
 @RestController
-public class LoginController {
-
-    @GetMapping
-    public Result<Void> login()
+public class SuggestionController {
 }

@@ -13,5 +13,5 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class AdminExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData rollbackVoucherQueue;
+    private QueueData deleteFileAdminQueue;
 }
