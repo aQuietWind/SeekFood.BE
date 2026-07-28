@@ -20,7 +20,7 @@ public class SyncLikeStateConsumer {
 
 
     @RabbitListener(queues = MQNameKeyEnum.Interaction_Exchange_Sync_Like_State_Queue)
-    public void syncInteractionStateQueue(SyncStateDTO syncStateDTO) {
+    public void syncLikeStateQueue(SyncStateDTO syncStateDTO) {
         likeMapper.syncLike(syncStateDTO);
     }
 

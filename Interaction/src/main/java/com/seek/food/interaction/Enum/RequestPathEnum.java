@@ -10,6 +10,7 @@ public class RequestPathEnum {
     //collect
     public static final String Interaction_Collect = "/collect";
     public static final String Interaction_Collect_Merchant = "/merchant";
+    public static final String Interaction_Collect_Merchant_List = "/merchant/list";
 
 
 

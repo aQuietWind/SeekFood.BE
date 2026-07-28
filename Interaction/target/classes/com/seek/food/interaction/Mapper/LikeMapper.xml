@@ -5,6 +5,6 @@
 <mapper namespace="com.seek.food.interaction.Mapper.LikeMapper">
     <insert id="syncLike">
         insert into like_connection (aim_id,account_id,type,is_like)
-        values( #{aimId} ,#{ownId},#{type},#{value}) on duplicate key update is_like=#{value}
+        values( #{aimId} ,#{ownId},#{type},#{value}) on duplicate key update is_like=#{value},update_time=now()
     </insert>
 </mapper>
