@@ -53,6 +53,7 @@ public class SuggestionServiceImpl implements SuggestionService {
     @PostConstruct
     public void init() {
         stringRedisTemplate.opsForValue().setIfAbsent(adminRedisKeyConfig.getAdminSuggestionIdCount().getName(), ""+commonParamRulesConfig.getIdCapacity());
+        FileSave.createDestDir(adminParamsRulesConfig.getSuggestionImageDest());
     }
 
     //插入建议

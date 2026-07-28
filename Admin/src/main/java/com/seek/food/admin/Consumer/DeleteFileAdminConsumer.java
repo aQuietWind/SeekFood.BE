@@ -25,8 +25,8 @@ public class DeleteFileAdminConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Comment_Exchange_Delete_File_Comment_Queue)
-    public void deleteFileCommentQueue(String path){
+    @RabbitListener(queues = MQNameKeyEnum.Admin_Exchange_Delete_File_Comment_Queue)
+    public void deleteFileAdminQueue(String path){
         try {
             FileRemove.removeFileByPath(path);
         }catch (Exception e){

@@ -1,14 +1,14 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seek.food.comment.Mapper.FirstCommentMapper">
+<mapper namespace="com.seek.food.admin.Mapper.SuggestionMapper">
 
     <!-- 全局统一字段映射 -->
     <resultMap id="SuggestionResultMap" type="com.seek.food.dto.Admin.SuggestionDTO">
         <result property="ack" column="is_ack" />
     </resultMap>
 
-    <insert id="insertSuggestion">
+    <insert id="insert">
         insert into suggestion (
                                 suggestion_id,
                                 account_id,
@@ -16,10 +16,10 @@
                                 suggestion_description
         )
         values(
-                  #{suggestion_id},
-                  #{account_id},
-                  #{suggestion_image_addr},
-                  #{suggestion_description}
+                  #{suggestionId},
+                  #{accountId},
+                  #{suggestionImageAddr},
+                  #{suggestionDescription}
               );
     </insert>
 
@@ -43,7 +43,7 @@
 
     <select id="getImageAddrAfterAck" resultType="java.lang.String">
         select
-            comment_image_addr
+            suggestion_image_addr
         from suggestion
         where suggestion_id=#{suggestionId} and is_ack=true
     </select>

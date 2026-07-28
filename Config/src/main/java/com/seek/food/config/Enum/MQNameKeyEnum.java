@@ -36,7 +36,6 @@ public class MQNameKeyEnum {
     public static final String Comment_Exchange_Change_Merchant_First_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-merchant-first-comment-amount-queue.name}";
     public static final String Comment_Exchange_Change_Second_Comment_Amount_Queue ="${mq.name.bind.comment-exchange.change-second-comment-amount-queue.name}";
 
-    public static final String Interaction_Exchange_Delete_File_Interaction_Queue ="${mq.name.bind.interaction-exchange.delete-file-interaction-queue.name}";
     public static final String Interaction_Exchange_Change_First_Comment_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-first-comment-like-amount-queue.name}";
     public static final String Interaction_Exchange_Change_Second_Comment_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-second-comment-like-amount-queue.name}";
     public static final String Interaction_Exchange_Change_Merchant_Like_Amount_Queue ="${mq.name.bind.interaction-exchange.change-merchant-like-amount-queue.name}";
@@ -44,6 +43,7 @@ public class MQNameKeyEnum {
     public static final String Interaction_Exchange_Sync_Like_State_Queue ="${mq.name.bind.interaction-exchange.sync-like-state-queue.name}";
     public static final String Interaction_Exchange_Sync_Collect_State_Queue ="${mq.name.bind.interaction-exchange.sync-collect-state-queue.name}";
 
+    public static final String Admin_Exchange_Delete_File_Comment_Queue ="${mq.name.bind.admin-exchange.delete-file-admin-queue.name}";
 
     public static final String Dead_Letter_Exchange_Delete_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";
     public static final String Dead_Letter_Exchange_Delete_All_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-all-file-meal-impl-queue.name}";

@@ -5,4 +5,6 @@ public class RequestPathEnum {
     public static final String Admin_Login = "/login";
     //suggest
     public static final String Admin_Suggestion = "/suggestion";
+    public static final String Admin_Suggestion_Get_List = "/list";
+    public static final String Admin_Suggestion_Ack = "/ack";
 }
