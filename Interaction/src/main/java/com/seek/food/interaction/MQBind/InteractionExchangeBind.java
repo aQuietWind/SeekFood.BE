@@ -1,6 +1,5 @@
 package com.seek.food.interaction.MQBind;
 
-import com.seek.food.config.NacosConfig.MQ.CommentExchangeConfig;
 import com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig;
 import com.seek.food.util.MQ.MQUtil;
 import org.springframework.amqp.core.Binding;
@@ -24,16 +23,6 @@ public class InteractionExchangeBind {
     @Bean
     public DirectExchange interactionExchange(){
         return new DirectExchange(interactionExchangeConfig.getExchangeName());
-    }
-    //删除文件队列
-    @Bean
-    public Queue deleteFileInteractionQueue(){
-        return MQUtil.generateQuorumQueue(interactionExchangeConfig.getDeleteFileInteractionQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding deleteFileInteractionBinding(Queue deleteFileInteractionQueue, DirectExchange interactionExchange){
-        return BindingBuilder.bind(deleteFileInteractionQueue).to(interactionExchange).with(interactionExchangeConfig.getDeleteFileInteractionQueue().getRoutingKey());
     }
     //更改商家点赞数目队列
     @Bean

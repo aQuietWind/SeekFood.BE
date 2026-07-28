@@ -13,7 +13,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class InteractionExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData deleteFileInteractionQueue;
     private QueueData changeFirstCommentLikeAmountQueue;
     private QueueData changeSecondCommentLikeAmountQueue;
     private QueueData changeMerchantLikeAmountQueue;
