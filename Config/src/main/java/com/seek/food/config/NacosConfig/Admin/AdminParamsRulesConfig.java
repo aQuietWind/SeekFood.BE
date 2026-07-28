@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Admin_Params_Rules_Config)
 public class AdminParamsRulesConfig {
-    private String adminUsername;
+    private String adminName;
     private String adminPassword;
     private int suggestionDescriptionMax;
     private String suggestionImageDest;
 
     //登录检测
-    public void adminLoginCheck(String username,String password) {
-        if (!adminUsername.equals(username)||!adminPassword.equals(password)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    public void adminLoginCheck(String name,String password) {
+        if (!adminName.equals(name)||!adminPassword.equals(password)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 
     public void suggestionDescriptionCheck(String description) {

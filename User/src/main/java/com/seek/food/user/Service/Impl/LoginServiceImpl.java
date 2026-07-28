@@ -17,6 +17,7 @@ import com.seek.food.util.JWT.TokenUtil;
 import com.seek.food.util.Redis.RedisUtil;
 import com.seek.food.util.TimeUtil.DurationUtil;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RefreshScope
+@Slf4j
 public class LoginServiceImpl implements LoginService {
     private final JWTData JWTUser;
     private final JWTConfig jwtConfig;
@@ -34,7 +36,6 @@ public class LoginServiceImpl implements LoginService {
     private final StringRedisTemplate stringRedisTemplate;
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final UserRedisKeyConfig userRedisKeyConfig;
-    private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Autowired
     public LoginServiceImpl(JWTConfig jwtConfig, LoginMapper loginMapper, UserParamsRulesConfig userParamsRulesConfig
@@ -52,7 +53,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     //获取登录所需验证码
     public String loginGetOpt(String phoneNumber){
-        logger.info("phone number:{} ,尝试获取登录验证码",phoneNumber);
+        log.info("phone number:{} ,尝试获取登录验证码",phoneNumber);
         //验证手机号
         commonParamRulesConfig.phoneNumberCheck(phoneNumber);
         //生成token并且记录于redis

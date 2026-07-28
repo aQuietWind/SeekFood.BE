@@ -15,5 +15,6 @@ public class AdminRedisKeyConfig {
     private RedisKeyData adminGetSuggestionListCooldown;
     private RedisKeyData adminAckSuggestionCooldown;
     private RedisKeyData adminSuggestionIdCount;
+    private RedisKeyData adminIdCount;
     private RedisKeyData suggestionCaffeine;
 }
