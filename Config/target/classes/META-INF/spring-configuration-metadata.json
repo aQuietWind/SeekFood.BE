@@ -353,87 +353,62 @@
   ],
   "properties": [
     {
-      "name": "admin.self.jvm-caffeine.admin",
+      "name": "admin.self.jvm-caffeine.suggestion",
       "type": "com.seek.food.config.Data.CaffeineData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminCaffeineConfig"
     },
     {
-      "name": "admin.self.params.rules.meal-content-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
-    },
-    {
-      "name": "admin.self.params.rules.meal-description-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
-    },
-    {
-      "name": "admin.self.params.rules.meal-file-delete-day",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
-    },
-    {
-      "name": "admin.self.params.rules.meal-name-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
-    },
-    {
-      "name": "admin.self.params.rules.meal-show-image-dest",
+      "name": "admin.self.params.rules.admin-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
     },
     {
-      "name": "admin.self.params.rules.meal-type-max",
+      "name": "admin.self.params.rules.admin-password",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
+    },
+    {
+      "name": "admin.self.params.rules.suggestion-description-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-delete-cooldown",
+      "name": "admin.self.params.rules.suggestion-image-dest",
+      "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminParamsRulesConfig"
+    },
+    {
+      "name": "admin.self.redis.key.admin-ack-suggestion-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-get-simple-by-type-cooldown",
+      "name": "admin.self.redis.key.admin-get-suggestion-list-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-get-simple-cooldown",
+      "name": "admin.self.redis.key.admin-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-id-count",
+      "name": "admin.self.redis.key.admin-insert-suggestion-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-insert-cooldown",
+      "name": "admin.self.redis.key.admin-login-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-message-caffeine",
+      "name": "admin.self.redis.key.admin-suggestion-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
     {
-      "name": "admin.self.redis.key.meal-update-message-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
-    },
-    {
-      "name": "admin.self.redis.key.meal-update-price-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
-    },
-    {
-      "name": "admin.self.redis.key.meal-update-sell-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
-    },
-    {
-      "name": "admin.self.redis.key.meal-update-show-image-cooldown",
+      "name": "admin.self.redis.key.suggestion-caffeine",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisKeyConfig"
     },
@@ -1353,13 +1328,13 @@
       "sourceType": "com.seek.food.config.NacosConfig.Merchant.MerchantRedisStreamConfig"
     },
     {
-      "name": "mq.name.bind.admin-exchange.exchange-name",
-      "type": "java.lang.String",
+      "name": "mq.name.bind.admin-exchange.delete-file-admin-queue",
+      "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.AdminExchangeConfig"
     },
     {
-      "name": "mq.name.bind.admin-exchange.rollback-voucher-queue",
-      "type": "com.seek.food.config.Data.QueueData",
+      "name": "mq.name.bind.admin-exchange.exchange-name",
+      "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.AdminExchangeConfig"
     },
     {
@@ -1489,11 +1464,6 @@
     },
     {
       "name": "mq.name.bind.interaction-exchange.change-second-comment-like-amount-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig"
-    },
-    {
-      "name": "mq.name.bind.interaction-exchange.delete-file-interaction-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig"
     },
