@@ -55,4 +55,9 @@
         from second_comment
         where second_comment_id=#{commentId} and is_delete=true
     </select>
+
+    <update id="updateLikeAmount">
+        update second_comment set like_amount=like_amount+#{changeNumber} where second_comment_id=#{commentId}
+    </update>
+
 </mapper>

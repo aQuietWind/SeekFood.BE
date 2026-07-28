@@ -75,20 +75,25 @@ public class InteractionExchangeBind {
     public Binding changeMerchantCollectAmountBinding(Queue changeMerchantCollectAmountQueue, DirectExchange interactionExchange){
         return BindingBuilder.bind(changeMerchantCollectAmountQueue).to(interactionExchange).with(interactionExchangeConfig.getChangeMerchantCollectAmountQueue().getRoutingKey());
     }
-    //同步商家点赞状态队列
+    //同步点赞状态队列
     @Bean
-    public Queue syncMerchantLikeStateQueue(){
-        return MQUtil.generateQuorumQueue(interactionExchangeConfig.getSyncMerchantLikeStateQueue().getName());
+    public Queue syncLikeStateQueue(){
+        return MQUtil.generateQuorumQueue(interactionExchangeConfig.getSyncLikeStateQueue().getName());
     }
     //绑定交换机与队列
     @Bean
-    public Binding syncMerchantLikeStateBinding(Queue syncMerchantLikeStateQueue, DirectExchange interactionExchange){
-        return BindingBuilder.bind(syncMerchantLikeStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncMerchantLikeStateQueue().getRoutingKey());
+    public Binding syncLikeStateBinding(Queue syncLikeStateQueue, DirectExchange interactionExchange){
+        return BindingBuilder.bind(syncLikeStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncLikeStateQueue().getRoutingKey());
+    }
+    //同步收藏状态队列
+    @Bean
+    public Queue syncCollectStateQueue(){
+        return MQUtil.generateQuorumQueue(interactionExchangeConfig.getSyncCollectStateQueue().getName());
     }
     //绑定交换机与队列
     @Bean
-    public Binding syncMerchantCollectStateBinding(Queue syncMerchantCollectStateQueue, DirectExchange interactionExchange){
-        return BindingBuilder.bind(syncMerchantCollectStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncMerchantCollectStateQueue().getRoutingKey());
+    public Binding syncCollectStateBinding(Queue syncCollectStateQueue, DirectExchange interactionExchange){
+        return BindingBuilder.bind(syncCollectStateQueue).to(interactionExchange).with(interactionExchangeConfig.getSyncCollectStateQueue().getRoutingKey());
     }
 
 

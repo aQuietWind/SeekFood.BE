@@ -95,7 +95,7 @@ public class MerchantServiceImpl implements MerchantService {
         long merchantId=TokenIdContext.getAndCheck(commonParamRulesConfig.getMerchantIdStart(),commonParamRulesConfig.getIdCapacity());
         //检查是否还未设置过该信息
         if (RedisUtil.oftenGetBit(stringRedisTemplate,merchantRedisKeyConfig.getMerchantMasterIsSet().getName(),merchantId,
-                commonParamRulesConfig.getIdCapacity()))throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
+                commonParamRulesConfig.getIdCapacity(),commonParamRulesConfig.getIdBitmapAreaNumber()))throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
         //检查格式
         commonParamRulesConfig.personNameCheck(masterName);
         commonParamRulesConfig.codeCheck(masterCode);

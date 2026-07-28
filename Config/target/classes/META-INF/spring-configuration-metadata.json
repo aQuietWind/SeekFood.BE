@@ -983,22 +983,7 @@
       "sourceType": "com.seek.food.config.NacosConfig.Gateway.GatewayRequestPathConfig"
     },
     {
-      "name": "interaction.self.params.rules.meal-content-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
-    },
-    {
-      "name": "interaction.self.params.rules.meal-description-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
-    },
-    {
-      "name": "interaction.self.params.rules.meal-file-delete-day",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
-    },
-    {
-      "name": "interaction.self.params.rules.meal-name-max",
+      "name": "interaction.self.params.rules.bitmap-per-x-number",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
     },
@@ -1008,22 +993,22 @@
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
     },
     {
-      "name": "interaction.self.params.rules.meal-type-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionParamsRulesConfig"
-    },
-    {
-      "name": "interaction.self.redis.key.meal-delete-cooldown",
+      "name": "interaction.self.redis.key.interaction-collect-merchant",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
     },
     {
-      "name": "interaction.self.redis.key.meal-get-simple-by-type-cooldown",
+      "name": "interaction.self.redis.key.interaction-like-first-comment",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
     },
     {
-      "name": "interaction.self.redis.key.meal-get-simple-cooldown",
+      "name": "interaction.self.redis.key.interaction-like-merchant",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
+    },
+    {
+      "name": "interaction.self.redis.key.interaction-like-second-comment",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
     },
@@ -1039,26 +1024,6 @@
     },
     {
       "name": "interaction.self.redis.key.meal-message-caffeine",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
-    },
-    {
-      "name": "interaction.self.redis.key.meal-update-message-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
-    },
-    {
-      "name": "interaction.self.redis.key.meal-update-price-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
-    },
-    {
-      "name": "interaction.self.redis.key.meal-update-sell-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
-    },
-    {
-      "name": "interaction.self.redis.key.meal-update-show-image-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Interaction.InteractionRedisKeyConfig"
     },
@@ -1535,6 +1500,16 @@
     {
       "name": "mq.name.bind.interaction-exchange.exchange-name",
       "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.interaction-exchange.sync-collect-state-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.interaction-exchange.sync-like-state-queue",
+      "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.InteractionExchangeConfig"
     },
     {

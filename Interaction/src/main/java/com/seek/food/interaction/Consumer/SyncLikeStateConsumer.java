@@ -1,7 +1,8 @@
 package com.seek.food.interaction.Consumer;
 
 import com.seek.food.config.Enum.MQNameKeyEnum;
-import com.seek.food.dto.Common.ChangeAmountDTO;
+import com.seek.food.dto.Common.SyncStateDTO;
+import com.seek.food.interaction.Mapper.LikeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,17 +11,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class SyncMerchantLikeStateConsumer {
-    private final MerchantMapper merchantMapper;
+public class SyncLikeStateConsumer {
+    private final LikeMapper likeMapper;
     @Autowired
-    public SyncMerchantLikeStateConsumer(MerchantMapper merchantMapper) {
-        this.merchantMapper = merchantMapper;
+    public SyncLikeStateConsumer(LikeMapper likeMapper) {
+        this.likeMapper = likeMapper;
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Employee_Exchange_Change_Amount_Employee_Queue)
-    public void changeEmployeeAmountQueue(ChangeAmountDTO changeAmountDTO) {
-        merchantMapper.updateEmployeeAmount(changeAmountDTO.getId(),changeAmountDTO.getChangeNumber());
+    @RabbitListener(queues = MQNameKeyEnum.Interaction_Exchange_Sync_Like_State_Queue)
+    public void syncInteractionStateQueue(SyncStateDTO syncStateDTO) {
+        likeMapper.syncLike(syncStateDTO);
     }
 
 

@@ -1,5 +1,7 @@
 CREATE DATABASE if not exists seek_food_voucher;
 USE seek_food_voucher;
+
+
 drop table if exists `merchant_voucher`;
 CREATE TABLE `merchant_voucher` (
                                     `voucher_id` bigint COMMENT '优惠券id',
@@ -14,6 +16,8 @@ CREATE TABLE `merchant_voucher` (
                                     PRIMARY KEY (`voucher_id`),
                                     INDEX `merchant_index`(`merchant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家优惠券表';
+
+
 drop table if exists `voucher_connection`;
 CREATE TABLE `voucher_connection` (
                                       `connection_id` bigint COMMENT '该持有关系id',

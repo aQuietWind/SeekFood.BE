@@ -18,8 +18,6 @@ public class InteractionExchangeConfig {
     private QueueData changeSecondCommentLikeAmountQueue;
     private QueueData changeMerchantLikeAmountQueue;
     private QueueData changeMerchantCollectAmountQueue;
-    private QueueData syncFirstCommentLikeStateQueue;
-    private QueueData syncSecondCommentLikeStateQueue;
-    private QueueData syncMerchantLikeStateQueue;
-    private QueueData syncMerchantCollectStateQueue;
+    private QueueData syncLikeStateQueue;
+    private QueueData syncCollectStateQueue;
 }
