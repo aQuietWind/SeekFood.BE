@@ -13,6 +13,7 @@ public class DeadLetterExchangeConfig {
     private String type;
     private String exchangeName;
     private QueueData deleteFileMealImplQueue;
+    private QueueData deleteFileChatImplQueue;
     private QueueData deleteAllFileMealImplQueue;
     private QueueData rollbackAllFundImplQueue;
 }
