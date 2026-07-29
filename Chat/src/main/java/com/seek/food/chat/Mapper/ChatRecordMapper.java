@@ -11,5 +11,5 @@ public interface ChatRecordMapper {
     public List<ChatRecordDTO> userGetList(int start, int need, long chatRoomId,long accountId);
     public List<ChatRecordDTO> merchantGetList(int start, int need, long chatRoomId,long accountId);
     public List<ChatRecordDTO> riderGetList(int start, int need, long chatRoomId,long accountId);
-    public boolean withdraw(long chatRecordId,long accountId);
+    public boolean withdraw(long recordId,long accountId);
 }

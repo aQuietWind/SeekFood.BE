@@ -7,7 +7,6 @@ import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
-import com.seek.food.config.NacosConfig.Common.CommonRedisKeyConfig;
 import com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig;
 import com.seek.food.dto.Chat.ChatRecordDTO;
 import com.seek.food.util.CommonUtil.IdUtil;
@@ -73,23 +72,19 @@ public class ChatRecordServiceImpl implements ChatRecordService {
         //获取tokenId,并且检测冷却
         long tokenId=quickGetIdAndCheckCooldown(chatRedisKeyConfig.getChatRecordInsertCooldown(), TokenIdContext.getAndToLong());
         //检查是否存在该关联
-        chatRoomService.checkIdAndRoom(tokenId,chatRoomId);
+        chatRoomService.checkIdAndRoom(chatRoomId,tokenId);
         //先保存文件
         String addr=null;
         if (file!=null&&!file.isEmpty())addr=quickSaveRecordImage(file);
+        //延时删除该图片
+        if (addr!=null)quickDeleteFileDelay(Paths.get(chatParamsRulesConfig.getChatRecordImageDest(),addr));
         //初始化聊天记录
         ChatRecordDTO record=new ChatRecordDTO( IdUtil.IdGenerateByIncrease(chatRedisKeyConfig.getChatRecordIdCount().getName(),stringRedisTemplate)
                 , chatRoomId, tokenId, null, description, addr
                 , null, chatParamsRulesConfig.getWithdrawDeadline(), null);
         //根据id类型选择相应的sql语句,type就是各个角色的id开头标识，如果追求更高的严格性，可以提取到配置类进行统一规范
-        try{
-            chatRecordMapper.insert(record.setTypeAndReturn(commonParamRulesConfig.getIdStart(tokenId)));
-        }catch (Exception e){
-            //当删除失败时进行文件删除,逻辑上仅当MySQL异常时才会走到这里
-            quickDeleteFile(Paths.get(chatParamsRulesConfig.getChatRecordImageDest(),addr));
-        }
-        //延时删除该图片
-        if (addr!=null)quickDeleteFileDelay(Paths.get(chatParamsRulesConfig.getChatRecordImageDest(),addr));
+        chatRecordMapper.insert(record.setTypeAndReturn(commonParamRulesConfig.getIdStart(tokenId)));
+        //通知WebSocket有新的聊天记录
         quickSend(chatExchangeConfig.getChatInformQueue().getRoutingKey(),chatRoomId);
     }
 
@@ -137,13 +132,8 @@ public class ChatRecordServiceImpl implements ChatRecordService {
                 ,commonParamRulesConfig.getImageType());
     }
 
-    private void quickDeleteFile(Path path){
-        MQUtil.send(chatExchangeConfig.getExchangeName(),chatExchangeConfig.getDeleteFileChatImplQueue().getRoutingKey()
-                ,path.toString(),rabbitTemplate);
-    }
-
     private void quickDeleteFileDelay(Path path){
-        MQUtil.sendWithTLL(chatExchangeConfig.getExchangeName(),chatExchangeConfig.getDeleteFileChatImplQueue().getRoutingKey()
+        MQUtil.sendWithTLL(chatExchangeConfig.getExchangeName(),chatExchangeConfig.getDeleteFileChatDeadLetterQueue().getRoutingKey()
                 ,path.toString(),rabbitTemplate,chatParamsRulesConfig.getImageDeleteMillis());
     }
 

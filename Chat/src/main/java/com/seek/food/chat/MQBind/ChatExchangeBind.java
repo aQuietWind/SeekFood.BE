@@ -29,17 +29,6 @@ public class ChatExchangeBind {
     }
 
 
-
-    //用于删除文件的队列
-    @Bean
-    public Queue deleteFileChatImplQueue(){
-        return MQUtil.generateQuorumQueue(chatExchangeConfig.getDeleteFileChatImplQueue().getName());
-    }
-    //绑定交换机与队列
-    @Bean
-    public Binding deleteFileChatImplBinding(Queue deleteFileChatImplQueue, DirectExchange chatExchange){
-        return BindingBuilder.bind(deleteFileChatImplQueue).to(chatExchange).with(chatExchangeConfig.getDeleteFileChatImplQueue().getRoutingKey());
-    }
     //用于延时删除文件的队列
     @Bean
     public Queue deleteFileChatDeadLetterQueue(){

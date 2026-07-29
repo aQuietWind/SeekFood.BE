@@ -21,7 +21,7 @@ public class ChatRecordController {
 
     //插入聊天
     @PostMapping
-    public Result<Void> insert(String description, MultipartFile file, long chatRoomId){
+    public Result<Void> insert(String description,@RequestBody MultipartFile file, long chatRoomId){
         chatRecordService.insert(description,file,chatRoomId);
         return Result.success();
     }

@@ -5,7 +5,7 @@
 <mapper namespace="com.seek.food.chat.Mapper.ChatRecordMapper">
 
     <!-- 全局统一字段映射 -->
-    <resultMap id="ChatRecordResultMap" type="com.seek.food.dto.Chat.ChatRoomDTO">
+    <resultMap id="ChatRecordResultMap" type="com.seek.food.dto.Chat.ChatRecordDTO">
         <result property="withdraw" column="is_withdraw" />
     </resultMap>
 
@@ -28,7 +28,7 @@
                  #{withdrawDeadline});
     </insert>
 
-    <select id="userGetList" resultMap="ChatRoomResultMap">
+    <select id="userGetList" resultMap="ChatRecordResultMap">
         select
             record_id,
             chat_room_id,
@@ -42,9 +42,9 @@
         from chat_record
         where (select user_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
         and is_withdraw=false
-        order by room_id desc limit #{start},#{need}
+        order by record_id desc limit #{start},#{need}
     </select>
-    <select id="merchantGetList" resultMap="ChatRoomResultMap">
+    <select id="merchantGetList" resultMap="ChatRecordResultMap">
         select
             record_id,
             chat_room_id,
@@ -58,9 +58,9 @@
         from chat_record
         where (select merchant_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
         and is_withdraw=false
-        order by room_id desc limit #{start},#{need}
+        order by record_id desc limit #{start},#{need}
     </select>
-    <select id="riderGetList" resultMap="ChatRoomResultMap">
+    <select id="riderGetList" resultMap="ChatRecordResultMap">
         select
             record_id,
             chat_room_id,
@@ -74,7 +74,7 @@
         from chat_record
         where (select rider_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
         and is_withdraw=false
-        order by room_id desc limit #{start},#{need}
+        order by record_id desc limit #{start},#{need}
     </select>
 
     <update id="withdraw">

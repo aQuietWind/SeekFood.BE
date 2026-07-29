@@ -1333,11 +1333,6 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
     },
     {
-      "name": "mq.name.bind.chat-exchange.delete-file-chat-impl-queue",
-      "type": "com.seek.food.config.Data.QueueData",
-      "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
-    },
-    {
       "name": "mq.name.bind.chat-exchange.exchange-name",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"

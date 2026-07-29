@@ -13,7 +13,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 public class ChatExchangeConfig {
     private String type;
     private String exchangeName;
-    private QueueData deleteFileChatImplQueue;
     private QueueData deleteFileChatDeadLetterQueue;
     private QueueData chatInformQueue;
 }

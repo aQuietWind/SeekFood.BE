@@ -86,7 +86,7 @@ public class CommonParamRulesConfig {
         if (id==null||(id-idCapacity)>100*idCapacity||id<idCapacity) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
     public int getIdStart(long id){
-        return Math.toIntExact((int) id / idCapacity);
+        return Math.toIntExact(id / idCapacity);
     }
 
 }

@@ -24,7 +24,7 @@ CREATE TABLE `chat_record` (
                                `account_id` bigint NOT NULL COMMENT '用户id',
                                `account_type` int NOT NULL COMMENT '发言账户的类型,1为用户,2为商家,3为骑手',
                                `chat_description` varchar(500) NOT NULL COMMENT '该聊天记录的内容',
-                               `chat_show_image_addr` varchar(50) NOT NULL COMMENT '该记录展示图片的地址',
+                               `chat_show_image_addr` varchar(50) COMMENT '该记录展示图片的地址',
                                `create_time` datetime NOT NULL default now() COMMENT '创建时间',
                                `withdraw_deadline` datetime NOT NULL COMMENT '可以撤回的截止时间',
                                `is_withdraw` boolean NOT NULL default false COMMENT '该记录是否撤回',
