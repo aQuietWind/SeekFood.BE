@@ -16,9 +16,21 @@ public class ChatParamsRulesConfig {
     private int chatDescriptionMax;
     private int chatRoomEndingDays;
     private int chatRecordWithdrawDeadlineMinutes;
+    private int chatRecordImageDeleteDays;
+    private int chatRecordUserType;
+    private int chatRecordMerchantType;
+    private int chatRecordRiderType;
     private String chatRecordImageDest;
 
     public void chatDescriptionCheck(String description) {
         if (description!=null&&(description.isBlank()||description.length()>chatDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
+    }
+
+    public String getImageDeleteMillis() {
+        return String.valueOf(chatRecordImageDeleteDays*24*60*60*1000);
+    }
+
+    public LocalDateTime getWithdrawDeadline() {
+        return LocalDateTime.now().plusMinutes(chatRecordWithdrawDeadlineMinutes);
     }
 }

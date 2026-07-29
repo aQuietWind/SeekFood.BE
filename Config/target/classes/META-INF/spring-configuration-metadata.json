@@ -418,8 +418,28 @@
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
     },
     {
+      "name": "chat.self.params.rules.chat-record-image-delete-days",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
+    },
+    {
       "name": "chat.self.params.rules.chat-record-image-dest",
       "type": "java.lang.String",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
+    },
+    {
+      "name": "chat.self.params.rules.chat-record-merchant-type",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
+    },
+    {
+      "name": "chat.self.params.rules.chat-record-rider-type",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
+    },
+    {
+      "name": "chat.self.params.rules.chat-record-user-type",
+      "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
     },
     {

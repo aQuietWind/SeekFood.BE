@@ -8,4 +8,70 @@
     <resultMap id="ChatRecordResultMap" type="com.seek.food.dto.Chat.ChatRoomDTO">
         <result property="withdraw" column="is_withdraw" />
     </resultMap>
+
+
+    <insert id="insert">
+        insert into chat_record (
+                               record_id,
+                               chat_room_id,
+                               account_id,
+                               account_type,
+                               chat_description,
+                               chat_show_image_addr,
+                               withdraw_deadline
+        ) values(#{recordId},
+                 #{chatRoomId},
+                 #{accountId},
+                 #{accountType},
+                 #{chatDescription},
+                 #{chatShowImageAddr},
+                 #{withdrawDeadline});
+    </insert>
+
+    <select id="userGetList" resultMap="ChatRoomResultMap">
+        select
+            record_id,
+            chat_room_id,
+            account_id,
+            account_type,
+            chat_description,
+            chat_show_image_addr,
+            create_time,
+            withdraw_deadline,
+            is_withdraw
+        from chat_record where user_id=#{accountId} and is_withdraw=false
+        order by room_id desc limit #{start},#{need}
+    </select>
+    <select id="merchantGetList" resultMap="ChatRoomResultMap">
+        select
+            record_id,
+            chat_room_id,
+            account_id,
+            account_type,
+            chat_description,
+            chat_show_image_addr,
+            create_time,
+            withdraw_deadline,
+            is_withdraw
+        from chat_record where merchant_id=#{accountId} and is_withdraw=false
+        order by room_id desc limit #{start},#{need}
+    </select>
+    <select id="riderGetList" resultMap="ChatRoomResultMap">
+        select
+            record_id,
+            chat_room_id,
+            account_id,
+            account_type,
+            chat_description,
+            chat_show_image_addr,
+            create_time,
+            withdraw_deadline,
+            is_withdraw
+        from chat_record where rider_id=#{accountId} and is_withdraw=false
+        order by room_id desc limit #{start},#{need}
+    </select>
+
+    <update id="complete">
+        update chat_room set is_complete=true where order_id=#{orderId} and is_complete=false
+    </update>
 </mapper>
