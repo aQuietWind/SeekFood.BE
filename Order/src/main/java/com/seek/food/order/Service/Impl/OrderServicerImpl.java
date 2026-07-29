@@ -41,6 +41,7 @@ import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -134,6 +135,7 @@ public class OrderServicerImpl implements OrderService {
 
     //获取订单的简易信息
     @Override
+    @Transactional
     public List<OrderDTO> getSimple(int start, int need){
         //检测参数
         commonParamRulesConfig.needNumberCheck(need);
@@ -145,6 +147,7 @@ public class OrderServicerImpl implements OrderService {
 
     //根据所处阶段获取订单的简易信息
     @Override
+    @Transactional
     public List<OrderDTO> getSimpleState(int start, int need, int state){
         //检测参数
         commonParamRulesConfig.needNumberCheck(need);
@@ -159,6 +162,7 @@ public class OrderServicerImpl implements OrderService {
 
     //获取订单详细信息
     @Override
+    @Transactional
     public OrderDTO  getDetail(long orderId){
         //检测参数
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -173,6 +177,7 @@ public class OrderServicerImpl implements OrderService {
 
     //用户订单退款
     @Override
+    @Transactional
     public void refund(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -186,6 +191,7 @@ public class OrderServicerImpl implements OrderService {
 
     //商家拒绝执行订单
     @Override
+    @Transactional
     public void merchantReject(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -199,6 +205,7 @@ public class OrderServicerImpl implements OrderService {
 
     //商家确定订单
     @Override
+    @Transactional
     public void merchantAck(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -212,6 +219,7 @@ public class OrderServicerImpl implements OrderService {
 
     //商家确认制作完订单
     @Override
+    @Transactional
     public void merchantMake(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -231,6 +239,7 @@ public class OrderServicerImpl implements OrderService {
 
     //骑手接受订单
     @Override
+    @Transactional
     public void riderAccept(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -252,6 +261,7 @@ public class OrderServicerImpl implements OrderService {
 
     //骑手确认已经拿到订单餐品
     @Override
+    @Transactional
     public void riderAck(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -263,6 +273,7 @@ public class OrderServicerImpl implements OrderService {
 
     //骑手确认已经运送餐品到目标地点
     @Override
+    @Transactional
     public void riderDelivery(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -276,6 +287,7 @@ public class OrderServicerImpl implements OrderService {
 
     //用户确认接收到订单餐品
     @Override
+    @Transactional
     public void userReceive(long orderId){
         //检查订单id
         commonParamRulesConfig.commonIdCheck(orderId);
@@ -285,6 +297,8 @@ public class OrderServicerImpl implements OrderService {
         quickUpdate(orderId,k->orderMapper.userReceive(orderId,userId));
         //发送增加用户订单数
         quickSend(orderExchangeConfig.getChangeUserOrderAmountQueue().getRoutingKey(),new ChangeAmountDTO(userId,1));
+        //发送更改聊天室状态
+        quickSend(orderExchangeConfig.getChatRoomCompleteQueue().getRoutingKey(),orderId);
     }
 
     //用户插入评论时查询订单获取一定信息

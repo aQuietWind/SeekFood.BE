@@ -21,11 +21,6 @@
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisStreamConfig"
     },
     {
-      "name": "chat.self.jvm-caffeine",
-      "type": "com.seek.food.config.NacosConfig.Chat.ChatCaffeineConfig",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatCaffeineConfig"
-    },
-    {
       "name": "chat.self.params.rules",
       "type": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
@@ -418,87 +413,52 @@
       "sourceType": "com.seek.food.config.NacosConfig.Admin.AdminRedisStreamConfig"
     },
     {
-      "name": "chat.self.jvm-caffeine.chat",
-      "type": "com.seek.food.config.Data.CaffeineData",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatCaffeineConfig"
-    },
-    {
-      "name": "chat.self.params.rules.meal-content-max",
+      "name": "chat.self.params.rules.chat-description-max",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
     },
     {
-      "name": "chat.self.params.rules.meal-description-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
-    },
-    {
-      "name": "chat.self.params.rules.meal-file-delete-day",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
-    },
-    {
-      "name": "chat.self.params.rules.meal-name-max",
-      "type": "java.lang.Integer",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
-    },
-    {
-      "name": "chat.self.params.rules.meal-show-image-dest",
+      "name": "chat.self.params.rules.chat-record-image-dest",
       "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
     },
     {
-      "name": "chat.self.params.rules.meal-type-max",
+      "name": "chat.self.params.rules.chat-record-withdraw-deadline-minutes",
       "type": "java.lang.Integer",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-delete-cooldown",
+      "name": "chat.self.params.rules.chat-room-ending-days",
+      "type": "java.lang.Integer",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig"
+    },
+    {
+      "name": "chat.self.redis.key.chat-record-get-list-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-get-simple-by-type-cooldown",
+      "name": "chat.self.redis.key.chat-record-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-get-simple-cooldown",
+      "name": "chat.self.redis.key.chat-record-insert-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-id-count",
+      "name": "chat.self.redis.key.chat-record-withdraw-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-insert-cooldown",
+      "name": "chat.self.redis.key.chat-room-get-list-cooldown",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
-      "name": "chat.self.redis.key.meal-message-caffeine",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
-    },
-    {
-      "name": "chat.self.redis.key.meal-update-message-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
-    },
-    {
-      "name": "chat.self.redis.key.meal-update-price-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
-    },
-    {
-      "name": "chat.self.redis.key.meal-update-sell-cooldown",
-      "type": "com.seek.food.config.Data.RedisKeyData",
-      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
-    },
-    {
-      "name": "chat.self.redis.key.meal-update-show-image-cooldown",
+      "name": "chat.self.redis.key.chat-room-id-count",
       "type": "com.seek.food.config.Data.RedisKeyData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
@@ -1343,13 +1303,23 @@
       "sourceType": "com.seek.food.config.NacosConfig.MQ.AdminExchangeConfig"
     },
     {
-      "name": "mq.name.bind.chat-exchange.exchange-name",
-      "type": "java.lang.String",
+      "name": "mq.name.bind.chat-exchange.chat-inform-queue",
+      "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
     },
     {
-      "name": "mq.name.bind.chat-exchange.rollback-voucher-queue",
+      "name": "mq.name.bind.chat-exchange.delete-file-chat-dead-letter-queue",
       "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.chat-exchange.delete-file-chat-impl-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.chat-exchange.exchange-name",
+      "type": "java.lang.String",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.ChatExchangeConfig"
     },
     {
@@ -1384,6 +1354,11 @@
     },
     {
       "name": "mq.name.bind.dead-letter-exchange.delete-all-file-meal-impl-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.dead-letter-exchange.delete-file-chat-impl-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig"
     },
@@ -1569,6 +1544,16 @@
     },
     {
       "name": "mq.name.bind.order-exchange.change-user-order-amount-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.chat-room-complete-queue",
+      "type": "com.seek.food.config.Data.QueueData",
+      "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
+    },
+    {
+      "name": "mq.name.bind.order-exchange.chat-room-init-queue",
       "type": "com.seek.food.config.Data.QueueData",
       "sourceType": "com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig"
     },
