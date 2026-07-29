@@ -22,4 +22,5 @@ public class OrderExchangeConfig {
     private QueueData changeMealSalesVolumeQueue;
     private QueueData changeUserOrderAmountQueue;
     private QueueData chatRoomInitQueue;
+    private QueueData chatRoomCompleteQueue;
 }

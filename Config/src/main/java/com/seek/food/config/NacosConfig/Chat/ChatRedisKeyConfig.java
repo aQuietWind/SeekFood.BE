@@ -10,6 +10,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Chat_Redis_Key_Config)
 public class ChatRedisKeyConfig {
+    private RedisKeyData chatRoomGetListCooldown;
     private RedisKeyData chatRecordInsertCooldown;
     private RedisKeyData chatRecordGetListCooldown;
     private RedisKeyData chatRecordWithdrawCooldown;

@@ -4,7 +4,7 @@ USE seek_food_chat;
 drop table if exists  `chat_room`;
 CREATE TABLE `chat_room` (
                               `room_id` bigint PRIMARY KEY COMMENT '聊天室id',
-                              `order_id` bigint NOT NULL COMMENT '订单id',
+                              `order_id` bigint NOT NULL UNIQUE COMMENT '订单id',
                               `user_id` bigint NOT NULL COMMENT '用户id',
                               `merchant_id` bigint NOT NULL COMMENT '商家id',
                               `rider_id` bigint NOT NULL COMMENT '骑手id',

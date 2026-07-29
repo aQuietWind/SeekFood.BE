@@ -30,6 +30,7 @@ public class MQNameKeyEnum {
     public static final String Order_Exchange_Change_Meal_Sales_Volume_Queue ="${mq.name.bind.order-exchange.change-meal-sales-volume-queue.name}";
     public static final String Order_Exchange_Change_User_Order_Amount_Queue ="${mq.name.bind.order-exchange.change-user-order-amount-queue.name}";
     public static final String Order_Exchange_Chat_Room_Init_Queue ="${mq.name.bind.order-exchange.chat-room-init-queue.name}";
+    public static final String Order_Exchange_Chat_Room_Complete_Queue ="${mq.name.bind.order-exchange.chat-room-complete-queue.name}";
 
     public static final String Rider_Exchange_Delete_File_Rider_Queue ="${mq.name.bind.rider-exchange.delete-file-rider-queue.name}";
 

@@ -123,4 +123,14 @@ public class OrderExchangeBind {
     public Binding chatRoomInitBinding(Queue chatRoomInitQueue, DirectExchange orderExchange){
         return BindingBuilder.bind(chatRoomInitQueue).to(orderExchange).with(orderExchangeConfig.getChatRoomInitQueue().getRoutingKey());
     }
+    //用于聊天室切换为完成状态的队列
+    @Bean
+    public Queue chatRoomCompleteQueue(){
+        return MQUtil.generateQuorumQueue(orderExchangeConfig.getChatRoomCompleteQueue().getName());
+    }
+    //绑定交换机与队列
+    @Bean
+    public Binding chatRoomCompleteBinding(Queue chatRoomCompleteQueue, DirectExchange orderExchange){
+        return BindingBuilder.bind(chatRoomCompleteQueue).to(orderExchange).with(orderExchangeConfig.getChatRoomCompleteQueue().getRoutingKey());
+    }
 }
