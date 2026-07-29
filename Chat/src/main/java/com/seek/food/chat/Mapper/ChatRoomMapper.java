@@ -12,4 +12,5 @@ public interface ChatRoomMapper {
     public List<ChatRoomDTO> merchantGetList(int start, int need,long accountId);
     public List<ChatRoomDTO> riderGetList(int start, int need,long accountId);
     public void complete(long orderId);
+    public boolean check(long roomId,long accountId);
 }

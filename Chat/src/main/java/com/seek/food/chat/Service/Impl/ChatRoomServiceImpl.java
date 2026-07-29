@@ -1,11 +1,14 @@
 package com.seek.food.chat.Service.Impl;
 
+import com.seek.food.chat.Caffeine.ChatRoomCaffeine;
 import com.seek.food.chat.Mapper.ChatRoomMapper;
 import com.seek.food.chat.Service.ChatRoomService;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.dto.Chat.ChatRoomDTO;
 import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.util.Exception.BizException;
+import com.seek.food.util.Exception.ErrorCodeEnum;
 import com.seek.food.util.Redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -23,12 +26,14 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomMapper chatRoomMapper;
     private final ChatRedisKeyConfig chatRedisKeyConfig;
     private final CommonParamRulesConfig commonParamRulesConfig;
+    private final ChatRoomCaffeine chatRoomCaffeine;
 
-    public ChatRoomServiceImpl(StringRedisTemplate stringRedisTemplate, ChatRoomMapper chatRoomMapper, ChatRedisKeyConfig chatRedisKeyConfig, CommonParamRulesConfig commonParamRulesConfig) {
+    public ChatRoomServiceImpl(StringRedisTemplate stringRedisTemplate, ChatRoomMapper chatRoomMapper, ChatRedisKeyConfig chatRedisKeyConfig, CommonParamRulesConfig commonParamRulesConfig, ChatRoomCaffeine chatRoomCaffeine) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.chatRoomMapper = chatRoomMapper;
         this.chatRedisKeyConfig = chatRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
+        this.chatRoomCaffeine = chatRoomCaffeine;
     }
 
     //获取聊天室列表
@@ -46,6 +51,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         else if (idStart==commonParamRulesConfig.getMerchantIdStart())return chatRoomMapper.merchantGetList(start,need,accountId);
         else if (idStart==commonParamRulesConfig.getRiderIdStart())return chatRoomMapper.riderGetList(start,need,accountId);
         else return new ArrayList<>();
+    }
+
+    //获取单个聊天室
+    public void checkIdAndRoom(long roomId,long accountId){
+        if (!chatRoomMapper.check(roomId,accountId)) throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
     }
 
 

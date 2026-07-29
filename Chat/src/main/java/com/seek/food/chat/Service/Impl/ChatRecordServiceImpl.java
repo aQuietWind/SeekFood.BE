@@ -2,6 +2,7 @@ package com.seek.food.chat.Service.Impl;
 
 import com.seek.food.chat.Mapper.ChatRecordMapper;
 import com.seek.food.chat.Service.ChatRecordService;
+import com.seek.food.chat.Service.ChatRoomService;
 import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
@@ -42,9 +44,10 @@ public class ChatRecordServiceImpl implements ChatRecordService {
     private final ChatExchangeConfig chatExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
     private final ChatRecordMapper chatRecordMapper;
+    private final ChatRoomService chatRoomService;
 
     @Autowired
-    public ChatRecordServiceImpl(StringRedisTemplate stringRedisTemplate, ChatRedisKeyConfig chatRedisKeyConfig, CommonParamRulesConfig commonParamRulesConfig, ChatParamsRulesConfig chatParamsRulesConfig, ChatExchangeConfig chatExchangeConfig, RabbitTemplate rabbitTemplate, ChatRecordMapper chatRecordMapper) {
+    public ChatRecordServiceImpl(StringRedisTemplate stringRedisTemplate, ChatRedisKeyConfig chatRedisKeyConfig, CommonParamRulesConfig commonParamRulesConfig, ChatParamsRulesConfig chatParamsRulesConfig, ChatExchangeConfig chatExchangeConfig, RabbitTemplate rabbitTemplate, ChatRecordMapper chatRecordMapper, ChatRoomService chatRoomService) {
         this.stringRedisTemplate = stringRedisTemplate;
         this.chatRedisKeyConfig = chatRedisKeyConfig;
         this.commonParamRulesConfig = commonParamRulesConfig;
@@ -52,6 +55,7 @@ public class ChatRecordServiceImpl implements ChatRecordService {
         this.chatExchangeConfig = chatExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
         this.chatRecordMapper = chatRecordMapper;
+        this.chatRoomService = chatRoomService;
     }
 
     @PostConstruct
@@ -61,12 +65,15 @@ public class ChatRecordServiceImpl implements ChatRecordService {
     }
     //插入聊天记录
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insert(String description, MultipartFile file, long chatRoomId){
         //校验参数
         chatParamsRulesConfig.chatDescriptionCheck(description);
         commonParamRulesConfig.commonIdCheck(chatRoomId);
         //获取tokenId,并且检测冷却
         long tokenId=quickGetIdAndCheckCooldown(chatRedisKeyConfig.getChatRecordInsertCooldown(), TokenIdContext.getAndToLong());
+        //检查是否存在该关联
+        chatRoomService.checkIdAndRoom(tokenId,chatRoomId);
         //先保存文件
         String addr=null;
         if (file!=null&&!file.isEmpty())addr=quickSaveRecordImage(file);
@@ -81,6 +88,8 @@ public class ChatRecordServiceImpl implements ChatRecordService {
             //当删除失败时进行文件删除,逻辑上仅当MySQL异常时才会走到这里
             quickDeleteFile(Paths.get(chatParamsRulesConfig.getChatRecordImageDest(),addr));
         }
+        //延时删除该图片
+        if (addr!=null)quickDeleteFileDelay(Paths.get(chatParamsRulesConfig.getChatRecordImageDest(),addr));
         quickSend(chatExchangeConfig.getChatInformQueue().getRoutingKey(),chatRoomId);
     }
 

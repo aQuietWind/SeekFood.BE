@@ -39,7 +39,9 @@
             create_time,
             withdraw_deadline,
             is_withdraw
-        from chat_record where user_id=#{accountId} and is_withdraw=false
+        from chat_record
+        where (select user_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
+        and is_withdraw=false
         order by room_id desc limit #{start},#{need}
     </select>
     <select id="merchantGetList" resultMap="ChatRoomResultMap">
@@ -53,7 +55,9 @@
             create_time,
             withdraw_deadline,
             is_withdraw
-        from chat_record where merchant_id=#{accountId} and is_withdraw=false
+        from chat_record
+        where (select merchant_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
+        and is_withdraw=false
         order by room_id desc limit #{start},#{need}
     </select>
     <select id="riderGetList" resultMap="ChatRoomResultMap">
@@ -67,11 +71,14 @@
             create_time,
             withdraw_deadline,
             is_withdraw
-        from chat_record where rider_id=#{accountId} and is_withdraw=false
+        from chat_record
+        where (select rider_id from chat_room where room_id=#{chatRoomId} and is_complete=false and now() &lt; ending_time)=#{accountId}
+        and is_withdraw=false
         order by room_id desc limit #{start},#{need}
     </select>
 
-    <update id="complete">
-        update chat_room set is_complete=true where order_id=#{orderId} and is_complete=false
+    <update id="withdraw">
+        update chat_record set is_withdraw=true
+        where record_id=#{recordId} and account_id=#{accountId} and is_withdraw=false and now() &lt; withdraw_deadline
     </update>
 </mapper>
