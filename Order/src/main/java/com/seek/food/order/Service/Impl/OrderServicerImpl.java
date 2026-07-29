@@ -6,6 +6,7 @@ import com.seek.food.config.NacosConfig.MQ.OrderExchangeConfig;
 import com.seek.food.config.NacosConfig.Order.OrderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Order.OrderRiderOrderEsTableConfig;
+import com.seek.food.dto.Chat.ChatRoomDTO;
 import com.seek.food.dto.Comment.FirstCommentDTO;
 import com.seek.food.dto.Common.ChangeAmountDTO;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
@@ -242,6 +243,11 @@ public class OrderServicerImpl implements OrderService {
                         .withDocument(Document.from(Map.of(orderRiderOrderEsTableConfig.getAccept(),true)))
                         .build()
                 , IndexCoordinates.of(orderRiderOrderEsTableConfig.getIndexName()));
+        //发送到Chat模块消费者进行聊天室初始化
+        OrderDTO order=quickGetOrder(orderId);
+        quickSend(orderExchangeConfig.getChatRoomInitQueue().getRoutingKey(),new ChatRoomDTO(
+                order.getOrderId(),order.getUserId(),order.getMerchantId(),order.getRiderId()
+        ));
     }
 
     //骑手确认已经拿到订单餐品
