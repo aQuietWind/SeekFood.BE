@@ -37,7 +37,9 @@ spring:
 server:
   port: 10010
 
-
+chat:
+  self:
+    this-sever-id: 0
 
 
 
