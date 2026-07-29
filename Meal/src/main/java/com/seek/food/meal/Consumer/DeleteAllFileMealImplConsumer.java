@@ -33,7 +33,7 @@ public class DeleteAllFileMealImplConsumer {
     }
 
 
-    @RabbitListener(queues = MQNameKeyEnum.Dead_Letter_Exchange_Delete_All_File_Meal_Queue)
+    @RabbitListener(queues = MQNameKeyEnum.Dead_Letter_Exchange_Delete_All_File_Meal_Impl_Queue)
     public void deleteAllFileMealImplQueue(long merchantId){
         List<String> addrs=mealMapper.getAllShowImageAddrAfterDelete(merchantId);
         FileRemove.removeFileListOutError(mealParamsRulesConfig.getMealShowImageDest(),addrs,(path,e)->{

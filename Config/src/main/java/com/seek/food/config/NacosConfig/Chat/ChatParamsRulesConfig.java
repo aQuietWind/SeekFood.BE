@@ -13,38 +13,12 @@ import java.time.LocalDateTime;
 @RefreshScope
 @ConfigurationProperties(ConfigKeyEnum.Chat_Params_Rules_Config)
 public class ChatParamsRulesConfig {
-    private int mealNameMax;
-    private int mealDescriptionMax;
-    private int mealContentMax;
-    private int mealTypeMax;
-    private int mealFileDeleteDay;
-    private String mealShowImageDest;
+    private int chatDescriptionMax;
+    private int chatRoomEndingDays;
+    private int chatRecordWithdrawDeadlineMinutes;
+    private String chatRecordImageDest;
 
-    public void mealNameCheck(String mealName) {
-        if (mealName == null || mealName.isBlank() || mealName.length()>mealNameMax) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public void mealDescriptionCheck(String mealDescription) {
-        if (mealDescription!=null&&(mealDescription.isBlank()||mealDescription.length()>mealDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public void mealContentCheck(String mealContent) {
-        if (mealContent!=null&&(mealContent.isBlank()||mealContent.length()>mealContentMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public void mealTypeCheck(Integer mealType) {
-        if (mealType!=null&&(mealType<0||mealType>mealTypeMax)) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public void mealPriceCheck(Double price) {
-        if (price==null||price.isNaN()||price<0||String.valueOf(price).split("\\.")[1].length()>2) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public void mealNextDiscountTimeCheck(LocalDateTime nextDiscountTime) {
-        if (nextDiscountTime!=null&&nextDiscountTime.isBefore(LocalDateTime.now())) throw new BizException(ErrorCodeEnum.PARAM_ERROR);
-    }
-
-    public String getMillsByFileDeleteDay() {
-        return String.valueOf(mealFileDeleteDay*24*60*60*1000);
+    public void chatDescriptionCheck(String description) {
+        if (description!=null&&(description.isBlank()||description.length()>chatDescriptionMax) )throw new BizException(ErrorCodeEnum.PARAM_ERROR);
     }
 }

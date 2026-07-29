@@ -73,7 +73,6 @@ public class ConfigKeyEnum {
 
     public static final String Chat_Params_Rules_Config="chat.self.params.rules";
     public static final String Chat_Redis_Key_Config="chat.self.redis.key";
-    public static final String Chat_Caffeine_Config="chat.self.jvm-caffeine";
     public static final String Chat_Redis_Stream_Config="chat.self.redis.stream";
 
 

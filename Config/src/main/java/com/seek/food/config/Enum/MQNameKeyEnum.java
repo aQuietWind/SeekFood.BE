@@ -29,6 +29,7 @@ public class MQNameKeyEnum {
     public static final String Order_Exchange_Change_Merchant_Order_Amount_Queue ="${mq.name.bind.order-exchange.change-merchant-order-amount-queue.name}";
     public static final String Order_Exchange_Change_Meal_Sales_Volume_Queue ="${mq.name.bind.order-exchange.change-meal-sales-volume-queue.name}";
     public static final String Order_Exchange_Change_User_Order_Amount_Queue ="${mq.name.bind.order-exchange.change-user-order-amount-queue.name}";
+    public static final String Order_Exchange_Chat_Room_Init_Queue ="${mq.name.bind.order-exchange.chat-room-init-queue.name}";
 
     public static final String Rider_Exchange_Delete_File_Rider_Queue ="${mq.name.bind.rider-exchange.delete-file-rider-queue.name}";
 
@@ -45,9 +46,13 @@ public class MQNameKeyEnum {
 
     public static final String Admin_Exchange_Delete_File_Comment_Queue ="${mq.name.bind.admin-exchange.delete-file-admin-queue.name}";
 
-    public static final String Dead_Letter_Exchange_Delete_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";
-    public static final String Dead_Letter_Exchange_Delete_All_File_Meal_Queue ="${mq.name.bind.dead-letter-exchange.delete-all-file-meal-impl-queue.name}";
+    public static final String Chat_Exchange_Delete_File_Chat_Impl_Queue ="${mq.name.bind.chat-exchange.delete-file-chat-impl-queue.name}";
+    public static final String Chat_Exchange_Chat_Inform_Queue ="${mq.name.bind.chat-exchange.chat-inform-queue.name}";
+
+    public static final String Dead_Letter_Exchange_Delete_File_Meal_Impl_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-meal-impl-queue.name}";
+    public static final String Dead_Letter_Exchange_Delete_All_File_Meal_Impl_Queue ="${mq.name.bind.dead-letter-exchange.delete-all-file-meal-impl-queue.name}";
     public static final String Dead_Letter_Exchange_Rollback_All_Fund_Impl_Queue ="${mq.name.bind.dead-letter-exchange.rollback-all-fund-impl-queue.name}";
+    public static final String Dead_Letter_Exchange_Delete_File_Chat_Impl_Queue ="${mq.name.bind.dead-letter-exchange.delete-file-chat-impl-queue.name}";
 
     public static final String Error_Exchange_Name="${mq.name.bind.error-exchange.exchange-name}";
     public static final String Error_Queue_Name="${mq.name.bind.error-exchange.error-queue.name}";

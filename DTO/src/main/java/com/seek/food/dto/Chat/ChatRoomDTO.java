@@ -25,4 +25,10 @@ public class ChatRoomDTO {
         this.merchantId = merchantId;
         this.riderId = riderId;
     }
+
+    public ChatRoomDTO quickInit(long roomId,int XDays) {
+        this.roomId = roomId;
+        this.endingTime  = LocalDateTime.now().plusDays(XDays);
+        return this;
+    }
 }

@@ -1,6 +1,5 @@
 package com.seek.food.config.AutoConfig;
 
-import com.seek.food.config.NacosConfig.Chat.ChatCaffeineConfig;
 import com.seek.food.config.NacosConfig.Chat.ChatParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisStreamConfig;
@@ -11,14 +10,9 @@ import org.springframework.context.annotation.Lazy;
 
 @Configuration
 // 绑定当前组件对应的属性类
-@EnableConfigurationProperties({ChatCaffeineConfig.class, ChatRedisKeyConfig.class, ChatRedisStreamConfig.class
+@EnableConfigurationProperties({ChatRedisKeyConfig.class, ChatRedisStreamConfig.class
         , ChatParamsRulesConfig.class})
 public class ChatSubConfig {
-    @Bean
-    @Lazy // 用到才实例化，启动不创建对象
-    public ChatCaffeineConfig chatCaffeineConfig(ChatCaffeineConfig chatCaffeineConfig) {
-        return chatCaffeineConfig;
-    }
     @Bean
     @Lazy // 用到才实例化，启动不创建对象
     public ChatRedisKeyConfig chatRedisKeyConfig(ChatRedisKeyConfig chatRedisKeyConfig) {
