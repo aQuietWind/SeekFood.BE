@@ -36,7 +36,6 @@ spring:
 #  端口设置
 server:
   port: 10010
-
 chat:
   self:
     this-sever-id: 0

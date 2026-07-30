@@ -14,6 +14,7 @@ public class ChatRedisKeyConfig {
     private RedisKeyData chatRecordInsertCooldown;
     private RedisKeyData chatRecordGetListCooldown;
     private RedisKeyData chatRecordWithdrawCooldown;
+    private RedisKeyData chatRoomWebsocketCooldown;
     private RedisKeyData chatRoomIdCount;
     private RedisKeyData chatRecordIdCount;
 }
