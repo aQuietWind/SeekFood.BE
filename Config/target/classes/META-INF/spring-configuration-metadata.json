@@ -483,6 +483,11 @@
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
     },
     {
+      "name": "chat.self.redis.key.chat-room-websocket-cooldown",
+      "type": "com.seek.food.config.Data.RedisKeyData",
+      "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig"
+    },
+    {
       "name": "chat.self.redis.stream.old-file-stream",
       "type": "com.seek.food.config.Data.RedisStreamData",
       "sourceType": "com.seek.food.config.NacosConfig.Chat.ChatRedisStreamConfig"

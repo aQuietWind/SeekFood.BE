@@ -28,7 +28,7 @@ import reactor.core.publisher.Mono;
 import java.util.concurrent.TimeUnit;
 
 @Order(2)
-@Component
+//@Component
 @RefreshScope
 public class RequestFilter implements GlobalFilter{
 

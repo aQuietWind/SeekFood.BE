@@ -1,95 +1,113 @@
 package com.seek.food.chat.WebSocketServer;
 
-import com.seek.food.chat.Configuration.WebSocketHandReqConfig;
-import com.seek.food.chat.Enum.RequestPathEnum;
 import com.seek.food.chat.Enum.WebSocketRequestParamsEnum;
 import com.seek.food.chat.Service.ChatRoomService;
 import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Chat.ChatRedisKeyConfig;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
-import com.seek.food.util.Context.TokenIdContext;
+import com.seek.food.config.NacosConfig.Common.JWTConfig;
 import com.seek.food.util.Redis.RedisUtil;
 import jakarta.websocket.*;
-import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.socket.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
-//设置为自定义的Endpoint配置
-@ServerEndpoint(value = RequestPathEnum.Chat_Room_WebSocket,configurator = WebSocketHandReqConfig.class)
 @Slf4j
-public class ChatInformServer {
+public class ChatInformServer implements WebSocketHandler {
 
     // 存放所有在线会话
-    private static final ConcurrentHashMap<Long, CopyOnWriteArrayList<Session>> Session_Map = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, ConcurrentHashMap<Long,WebSocketSession>> Session_Map = new ConcurrentHashMap<>();
     private final CommonParamRulesConfig commonParamRulesConfig;
     private final ChatRoomService chatRoomService;
     private final StringRedisTemplate stringRedisTemplate;
     private final ChatRedisKeyConfig chatRedisKeyConfig;
+    private final JWTConfig jwtConfig;
 
-    public ChatInformServer(CommonParamRulesConfig commonParamRulesConfig, ChatRoomService chatRoomService, StringRedisTemplate stringRedisTemplate, ChatRedisKeyConfig chatRedisKeyConfig) {
+    @Autowired
+    public ChatInformServer(CommonParamRulesConfig commonParamRulesConfig, ChatRoomService chatRoomService, StringRedisTemplate stringRedisTemplate, ChatRedisKeyConfig chatRedisKeyConfig, JWTConfig jwtConfig) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.chatRoomService = chatRoomService;
         this.stringRedisTemplate = stringRedisTemplate;
         this.chatRedisKeyConfig = chatRedisKeyConfig;
+        this.jwtConfig = jwtConfig;
     }
 
     // 连接建立成功
-    @OnOpen
-    public void onOpen(Session session) {
-        Long roomId=null;
-        try {
-            roomId= (Long) session.getUserProperties().get(WebSocketRequestParamsEnum.Room_Id);
-        }catch (Exception e){return;}
+    @Override
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws Exception{
+        Long roomId=quickGetRoomIdFirst(session);
         //检查该请求参数
         commonParamRulesConfig.commonIdCheck(roomId);
         //获取该请求账户的Id
-        long tokenId=quickGetIdAndCheckCooldown(chatRedisKeyConfig.getChatRoomWebsocketCooldown(),TokenIdContext.getAndToLong());
+        long tokenId=quickGetIdAndCheckCooldown(chatRedisKeyConfig.getChatRoomWebsocketCooldown(),quickGetTokenId(session));
         //检查该账户是否有权限监听该合格聊天室
         chatRoomService.checkIdAndRoom(roomId, tokenId);
         //放置该session
-        Session_Map.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<Session>());
-        Session_Map.get(roomId).add(session);
-    }
-
-    // 收到客户端消息
-    @OnMessage
-    public void onMessage(String msg, Session session){
-        //禁止客户端消息回话,故不做如何操作
+        quickSaveSession(session,roomId,tokenId);
     }
 
     // 连接关闭
-    @OnClose
-    public void onClose(Session session) {
+    @Override
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus closeStatus) throws Exception {
         //删除该会话
-        Session_Map.get((Long) session.getUserProperties().get(WebSocketRequestParamsEnum.Room_Id)).remove(session);
+        quickRemoveSession(session);
     }
 
-    // 异常回调
-    @OnError
-    public void onError(Session session, Throwable throwable) {
-        throwable.printStackTrace();
+    //异常回调
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+        log.error("websocket会话异常,tokenId:{},roomId:{}",quickGetTokenId(session),quickGetRoomIdFirst(session),exception);
     }
+    @Override
+    public boolean supportsPartialMessages() {return false;}
+    /** 收到消息时的回调 */
+    @Override
+    public void handleMessage(@NonNull WebSocketSession session, @NonNull WebSocketMessage<?> message) throws Exception {}
 
     //对指定的聊天室id广播消息
     public void broadcastRoomId(long roomId,String msg) throws IOException {
-        CopyOnWriteArrayList<Session> list=Session_Map.get(roomId);
-        for (Session session : list) {
+        ConcurrentHashMap<Long,WebSocketSession> map=Session_Map.get(roomId);
+        for (Map.Entry<Long, WebSocketSession> entry : map.entrySet()) {
             //发送消息
-            if (session.isOpen()) session.getBasicRemote().sendText(msg);
+            if (entry.getValue().isOpen()) entry.getValue().sendMessage(new TextMessage(msg));
         }
     }
 
-    private void quickCooldown(RedisKeyData key, Object id){
-        RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
-    }
     private long quickGetIdAndCheckCooldown(RedisKeyData key, long id){
-        quickCooldown(key,id);
+        RedisUtil.checkCooldown(stringRedisTemplate,key.getRedisKey(id),key.getDuration());
         return id;
+    }
+    private Long quickGetRoomIdFirst(WebSocketSession session){
+        return Long.valueOf(getQueryParam(Objects.requireNonNull(session.getUri()).normalize(),WebSocketRequestParamsEnum.Room_Id));
+    }
+    private Long quickGetTokenId(WebSocketSession session){
+        return Long.parseLong(Objects.requireNonNull(session.getHandshakeHeaders().getFirst(jwtConfig.getHeaderTokenName())));
+    }
+    public static String getQueryParam(URI uri, String paramName) {
+        if (uri == null) return null;
+        UriComponents components = UriComponentsBuilder.fromUri(uri).build();
+        return components.getQueryParams().getFirst(paramName);
+    }
+    private void quickRemoveSession(WebSocketSession session){
+        Long roomId= (Long) session.getAttributes().get(WebSocketRequestParamsEnum.Room_Id);
+        if (roomId!=null)Session_Map.get(roomId).remove(quickGetTokenId(session),session);
+    }
+    private void quickSaveSession(WebSocketSession session,long roomId,long tokenId){
+        //先放置，方便后续拿取
+        session.getAttributes().put(WebSocketRequestParamsEnum.Room_Id, roomId);
+        Session_Map.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>());
+        Session_Map.get(roomId).put(tokenId,session);
     }
 }
