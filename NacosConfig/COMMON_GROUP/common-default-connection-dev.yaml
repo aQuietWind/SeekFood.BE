@@ -77,28 +77,28 @@ feign:
         #开启基础重试（注意：默认只重试1次，且只针对GET请求）
         retryer: feign.Retryer.Default
 
-#  seata设置
-seata:
-  #设置模式为AT模式
-  data-source-proxy-mode: AT
-  register:
-    #类型
-    type: nacos
-    nacos:
-      #nacos服务地点
-      server-addr: 127.0.0.1:8848
-      #命名空间，可为空
-      namespace: ""
-      #服务组名称
-      group: SEATA_GROUP
-      #服务名称
-      application: seata-server
-      #事务组
-  tx-server-group: default_tx_group
-  service:
-    vgroup-mapping:     #与事务组的映射关系
-      #seata集群名
-      default_tx_group: default   
-    default:
-      #seata地址
-      grouplist: 127.0.0.1:8091     
+# #  seata设置
+# seata:
+#   #设置模式为AT模式
+#   data-source-proxy-mode: AT
+#   register:
+#     #类型
+#     type: nacos
+#     nacos:
+#       #nacos服务地点
+#       server-addr: 127.0.0.1:8848
+#       #命名空间，可为空
+#       namespace: ""
+#       #服务组名称
+#       group: SEATA_GROUP
+#       #服务名称
+#       application: seata-server
+#       #事务组
+#   tx-server-group: default_tx_group
+#   service:
+#     vgroup-mapping:     #与事务组的映射关系
+#       #seata集群名
+#       default_tx_group: default   
+#     default:
+#       #seata地址
+#       grouplist: 127.0.0.1:8091     

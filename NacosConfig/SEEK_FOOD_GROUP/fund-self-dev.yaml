@@ -13,7 +13,7 @@ fund:
         recharge-amount-max: 648
         withdraw-amount-max: 20000
         description-max: 100
-        deadline-minut-max: 3
+        deadline-minute-max: 3
         rollback-minute-max: 5
     redis:
       key:

@@ -75,6 +75,9 @@ merchant:
         merchant-update-open-cooldown:
           name: "merchant:update:open:cooldown:"
           duration: 30
+        merchant-get-distance-cooldown:
+          name: "merchant:get:distance:cooldown:"
+          duration: 3
         merchant-id-count:
           name: "merchant:id:count"
           duration: null

@@ -36,11 +36,14 @@ gateway:
         - /merchant/login
         - /merchant/login/opt
         - /merchant/login/password
-        - /merchant/login/password
+        - /rider/register
+        - /rider/register/opt
+        - /rider/login
+        - /rider/login/opt
+        - /rider/login/password
+        - /admin/login
         reject-path:
-        - /testsetstes43435324634645746785
-        - /654654
-        - /t543erfgt
+        - /test/reject/path
 
 
 
