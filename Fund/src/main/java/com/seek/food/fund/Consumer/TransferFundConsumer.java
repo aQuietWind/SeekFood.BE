@@ -16,15 +16,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class TransferFundConsumer {
-    private final FundMapper fundMapper;
     private final FundService fundService;
     private final StringRedisTemplate stringRedisTemplate;
     private final FundRechargeRecordMapper fundRechargeRecordMapper;
     private final FundRedisKeyConfig fundRedisKeyConfig;
 
     @Autowired
-    public TransferFundConsumer(FundMapper fundMapper, FundService fundService, StringRedisTemplate stringRedisTemplate, FundRechargeRecordMapper fundRechargeRecordMapper, FundRedisKeyConfig fundRedisKeyConfig) {
-        this.fundMapper = fundMapper;
+    public TransferFundConsumer(FundService fundService, StringRedisTemplate stringRedisTemplate
+            , FundRechargeRecordMapper fundRechargeRecordMapper, FundRedisKeyConfig fundRedisKeyConfig) {
         this.fundService = fundService;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRechargeRecordMapper = fundRechargeRecordMapper;
@@ -36,7 +35,7 @@ public class TransferFundConsumer {
         //写入DB
         fundService.increaseFund(record.getRechargeAmount(), record.getAccountId());
         record.setRecordId(IdUtil.IdGenerateByIncrease(fundRedisKeyConfig.getFundRechargeRecordIdCount().getName(),stringRedisTemplate));
-        //写入记录档
+        //写入记录档, 推荐用MySQL触发器实现自动生成记录
         fundRechargeRecordMapper.insertRechargeRecord(record);
     }
 

@@ -82,7 +82,6 @@ Rider 服务本身不存收入数据，它只负责把"骑手来了"和"骑手�
 
 **坑：**
 
-- 同一个模块里 `RiderCaffeine` 和 `RiderPhoneCaffeine` 定义在 `Consumer` 包下而不是 `Caffeine` 包下，命名不太规范，新人可能会找不到。
 - 骑手注销后，数据库里只是逻辑删除（`is_delete = true`），但 MQ 发出去删除资金账户和文件的消息如果消费失败，可能会留下孤儿数据。虽然有定时任务兜底，但文件清理和资金账户清理是两条独立的链路。
 - JWT Token 的刷新机制依赖 Redis 的 ZSet 存储，如果 Redis 挂了，刷新 Token 会失败，但旧的 Token 还能用（因为 JWT 本身还未过期）。
 

@@ -142,17 +142,11 @@ jwt:
 
 ## 网关的"坑"和注意事项
 
-### 1. RequestFilter 被注释掉了
-
-看代码你会发现，`RequestFilter`（黑名单过滤器）的 `@Component` 注解被注释了。这意味着**这个过滤器目前没有生效**。
-
-这可能是开发者在调试时临时注释掉的，也可能是发现有问题暂时关闭了。**在生产环境部署前，一定要把这行注释取消**，否则限流和黑名单功能是失效的。
-
-### 2. Spring Cloud Gateway 是响应式的
+### 1. Spring Cloud Gateway 是响应式的
 
 网关用的是 Spring WebFlux（响应式编程），不是传统的 Spring MVC。这意味着你不能用传统的 `HttpServletRequest`/`HttpServletResponse`，而是用 `ServerWebExchange`。如果你以前只写过 Spring MVC，这里需要适应一下。
 
-### 3. 网关不处理业务逻辑
+### 2. 网关不处理业务逻辑
 
 新手常犯的错误：在网关里写业务逻辑。网关只做**路由和鉴权**，不应该处理任何业务。如果发现自己在网关里写了复杂的判断逻辑，停下来想想——这段逻辑是不是应该放在业务服务里？
 

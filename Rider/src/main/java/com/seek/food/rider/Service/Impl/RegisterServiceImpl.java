@@ -2,10 +2,9 @@ package com.seek.food.rider.Service.Impl;
 
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.MQ.RiderExchangeConfig;
-import com.seek.food.config.NacosConfig.Rider.RiderParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Rider.RiderRedisKeyConfig;
 import com.seek.food.dto.Rider.RiderDTO;
-import com.seek.food.rider.Consumer.RiderCaffeine;
+import com.seek.food.rider.Caffeine.RiderCaffeine;
 import com.seek.food.rider.Mapper.RegisterMapper;
 import com.seek.food.rider.Service.RegisterService;
 import com.seek.food.util.CommonUtil.IdUtil;

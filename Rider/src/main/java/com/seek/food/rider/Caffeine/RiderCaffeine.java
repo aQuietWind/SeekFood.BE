@@ -1,10 +1,8 @@
-package com.seek.food.rider.Consumer;
+package com.seek.food.rider.Caffeine;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.seek.food.config.NacosConfig.Rider.RiderCaffeineConfig;
-import com.seek.food.config.NacosConfig.User.UserCaffeineConfig;
 import com.seek.food.dto.Rider.RiderDTO;
-import com.seek.food.dto.User.UserDTO;
 import com.seek.food.util.Caffeine.JvmCaffeineParent;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
