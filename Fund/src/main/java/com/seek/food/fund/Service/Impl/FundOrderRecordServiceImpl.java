@@ -4,6 +4,7 @@ import com.seek.food.config.Data.RedisKeyData;
 import com.seek.food.config.NacosConfig.Common.CommonParamRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundParamsRulesConfig;
 import com.seek.food.config.NacosConfig.Fund.FundRedisKeyConfig;
+import com.seek.food.config.NacosConfig.MQ.DeadLetterExchangeConfig;
 import com.seek.food.config.NacosConfig.MQ.FundExchangeConfig;
 import com.seek.food.dto.Fund.FundOrderRecordDTO;
 import com.seek.food.fund.Caffeine.FundOrderRecordCaffeine;
@@ -37,10 +38,11 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
     private final FundService fundService;
     private final FundExchangeConfig fundExchangeConfig;
     private final RabbitTemplate rabbitTemplate;
+    private final DeadLetterExchangeConfig deadLetterExchangeConfig;
 
     public FundOrderRecordServiceImpl(CommonParamRulesConfig commonParamRulesConfig, StringRedisTemplate stringRedisTemplate
             , FundRedisKeyConfig fundRedisKeyConfig, FundOrderRecordMapper fundOrderRecordMapper, FundOrderRecordCaffeine fundOrderRecordCaffeine
-            , FundService fundService, FundExchangeConfig fundExchangeConfig, RabbitTemplate rabbitTemplate) {
+            , FundService fundService, FundExchangeConfig fundExchangeConfig, RabbitTemplate rabbitTemplate, DeadLetterExchangeConfig deadLetterExchangeConfig) {
         this.commonParamRulesConfig = commonParamRulesConfig;
         this.stringRedisTemplate = stringRedisTemplate;
         this.fundRedisKeyConfig = fundRedisKeyConfig;
@@ -49,6 +51,7 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         this.fundService = fundService;
         this.fundExchangeConfig = fundExchangeConfig;
         this.rabbitTemplate = rabbitTemplate;
+        this.deadLetterExchangeConfig = deadLetterExchangeConfig;
     }
 
     //批量获取预览信息
@@ -107,8 +110,8 @@ public class FundOrderRecordServiceImpl implements FundOrderRecordService {
         Long orderId=fundOrderRecordMapper.ableRollback(recordId,userId);
         if (orderId==null) throw new BizException(ErrorCodeEnum.CONDITION_NOT_PASS);
         //发送消息进行全局回滚尝试，在MQ的消费者会立即进行判断并且尝试回滚
-        MQUtil.sendWithTLL(fundExchangeConfig.getExchangeName(),fundExchangeConfig.getRollbackAllFundDeadLetterQueue().getRoutingKey()
-        ,orderId ,rabbitTemplate,"0");
+        MQUtil.send(deadLetterExchangeConfig.getExchangeName(),deadLetterExchangeConfig.getRollbackAllFundImplQueue().getRoutingKey()
+        ,orderId ,rabbitTemplate);
     }
 
     //确认退款
