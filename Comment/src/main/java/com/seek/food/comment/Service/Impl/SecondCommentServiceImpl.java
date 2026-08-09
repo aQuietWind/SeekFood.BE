@@ -122,7 +122,7 @@ public class SecondCommentServiceImpl implements SecondCommentService {
         //删除照片
         String addr=secondCommentMapper.getImageAddrAfterDelete(commentId);
         if (addr!=null&&!addr.isEmpty())quickDeleteFile(addr);
-        //这里可选择发送到MQ自减一级评论的二级评论数（根据业务一致性和用户体验性来自行抉择），反正消费者可以直接兼容正负号
+        //这里可选择发送到MQ自减一级评论的二级评论数（根据业务一致性和用户体验性来自行抉择）
     }
 
 
